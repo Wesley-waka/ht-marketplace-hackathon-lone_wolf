@@ -9,14 +9,21 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "chart.js": "^4.4.6",
     "core-js": "^3.25.3",
+    "element-ui": "^2.15.14",
+    "hchs-vue-charts": "^1.2.8",
     "nuxt": "^2.15.8",
+    "pretty-checkbox-vue": "^1.1.9",
     "primeflex": "^3.2.1",
     "primeicons": "^6.0.1",
     "primevue": "^2.10.0",
+    "sass-loader": "^16.0.3",
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "sass": "^1.81.0"
+  }
 }

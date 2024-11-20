@@ -1,0 +1,270 @@
+@forward "variables";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: underline;
+}
+
+*,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+a {
+  font-size: 14px;
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+}
+
+.onboarding_process {
+  h5 {
+    color: #000;
+  }
+  .box {
+    position: relative;
+    z-index: 0;
+    &:first-of-type {
+      padding-top: 10px !important;
+    }
+    .before {
+      position: absolute;
+      left: 4px;
+      top: 15px;
+      height: 100%;
+      width: 2px;
+      z-index: -1;
+      transition: all 0.3s ease-in-out;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      bottom: 0;
+      height: 1px;
+      width: calc(100% - 60px);
+      background-color: #e2e7f1;
+    }
+    svg {
+      align-self: start;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
+.billings_process {
+  h5 {
+    color: #000;
+  }
+  .box {
+    position: relative;
+    z-index: 0;
+
+    &::before {
+      position: absolute;
+      content: '';
+      right: 0px;
+      top: 20px;
+      height: 10%;
+      width: 100%;
+      z-index: 1111;
+      transition: all 0.3s ease-in-out;
+    }
+    &:after {
+      content: '';
+      width: 100% !important;
+      position: absolute;
+      right: -18px;
+      top: 41px;
+      height: 3px;
+      background-color: #0a94ff;
+      // &:last-of-type {
+      //   visibility: hidden;
+      // }
+    }
+    svg {
+      align-self: start;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
+// *** SCROLLBAR ***
+body::-webkit-scrollbar {
+  width: 0px;
+  background-color: #ecf4f8;
+}
+
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+  background-color: #ecf4f8;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    top,
+    color-stop(0.44, #0a94ff),
+    color-stop(0.72, #0a94ff),
+    color-stop(0.86, #0a94ff)
+  );
+}
+
+.h1 {
+  font-size: $h1-size;
+  font-weight: $h1-weight;
+}
+.h2 {
+  font-size: $h2-size;
+  font-weight: $h2-weight;
+}
+.h3 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.h4 {
+  font-size: $h4-size;
+  font-weight: $h4-weight;
+}
+.h5 {
+  font-size: $h5-size;
+  font-weight: $h5-weight;
+}
+.h6 {
+  font-size: $h6-size;
+  font-weight: $h6-weight;
+}
+
+// *** SNACKBAR ***
+.snackbar {
+  width: 100%;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center !important;
+
+  div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+// *** V-CHECKBOX ***
+div[role='checkbox'] {
+  margin: 0;
+  padding: 0;
+  border: 2px transparent solid;
+}
+
+div[role='checkbox']:active {
+  background-color: red;
+}
+
+div[role='checkbox']:hover {
+  border-color: red;
+}
+
+div[role='checkbox'].focus {
+  border-color: black;
+}
+#example {
+  background-color: red;
+  padding: 5px;
+}
+
+.required {
+  label {
+    position: relative;
+    width: fit-content;
+    &:before {
+      content: '*';
+      position: absolute;
+      right: -8px;
+      top: 0;
+      color: red;
+    }
+  }
+}
+
+// Mouse Cursor Pointer
+.mouse_cursor_pointer {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// Skeleton
+.skeleton {
+  opacity: 0.7;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 6px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+// cursor: pointer;
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.loader {
+  z-index: 10;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.nn___logo {
+  height: 120px;
+  width: 150px;
+  margin-left: auto;
+  .v-image__image {
+    background-size: contain;
+  }
+}
+
+.powered__logo {
+  width: 140px;
+  padding: 0 !important;
+  margin: 0 !important;
+  transform: translateY(-6px);
+  .v-image__image {
+    background-size: contain;
+  }
+}
+

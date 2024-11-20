@@ -18,12 +18,29 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-      'primeflex/primeflex.css'
+      // 'primeflex/primeflex.css',
+     "@/assets/scss/global.scss"
   ],
+
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/chartjs', ssr: false },
+    { src: '~/plugins/element-ui', ssr: true },
+    { src: '~/plugins/pretty-checkbox', ssr: false },
+
+
   ],
+
+  axios: {
+    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    // baseURL: "http://localhost:4100/v1/",
+    // baseURL: 'https://accounting-api-staging.devnhr.com/v1/',
+    // baseURL: 'https://ead.api-staging.nathanerp.com/',
+    baseURL: process.env.BASE_URL,
+    crossDomain: process.env.CROSS_DOMAIN,
+    https: process.env.HTTPS,
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -42,5 +59,6 @@ export default {
   build: {
     // https://github.com/primefaces/primevue/issues/844
     transpile: ['primevue'],
+    postcss: null,
   }
 }
