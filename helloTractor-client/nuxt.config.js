@@ -59,6 +59,19 @@ export default {
   build: {
     // https://github.com/primefaces/primevue/issues/844
     transpile: ['primevue'],
-    postcss: null,
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+      },
+    },
+    loaders: {
+      sass: {
+        implementation: require('sass'),
+      },
+      scss: {
+        implementation: require('sass'),
+      },
+    },
   }
 }
