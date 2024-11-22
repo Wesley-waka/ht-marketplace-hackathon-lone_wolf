@@ -1,12 +1,12 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../models/user');
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+import { use, serializeUser, deserializeUser } from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
+import User, { findOne, findById } from '../models/user';
+import { randomBytes } from 'crypto';
+import { createTransport } from 'nodemailer';
 
 // Configure Nodemailer
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   service: 'Gmail',
   host: "smtp.gmail.com",
   port: 465,
@@ -19,16 +19,16 @@ const transporter = nodemailer.createTransport({
 
 
 
-passport.use(new GoogleStrategy({
+use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback'
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    let user = await User.findOne({ googleId: profile.id });
+    let user = await findOne({ googleId: profile.id });
 
     if (!user) {
-      const twoFactorCode = crypto.randomBytes(3).toString('hex');
+      const twoFactorCode = randomBytes(3).toString('hex');
       user = new User({
         googleId: profile.id,
         email: profile.emails[0].value,
@@ -53,17 +53,17 @@ passport.use(new GoogleStrategy({
   }
 }));
 
-passport.use(new FacebookStrategy({
+use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: '/auth/facebook/callback',
   profileFields: ['id', 'emails', 'name']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    let user = await User.findOne({ facebookId: profile.id });
+    let user = await findOne({ facebookId: profile.id });
 
     if (!user) {
-      const twoFactorCode = crypto.randomBytes(3).toString('hex');
+      const twoFactorCode = randomBytes(3).toString('hex');
       user = new User({
         facebookId: profile.id,
         email: profile.emails[0].value,
@@ -88,13 +88,13 @@ passport.use(new FacebookStrategy({
   }
 }));
 
-passport.serializeUser((user, done) => {
+serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id, done) => {
+deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await findById(id);
     done(null, user);
   } catch (error) {
     done(error, null);

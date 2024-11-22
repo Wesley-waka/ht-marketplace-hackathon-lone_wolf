@@ -1,24 +1,26 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user');
-const passport = require('passport');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
-const AWS = require('aws-sdk');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+import { Router } from 'express';
+import User from '../models/user.js';
+import { authenticate } from 'passport';
+import { createTransport } from 'nodemailer';
+import { randomBytes } from 'crypto';
+import { sign } from 'jsonwebtoken';
+import { hash, compare } from 'bcrypt';
+import cookieParser from 'cookie-parser';
+import { config, S3 } from 'aws-sdk';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
+
+
+const authRouter = Router();
 
 // Configure AWS SDK
-AWS.config.update({
+config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
-const s3 = new AWS.S3();
+const s3 = new S3();
 
 const upload = multer({
   storage: multerS3({
@@ -40,9 +42,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 router.use(cookieParser());
 
 // Google authentication routes
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+router.get('/google/callback', authenticate('google', { failureRedirect: '/' }), (req, res) => {
   res.redirect('/verify-2fa');
 });
 
@@ -61,7 +63,7 @@ router.post('/verify-2fa', async (req, res) => {
       await user.save();
 
       // Generate JWT token
-      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
       // Set token as a cookie
       res.cookie('token', token, { httpOnly: true });
@@ -76,14 +78,14 @@ router.post('/verify-2fa', async (req, res) => {
 });
 
 // Facebook authentication routes
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+router.get('/facebook', authenticate('facebook', { scope: ['email'] }));
 
-router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
+router.get('/facebook/callback', authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
   res.redirect('/verify-2fa');
 });
 
 // Configure Nodemailer
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   service: 'Gmail',
   host: "smtp.gmail.com",
   port: 465,
@@ -99,10 +101,10 @@ router.post('/signup', upload.array('image', 1), async (req, res) => {
   const { email, password } = req.body;
 
   // Generate a 2FA code
-  const twoFactorCode = crypto.randomBytes(3).toString('hex');
+  const twoFactorCode = randomBytes(3).toString('hex');
 
   // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await hash(password, 10);
 
   const image = req.files[0].location; // S3 URL
 
@@ -143,13 +145,13 @@ router.post('/signin', async (req, res) => {
       return res.status(400).send('Email not verified.');
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await compare(password, user.password);
     if (!isMatch) {
       return res.status(400).send('Invalid email or password.');
     }
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
     // Set token as a cookie
     res.cookie('token', token, { httpOnly: true });
@@ -160,4 +162,4 @@ router.post('/signin', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default authRouter;

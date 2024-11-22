@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const childDealerSchema = new mongoose.Schema({
+const childDealerSchema = new Schema({
   name: String,
   specialty: String,
-  dealer: { type: mongoose.Schema.Types.ObjectId, ref: 'Dealer' },
+  dealer: { type: Schema.Types.ObjectId, ref: 'Dealer' },
   location: {
     type: { type: String, default: 'Point' },
     coordinates: [Number],
   },
 });
 
-module.exports = mongoose.model('Dealer', childDealerSchema);
+export default model('Dealer', childDealerSchema);

@@ -1,32 +1,39 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const passport = require('passport');
-const session = require('express-session');
-const authRoutes = require('./routes/auth');
-const reviewRoutes = require('./routes/review.routes');
+import express, { json, static as serveStatic } from 'express';
+import pkg from 'body-parser';
+import { connect } from 'mongoose';
+import { config } from 'dotenv';
+import passport from 'passport';
+import session from 'express-session';
+import path from 'path';
+import { fileURLToPath } from 'url';
+// import authRouter from './routes/auth.js';
+import reviewRouter from './routes/review.routes.js';
 
-dotenv.config();
-
+config();
 const app = express();
-app.use(bodyParser.json());
+
+const { json: _json } = pkg;
+const { initialize: _initialize, session: _session } = passport;
+// app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
+// app.use(pkgPassport.initialize());
+// app.use(pkgPassport.session());
+app.use(_json());
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(json());
+app.use('/uploads', serveStatic(path.join(__dirname, 'uploads')));
 
-app.use("/api", reviewRoutes);
+app.use("/api", reviewRouter);
+// app.use('/auth', authRouter);
 
-app.use('/auth', authRoutes);
 app.get('/', (req, res) => {
   console.log('Hello, world!');
   res.send('Hello, world!');

@@ -1,17 +1,17 @@
-const Tractor = require('../models/Tractor');
-const router = express.Router();
-const AWS = require('aws-sdk');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+import Tractor from '../models/Tractor';
+import { config, S3 } from 'aws-sdk';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
 
 // Configure AWS SDK
-AWS.config.update({
+config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
-const s3 = new AWS.S3();
+const s3 = new S3();
+const router = express.Router();
 
 const upload = multer({
   storage: multerS3({
@@ -64,4 +64,4 @@ router.get('/tractors/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

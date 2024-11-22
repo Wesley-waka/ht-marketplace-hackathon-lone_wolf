@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String },
   googleId: { type: String },
@@ -23,4 +23,4 @@ const userSchema = new mongoose.Schema({
 
 userSchema.index({ location: '2dsphere'});
 
-module.exports = mongoose.model('User', userSchema);
+export default model('User', userSchema);

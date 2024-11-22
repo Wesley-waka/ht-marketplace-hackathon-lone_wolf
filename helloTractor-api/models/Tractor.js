@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+import { Schema, model as _model } from 'mongoose';
 
-const tractorSchema = new mongoose.Schema({
+const tractorSchema = new Schema({
   tractorName: String,
   model: String,
   year: Number,
-  images: {type:[String], required: true},
-  dealer: { type: mongoose.Schema.Types.ObjectId, ref: 'Dealer' }, //same as brand or make
+  images: { type: [String], required: true },
+  dealer: { type: Schema.Types.ObjectId, ref: 'Dealer' }, //same as brand or make
   isApproved: { type: Boolean, default: false },
   HPCategory: Number,
   engineHoursUsed: Number,
@@ -15,11 +15,11 @@ const tractorSchema = new mongoose.Schema({
   engineConditions: String,
   engineConsumption: Number,
   tyreConditions: String,
-  exteriorFeatures: {type:[String], required: true},
-  interiorFeatures: {type:[String], required: true},
+  exteriorFeatures: { type: [String], required: true },
+  interiorFeatures: { type: [String], required: true },
   price: Number,
 
-  
+
 });
 
-module.exports = mongoose.model('Tractor', tractorSchema);
+export default _model('Tractor', tractorSchema);

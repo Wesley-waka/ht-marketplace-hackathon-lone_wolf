@@ -1,6 +1,6 @@
-const ChildDealers = require('../models/ChildDealers');
-const Dealer = require('../models/Dealer');
-const user = require('../models/user');
+import ChildDealers from '../models/ChildDealers';
+import Dealer, { findById, find } from '../models/Dealer';
+import user from '../models/user';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -47,7 +47,7 @@ router.post('/dealers/:dealerId/dealers', async (req, res) => {
     const mechanic = new Dealer({ name, specialty, dealer: dealerId });
     await mechanic.save();
 
-    const dealer = await Dealer.findById(dealerId);
+    const dealer = await findById(dealerId);
     dealer.mechanics.push(mechanic._id);
     await dealer.save();
 
@@ -76,10 +76,32 @@ router.post('/dealers/:dealerId/dealers', async (req, res) => {
   }
 });
 
+router.post('/dealer-submit', async (req, res) => {
+  try {
+    const { name, email, state } = req.body;
+
+    // find a way to get the dealer's name 
+    // Email content
+    const mailOptions = {
+      from: 'your-email@gmail.com',
+      to: email,
+      subject: 'Appointment Confirmation',
+      text: `Hello ${name},\n\nYou will be attended to on Thursday.\n\nState: ${state}.Kinddly contact us if you dealer does not contact you before that date.\n\nBest regards,\nHello Tractor`
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.get('/dealers-nearby', async (req, res) => {
   const { lat, lng } = req.query;
-  const drivers = await Dealer.find({
+  const drivers = await find({
     location: {
       $near: {
         $geometry: { type: 'Point', coordinates: [lng, lat] },
@@ -145,4 +167,4 @@ app.get('/dealers-nearby', async (req, res) => {
 
 // export default App;
 
-module.exports = router;
+export default router;

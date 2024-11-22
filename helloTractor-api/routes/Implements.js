@@ -1,5 +1,5 @@
 const router = express.Router();
-const Implements = require('../models/Implements');
+import Implements from '../models/Implements';
 const upload = multer({ storage });
 
 // Multer setup for image upload
@@ -44,4 +44,4 @@ router.get('/implements/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
