@@ -37,19 +37,19 @@
         <div class="">
           <div class="w-[600px] rounded-md absolute bg-green-500 h-48 z-10 top-[50rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex py-[40px] px-[20px] gap-3">
             <div class="flex align-middle gap-3">
-              <img class="h-[40px]" src="../static/caraudit.svg" alt="">
+              <img class="h-[40px]" src="/caraudit.svg" alt="">
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             </div>
             <div class="divider divider-horizontal"></div>
             <div class="flex align-middle gap-3">
-              <img src="../static/finance.svg" class="h-[40px]" alt="">
+              <img src="/finance.svg" class="h-[40px]" alt="">
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             </div>
             <div class="divider divider-horizontal"></div>
             
             <div class="flex align-middle gap-3">
               
-              <img src="../static/legal.svg" class="h-[40px]" alt="">
+              <img src="/legal.svg" class="h-[40px]" alt="">
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             </div>
           </div>
