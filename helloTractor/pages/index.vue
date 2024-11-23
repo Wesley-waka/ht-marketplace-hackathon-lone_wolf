@@ -19,7 +19,7 @@
         <div class="flex space-x-4 mt-3">
           <i class="pi pi-heart" style="font-size: 1.5rem"></i>
           <div class="flex align-middle mx-auto space-x-2">
-            <img src="../static/login.svg" class="h-8" alt="" srcset="">
+            <img src="/login.svg" class="h-8" alt="" srcset="">
             <h3 class="mt-1">Login</h3>
           </div>
         </div>
