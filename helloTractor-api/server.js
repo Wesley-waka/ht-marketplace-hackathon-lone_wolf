@@ -11,6 +11,7 @@ import reviewRouter from './routes/review.routes.js';
 import messageRouter from './routes/message.js';
 import tractorRouter from './routes/tractors.js';
 import implementsRouter from './routes/implements.js';
+import childDealerRouter from './routes/childDealer.js';
 
 config();
 const app = express();
@@ -39,6 +40,7 @@ app.use('/implements',implementsRouter);
 app.use("/api", reviewRouter);
 app.use('/auth', authRouter);
 app.use('/messages',messageRouter);
+app.use('/childDealer',childDealerRouter);
 
 app.get('/', (req, res) => {
   console.log('Hello, world!');

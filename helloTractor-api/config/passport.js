@@ -65,24 +65,18 @@ export default function configurePassport() {
 
 
         console.log(state,'this is the profile');
+        
 
-        function removeOutsideQuotes(str) {
-          return `'${str.replace(/^"|"$/g, '')}'`;
+        if (user) {
+          if (!user.google || !user.google.id) {
+            user.google = {
+              id: profile.id,
+              email: profile.emails[0].value
+            };
+            await user.save();
+          }
+          return done(null, user);
         }
-        
-       
-        
-
-        // if (user) {
-        //   if (!user.google || !user.google.id) {
-        //     user.google = {
-        //       id: profile.id,
-        //       email: profile.emails[0].value
-        //     };
-        //     await user.save();
-        //   }
-        //   return done(null, user);
-        // }
 
     
 

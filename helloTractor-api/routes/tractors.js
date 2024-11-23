@@ -4,16 +4,8 @@ import multer from 'multer';
 import { S3Client } from "@aws-sdk/client-s3";
 import multerS3 from 'multer-s3';
 import { config } from 'dotenv';
-// Configure AWS SDK
-// config.update({
-//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   region: process.env.AWS_REGION,
-// });
 config();
 
-
-// const s3 = new S3();
 const tractorRouter = express.Router();
 
 const s3Client = new S3Client({
@@ -25,7 +17,6 @@ const s3Client = new S3Client({
 });
 
 const fileFilter = (req, file, cb) => {
-  // Accept images only
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return cb(new Error('Only image files are allowed!'), false);
   }
@@ -46,13 +37,12 @@ const upload = multer({
     },
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB file size limit
+    fileSize: 5 * 1024 * 1024
   }
 });
 
 tractorRouter.post('/tractors', async (req, res) => {
-
-  const uploadMiddleware = upload.single('image');
+  const uploadMiddleware = upload.array('images',5);
 
   try {
     await new Promise((resolve, reject) => {
@@ -69,15 +59,26 @@ tractorRouter.post('/tractors', async (req, res) => {
       return res.status(400).send('Please upload an image file.');
     }
 
-    const { model, year, dealerId } = req.body;
+    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures } = req.body;
 
-    const imageUrl = req.file.location;// S3 URL
+    const imageUrl = req.file.location;
 
     const tractor = new Tractor({
       model,
       year,
       images: imageUrl,
-      dealer: dealerId,
+      dealer,
+      HPCategory,
+      engineHoursUsed,
+      vehicleID,
+      engineCapacity,
+      fuelType,
+      engineConditions,
+      engineConsumption,
+      tyreConditions,
+      exteriorFeatures,
+      interiorFeatures,
+      tractorName,
     });
 
     await tractor.save();
@@ -100,6 +101,54 @@ tractorRouter.get('/tractors/:id', async (req, res) => {
     const priceRatio = (tractor.price / totalPrices) * 100;
 
     res.json({ ...tractor.toObject(), priceRatio });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+tractorRouter.patch('/tractors/:id', async (req, res) => {
+  const uploadMiddleware = upload.array('images', 5); // Allow up to 5 images
+
+  try {
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const tractor = await Tractor.findById(req.params.id);
+
+    if (!tractor) {
+      return res.status(404).json({ error: 'Tractor not found' });
+    }
+
+    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures } = req.body;
+
+    if (req.file) {
+      tractor.images = req.file.location;
+    }
+
+    tractor.tractorName = tractorName || tractor.tractorName;
+    tractor.model = model || tractor.model;
+    tractor.year = year || tractor.year;
+    tractor.dealer = dealer || tractor.dealer;
+    tractor.HPCategory = HPCategory || tractor.HPCategory;
+    tractor.engineHoursUsed = engineHoursUsed || tractor.engineHoursUsed;
+    tractor.vehicleID = vehicleID || tractor.vehicleID;
+    tractor.engineCapacity = engineCapacity || tractor.engineCapacity;
+    tractor.fuelType = fuelType || tractor.fuelType;
+    tractor.engineConditions = engineConditions || tractor.engineConditions;
+    tractor.engineConsumption = engineConsumption || tractor.engineConsumption;
+    tractor.tyreConditions = tyreConditions || tractor.tyreConditions;
+    tractor.exteriorFeatures = exteriorFeatures || tractor.exteriorFeatures;
+    tractor.interiorFeatures = interiorFeatures || tractor.interiorFeatures;
+
+    await tractor.save();
+    res.json(tractor);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

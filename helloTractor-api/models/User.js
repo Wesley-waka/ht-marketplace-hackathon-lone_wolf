@@ -1,40 +1,82 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String },
-  googleId: { type: String },
-  facebookId: { type: String },
-  // images: {type:[String], required: true},
-  matchedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  images: {type:[String]},
-  twoFactorCode: { type: String, required: true },
-  isVerified: { type: Boolean, default: false },
-  user: { type: String, enum: ['buyer','seller','admin','"buyer"','"seller"','"admin"']},
-  isAdmin: {
-    type: Boolean,
-    required: false,
-    default: false,
+  name: {
+    type: String,
+    required: true,
+    trim: true
   },
-  location: {
-    type: { type: String, default: 'Point' },
-    coordinates: [Number],
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
   },
-  totalRating: { type: Number, default: 0 },
-  ratingCount: { type: Number, default: 0 },
-  reviewsCount: { type: Number, default: 0 },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8
+  },
   google: {
-    id: String,
-    email: String
+    id: {
+      type: String,
+      sparse: true
+    },
+    email: {
+      type: String,
+      sparse: true,
+      lowercase: true
+    }
   },
-  facebook: {
-    id: String,
-    email: String
+  isVerified: {
+    type: Boolean,
+    default: false
   },
-  phoneNumber: { type: String },
+  twoFactorCode: {
+    type: String,
+    default: ''
+  },
+  phoneNumber: {
+    type: String,
+    default: ''
+  },
+  user: {
+    type: String,
+    required: true
+  },
+  images: {
+    type: [String],
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
 });
 
-userSchema.index({ location: '2dsphere'});
+// Index for faster queries
+userSchema.index({ email: 1 });
+userSchema.index({ 'google.id': 1 });
 
-export default model('User', userSchema);
+// Pre-save middleware to handle password hashing if needed
+userSchema.pre('save', function(next) {
+  // You can add password hashing logic here if needed
+  next();
+});
+
+// Method to validate if the user has completed 2FA
+userSchema.methods.has2FACompleted = function() {
+  return this.isVerified && !this.twoFactorCode;
+};
+
+const User = mongoose.model('User', userSchema);
+
+export default User;

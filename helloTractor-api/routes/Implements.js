@@ -45,10 +45,10 @@ const upload = multer({
   }
 });
 
-
-
 implementsRouter.post('/implements', async (req, res) => {
   try {
+    const uploadMiddleware = upload.array('images', 5);
+
     await new Promise((resolve, reject) => {
       uploadMiddleware(req, res, (err) => {
         if (err) {
@@ -63,19 +63,36 @@ implementsRouter.post('/implements', async (req, res) => {
       return res.status(400).send('Please upload an image file.');
     }
 
-    const { model, year, dealerId } = req.body;
-    const images = req.files.map(file => file.path);
+    const { model, year, dealer, implementType, implementCategory, implementPower, modelTyneFix, modelTyneThickness, numberofTyne, frameTyne, interTyneSpacing, gapBetweenFrontTyne, rearTyne, tyneHeight, mostHeightGround, height, width, lengthtotalWeigth, widthOfCut, powerRequired, isApproved } = req.body;
 
     const imageUrl = req.file.location;
 
-    const Implements = new Implements({
+    const implementCultivator = new Implements({
       model,
       year,
       images: imageUrl,
-      dealer: dealerId,
+      dealer,
+      implementType,
+      implementCategory,
+      implementPower,
+      modelTyneFix,
+      modelTyneThickness,
+      numberofTyne,
+      frameTyne,
+      interTyneSpacing,
+      gapBetweenFrontTyne,
+      rearTyne,
+      tyneHeight,
+      mostHeightGround,
+      height,
+      width,
+      lengthtotalWeigth,
+      widthOfCut,
+      powerRequired,
+      isApproved
     });
 
-    await Implements.save();
+    await implementCultivator.save();
     res.status(201).json(Implements);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -84,11 +101,65 @@ implementsRouter.post('/implements', async (req, res) => {
 
 implementsRouter.get('/implements/:id', async (req, res) => {
   try {
-    const Implements = await Implements.findById(req.params.id).populate('dealer');
-    if (!Implements) {
+    const implementCultivator = await Implements.findById(req.params.id).populate('dealer');
+    if (!implementCultivator) {
       return res.status(404).json({ error: 'Implements not found' });
     }
-    res.json(Implements);
+    res.json(implementCultivator);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+implementsRouter.patch('/implements/:id', async (req, res) => {
+  try {
+    const uploadMiddleware = upload.array('images', 5);
+
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const implementCultivator = await Implements.findById(req.params.id);
+    if (!implementCultivator) {
+      return res.status(404).json({ error: 'Implements not found' });
+    }
+
+    const { model, year, dealer, implementType, implementCategory, implementPower, modelTyneFix, modelTyneThickness, numberofTyne, frameTyne, interTyneSpacing, gapBetweenFrontTyne, rearTyne, tyneHeight, mostHeightGround, height, width, lengthtotalWeigth, widthOfCut, powerRequired, isApproved } = req.body;
+
+    if (req.file) {
+      implementCultivator.images = req.file.location;
+    }
+
+    implementCultivator.model = model || implementCultivator.model;
+    implementCultivator.year = year || implementCultivator.year;
+    implementCultivator.dealer = dealer || implementCultivator.dealer;
+    implementCultivator.implementType = implementType || implementCultivator.implementType;
+    implementCultivator.implementCategory = implementCategory || implementCultivator.implementCategory;
+    implementCultivator.implementPower = implementPower || implementCultivator.implementPower;
+    implementCultivator.modelTyneFix = modelTyneFix || implementCultivator.modelTyneFix;
+    implementCultivator.modelTyneThickness = modelTyneThickness || implementCultivator.modelTyneThickness;
+    implementCultivator.numberofTyne = numberofTyne || implementCultivator.numberofTyne;
+    implementCultivator.frameTyne = frameTyne || implementCultivator.frameTyne;
+    implementCultivator.interTyneSpacing = interTyneSpacing || implementCultivator.interTyneSpacing;
+    implementCultivator.gapBetweenFrontTyne = gapBetweenFrontTyne || implementCultivator.gapBetweenFrontTyne;
+    implementCultivator.rearTyne = rearTyne || implementCultivator.rearTyne;
+    implementCultivator.tyneHeight = tyneHeight || implementCultivator.tyneHeight;
+    implementCultivator.mostHeightGround = mostHeightGround || implementCultivator.mostHeightGround;
+    implementCultivator.height = height || implementCultivator.height;
+    implementCultivator.width = width || implementCultivator.width;
+    implementCultivator.lengthtotalWeigth = lengthtotalWeigth || implementCultivator.lengthtotalWeigth;
+    implementCultivator.widthOfCut = widthOfCut || implementCultivator.widthOfCut;
+    implementCultivator.powerRequired = powerRequired || implementCultivator.powerRequired;
+    implementCultivator.isApproved = isApproved || implementCultivator.isApproved;
+
+    await implementCultivator.save();
+    res.json(implementCultivator);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

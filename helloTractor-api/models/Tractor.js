@@ -18,8 +18,6 @@ const tractorSchema = new Schema({
   exteriorFeatures: { type: [String], required: true },
   interiorFeatures: { type: [String], required: true },
   price: Number,
-
-
 });
 
 export default _model('Tractor', tractorSchema);
