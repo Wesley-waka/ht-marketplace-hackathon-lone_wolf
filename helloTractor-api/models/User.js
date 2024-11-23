@@ -17,12 +17,13 @@ const userSchema = new Schema({
     required: false,
     default: false,
   },
-  // location: {
-  //   type: { type: String, default: 'Point' },
-  //   coordinates: [Number],
-  // },
+  location: {
+    type: { type: String, default: 'Point' },
+    coordinates: [Number],
+  },
   totalRating: { type: Number, default: 0 },
   ratingCount: { type: Number, default: 0 },
+  reviewsCount: { type: Number, default: 0 },
   google: {
     id: String,
     email: String

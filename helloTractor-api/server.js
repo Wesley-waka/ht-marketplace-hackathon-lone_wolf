@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url';
 import authRouter from './routes/auth.js';
 import reviewRouter from './routes/review.routes.js';
 import messageRouter from './routes/message.js';
+import tractorRouter from './routes/tractors.js';
+import implementsRouter from './routes/implements.js';
 
 config();
 const app = express();
@@ -32,9 +34,11 @@ const __dirname = path.dirname(__filename);
 app.use(json());
 app.use('/uploads', serveStatic(path.join(__dirname, 'uploads')));
 
+app.use('/tractor',tractorRouter);
+app.use('/implements',implementsRouter);
 app.use("/api", reviewRouter);
 app.use('/auth', authRouter);
-app.use('/messages',messageRouter)
+app.use('/messages',messageRouter);
 
 app.get('/', (req, res) => {
   console.log('Hello, world!');

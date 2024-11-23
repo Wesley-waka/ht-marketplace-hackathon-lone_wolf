@@ -13,6 +13,7 @@ reviewRouter.post('/reviews', async (req, res) => {
     const seller = await User.findById(sellerId);
     seller.totalRating += rating;
     seller.ratingCount += 1;
+    seller.reviewsCount += 1;
     await seller.save();
 
     res.status(201).send(review);

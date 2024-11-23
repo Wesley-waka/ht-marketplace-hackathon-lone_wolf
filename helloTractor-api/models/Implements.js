@@ -26,7 +26,7 @@ const implementSchema = new Schema({
   isApproved: { type: Boolean, default: false },
 });
 
-export default _model('Tractor', implementSchema);
+export default _model('Implements', implementSchema);
 
 
 //Dealer and technicians

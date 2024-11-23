@@ -1,21 +1,41 @@
-import Tractor from '../models/Tractor';
-import { config, S3 } from 'aws-sdk';
+import express from "express";
+import Tractor from '../models/Tractor.js';
 import multer from 'multer';
+import { S3Client } from "@aws-sdk/client-s3";
 import multerS3 from 'multer-s3';
-
+import { config } from 'dotenv';
 // Configure AWS SDK
-config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+// config.update({
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//   region: process.env.AWS_REGION,
+// });
+config();
+
+
+// const s3 = new S3();
+const tractorRouter = express.Router();
+
+const s3Client = new S3Client({
   region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }
 });
 
-const s3 = new S3();
-const router = express.Router();
+const fileFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
 
 const upload = multer({
+  fileFilter: fileFilter,
   storage: multerS3({
-    s3: s3,
+    s3: s3Client,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     acl: 'public-read',
     metadata: (req, file, cb) => {
@@ -25,17 +45,38 @@ const upload = multer({
       cb(null, `${Date.now().toString()}-${file.originalname}`);
     },
   }),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB file size limit
+  }
 });
 
-router.post('/tractors', upload.array('images', 5), async (req, res) => {
+tractorRouter.post('/tractors', async (req, res) => {
+
+  const uploadMiddleware = upload.single('image');
+
   try {
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    if (!req.file) {
+      return res.status(400).send('Please upload an image file.');
+    }
+
     const { model, year, dealerId } = req.body;
-    const images = req.files.map(file => file.location); // S3 URL
+
+    const imageUrl = req.file.location;// S3 URL
 
     const tractor = new Tractor({
       model,
       year,
-      images,
+      images: imageUrl,
       dealer: dealerId,
     });
 
@@ -46,7 +87,7 @@ router.post('/tractors', upload.array('images', 5), async (req, res) => {
   }
 });
 
-router.get('/tractors/:id', async (req, res) => {
+tractorRouter.get('/tractors/:id', async (req, res) => {
   try {
     const tractor = await Tractor.findById(req.params.id).populate('dealer');
 
@@ -64,4 +105,4 @@ router.get('/tractors/:id', async (req, res) => {
   }
 });
 
-export default router;
+export default tractorRouter;
