@@ -1,6 +1,12 @@
+<script setup>
+useHead({
+  title: "Hello Tractor",
+});
+</script>
+
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div>
+  <NuxtLayout>
+    <Toaster position="top-right" richColors />
+    <NuxtPage />
+  </NuxtLayout>
 </template>
