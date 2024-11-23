@@ -1,30 +1,48 @@
-import { Router } from 'express';
+import express from "express";
 import User from '../models/user.js';
-import { authenticate } from 'passport';
+import passport from 'passport';
 import { createTransport } from 'nodemailer';
 import { randomBytes } from 'crypto';
-import { sign } from 'jsonwebtoken';
+import sign from 'jsonwebtoken';
 import { hash, compare } from 'bcrypt';
 import cookieParser from 'cookie-parser';
-import { config, S3 } from 'aws-sdk';
+import { S3Client } from "@aws-sdk/client-s3";
 import multer from 'multer';
 import multerS3 from 'multer-s3';
+import { config } from 'dotenv';
+import configurePassport from "../config/passport.js";
+import generateTokenAndSetCookie from "../utils/generateToken.js";
+
+config();
 
 
-const authRouter = Router();
 
-// Configure AWS SDK
-config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const authRouter = express.Router();
+
+// Configure AWS SDK v3
+const s3Client = new S3Client({
   region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }
 });
 
-const s3 = new S3();
+configurePassport();
+
+// Updated multer configuration for S3 v3
+const fileFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return cb(new Error('Only image files are allowed!'), false);
+  }
+  cb(null, true);
+};
 
 const upload = multer({
+  fileFilter: fileFilter,
   storage: multerS3({
-    s3: s3,
+    s3: s3Client,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     acl: 'public-read',
     metadata: (req, file, cb) => {
@@ -34,22 +52,59 @@ const upload = multer({
       cb(null, `${Date.now().toString()}-${file.originalname}`);
     },
   }),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB file size limit
+  }
 });
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 // Middleware to parse cookies
-router.use(cookieParser());
+authRouter.use(cookieParser());
 
 // Google authentication routes
-router.get('/google', authenticate('google', { scope: ['profile', 'email'] }));
+// authRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', authenticate('google', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/verify-2fa');
+// authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+//   res.redirect('/verify-2fa');
+// });
+
+authRouter.get('/google', 
+  (req, res, next) => {
+    const {userType} = req.query;
+    passport.authenticate('google', { 
+      scope: ['profile', 'email'],
+      prompt: 'select_account',
+      state: JSON.stringify(userType)
+    })(req, res, next);
+  }
+);
+
+authRouter.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Successful authentication, redirect to the desired page
+    res.redirect('/verify-2fa?email=' + req.user.email);
+  }
+);
+
+// Facebook authentication routes
+authRouter.get('/facebook', (req, res, next) => {
+  const { userType } = req.query;
+
+  passport.authenticate('facebook', { 
+    scope: ['email'],
+    state: JSON.stringify(userType)
+  })(req, res, next);
 });
 
-router.post('/verify-2fa', async (req, res) => {
-  const { email, twoFactorCode } = req.body;
+authRouter.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('/verify-2fa?email=' + req.user.email);
+});
+
+authRouter.post('/verify-2fa', async (req, res) => {
+  const { email } = req.query;
+  const { twoFactorCode } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -62,12 +117,8 @@ router.post('/verify-2fa', async (req, res) => {
       user.isVerified = true;
       await user.save();
 
-      // Generate JWT token
       const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
-      // Set token as a cookie
       res.cookie('token', token, { httpOnly: true });
-
       res.status(200).send('2FA verification successful.');
     } else {
       res.status(400).send('Invalid 2FA code.');
@@ -77,12 +128,7 @@ router.post('/verify-2fa', async (req, res) => {
   }
 });
 
-// Facebook authentication routes
-router.get('/facebook', authenticate('facebook', { scope: ['email'] }));
 
-router.get('/facebook/callback', authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/verify-2fa');
-});
 
 // Configure Nodemailer
 const transporter = createTransport({
@@ -96,42 +142,74 @@ const transporter = createTransport({
   }
 });
 
-// Sign-up route
-router.post('/signup', upload.array('image', 1), async (req, res) => {
-  const { email, password } = req.body;
-
-  // Generate a 2FA code
-  const twoFactorCode = randomBytes(3).toString('hex');
-
-  // Hash the password
-  const hashedPassword = await hash(password, 10);
-
-  const image = req.files[0].location; // S3 URL
-
-  // Create a new user
-  const newUser = new User({ email, password: hashedPassword, twoFactorCode, image });
-
+// Updated sign-up route with error handling
+authRouter.post('/signup', async (req, res) => {
+  // Wrap the multer upload in a promise to handle errors better
+  const uploadMiddleware = upload.single('image');
+  
   try {
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    if (!req.file) {
+      return res.status(400).send('Please upload an image file.');
+    }
+
+    const { name, email, password, location, phoneNumber, user } = req.body;
+
+    // Generate a 2FA code
+    const twoFactorCode = randomBytes(3).toString('hex');
+
+    // Hash the password
+    const hashedPassword = await hash(password, 10);
+
+    const imageUrl = req.file.location; // S3 URL
+
+    // Create a new user
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      twoFactorCode,
+      images: imageUrl,
+      location,
+      phoneNumber,
+      user,
+      name
+    });
+
     await newUser.save();
 
+    
+
+    // Generate verification link
+    const verificationLink = `${process.env.APP_URL}/verify-2FA?email=${email}`;
+    
     // Send 2FA code via email
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,
       subject: 'Your 2FA Code',
-      text: `Your 2FA code is: ${twoFactorCode}`
+      text: `Your 2FA code is: ${twoFactorCode}.Click the following link and enter the code to verify your email: ${verificationLink}`
     };
 
     await transporter.sendMail(mailOptions);
 
     res.status(200).send('Sign-up successful. Please check your email for the 2FA code.');
   } catch (error) {
-    res.status(500).send('Error signing up. Please try again.');
+    console.error('Signup error:', error);
+    res.status(500).send(`Error signing up: ${error.message}`);
   }
 });
 
 // Sign-in route
-router.post('/signin', async (req, res) => {
+authRouter.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -150,16 +228,16 @@ router.post('/signin', async (req, res) => {
       return res.status(400).send('Invalid email or password.');
     }
 
-    // Generate JWT token
-    const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
-    // Set token as a cookie
-    res.cookie('token', token, { httpOnly: true });
-
+    generateTokenAndSetCookie(user._id, res);
+    // const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    // res.cookie('token', token, { httpOnly: true });
     res.status(200).send('Sign-in successful.');
   } catch (error) {
     res.status(500).send('Error signing in. Please try again.');
   }
 });
+
+authRouter.use(passport.initialize());
+authRouter.use(passport.session());
 
 export default authRouter;

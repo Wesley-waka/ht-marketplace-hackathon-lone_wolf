@@ -2,26 +2,19 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    reviewerId: {
+    buyer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: 'User',
+      required: true
     },
-    revieweeId: {
+    seller: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: 'User',
+      required: true
     },
-    rating: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 5,
-    },
-    review: {
-      type: String,
-      required: true,
-    },
+    rating: { type: Number, min: 1, max: 5, required: true },
+    reviewText: { type: String, required: true },
+    feedback: { type: String }
   },
   { timestamps: true }
 );

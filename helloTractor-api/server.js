@@ -6,8 +6,9 @@ import passport from 'passport';
 import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import authRouter from './routes/auth.js';
+import authRouter from './routes/auth.js';
 import reviewRouter from './routes/review.routes.js';
+import messageRouter from './routes/message.js';
 
 config();
 const app = express();
@@ -32,7 +33,8 @@ app.use(json());
 app.use('/uploads', serveStatic(path.join(__dirname, 'uploads')));
 
 app.use("/api", reviewRouter);
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
+app.use('/messages',messageRouter)
 
 app.get('/', (req, res) => {
   console.log('Hello, world!');
