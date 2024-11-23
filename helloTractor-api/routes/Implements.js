@@ -99,6 +99,27 @@ implementsRouter.post('/implements', async (req, res) => {
   }
 });
 
+// New endpoint to get all implements with optional filtering by brand or category
+implementsRouter.get('/implements', async (req, res) => {
+  try {
+    const { brand, category } = req.query;
+    const filter = {};
+
+    if (brand) {
+      filter.dealer = brand;
+    }
+
+    if (category) {
+      filter.implementCategory = category;
+    }
+
+    const implementsList = await Implements.find(filter).populate('dealer');
+    res.json(implementsList);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 implementsRouter.get('/implements/:id', async (req, res) => {
   try {
     const implementCultivator = await Implements.findById(req.params.id).populate('dealer');

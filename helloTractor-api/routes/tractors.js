@@ -59,7 +59,7 @@ tractorRouter.post('/tractors', async (req, res) => {
       return res.status(400).send('Please upload an image file.');
     }
 
-    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures } = req.body;
+    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures,cost } = req.body;
 
     const imageUrl = req.file.location;
 
@@ -73,6 +73,7 @@ tractorRouter.post('/tractors', async (req, res) => {
       vehicleID,
       engineCapacity,
       fuelType,
+      cost,
       engineConditions,
       engineConsumption,
       tyreConditions,
@@ -101,6 +102,37 @@ tractorRouter.get('/tractors/:id', async (req, res) => {
     const priceRatio = (tractor.price / totalPrices) * 100;
 
     res.json({ ...tractor.toObject(), priceRatio });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+tractorRouter.get('/tractors', async (req, res) => {
+  try {
+    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features,tractorType } = req.query;
+    const query = {};
+
+    if (dealer) query.dealer = dealer;
+    if (budget) query.cost = { $lte: budget };
+    if (location) {
+      const [lng, lat] = location.split(',').map(Number);
+      query.location = {
+        $near: {
+          $geometry: { type: 'Point', coordinates: [lng, lat] },
+          $maxDistance: 5000, // 5 km radius
+        },
+      };
+    }
+    if(tractorType) query.tractorType = tractorType;
+    if (cost) query.cost = { $lte: cost };
+    if (HP) query.HPCategory = { $gte: HP.from, $lte: HP.to };
+    if (price) query.price = { $gte: price.from, $lte: price.to };
+    if (year) query.year = { $gte: year.from, $lte: year.to };
+    if (engineHoursUsed) query.engineHoursUsed = { $gte: engineHoursUsed.from, $lte: engineHoursUsed.to };
+    if (features) query.features = { $in: features.split(',') };
+
+    const tractors = await Tractor.find(query);
+    res.json(tractors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -153,5 +185,7 @@ tractorRouter.patch('/tractors/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 export default tractorRouter;

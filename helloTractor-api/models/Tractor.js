@@ -8,6 +8,8 @@ const tractorSchema = new Schema({
   dealer: { type: Schema.Types.ObjectId, ref: 'Dealer' }, //same as brand or make
   isApproved: { type: Boolean, default: false },
   HPCategory: Number,
+  cost: Number,
+  tractorType: {type: String,enum:['Utility Tractors','Row-Crop Tractors','Compact Tractors','Sub-Compact Tractors','High-Horsepower Tractors']},
   engineHoursUsed: Number,
   vehicleID: Number,
   engineCapacity: Number,

@@ -31,9 +31,29 @@ childDealerRouter.patch('/child-dealers/:id', async (req, res) => {
 });
 
 // GET request to retrieve all child dealers
+
 childDealerRouter.get('/child-dealers', async (req, res) => {
   try {
-    const childDealers = await ChildDealer.find();
+    const { lng, lat } = req.query;
+    const maxDistance = 10000;
+    let childDealers;
+
+    if (lng && lat && maxDistance) {
+      childDealers = await ChildDealer.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [parseFloat(lng), parseFloat(lat)],
+            },
+            $maxDistance: parseFloat(maxDistance),
+          },
+        },
+      });
+    } else {
+      childDealers = await ChildDealer.find();
+    }
+
     res.json(childDealers);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -98,8 +98,39 @@ router.post('/dealer-submit', async (req, res) => {
   }
 });
 
+// Endpoint to get all dealers or based on query
+router.get('/dealers', async (req, res) => {
+  try {
+    const { lng, lat } = req.query;
+    const maxDistance = 10000;
+    let dealers;
 
-app.get('/dealers-nearby', async (req, res) => {
+    if (lng && lat && maxDistance) {
+      dealers = await Dealer.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [parseFloat(lng), parseFloat(lat)],
+            },
+            $maxDistance: parseFloat(maxDistance),
+          },
+        },
+      });
+    } else {
+      dealers = await Dealer.find();
+    }
+
+
+    
+    res.status(200).json(dealers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+router.get('/dealers-nearby', async (req, res) => {
   const { lat, lng } = req.query;
   const drivers = await find({
     location: {
