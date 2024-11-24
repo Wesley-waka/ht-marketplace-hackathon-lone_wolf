@@ -186,4 +186,31 @@ implementsRouter.patch('/implements/:id', async (req, res) => {
   }
 });
 
+implementsRouter.post('/increment/:productId', async (req, res) => {
+  const { productId } = req.params;
+  let productView = await Implements.findOne({ productId });
+
+  if (!productView) {
+    productView = new Tractor({ productId });
+  }
+
+  productView.viewCount += 1;
+  await productView.save();
+
+  res.status(200).json({ viewCount: productView.viewCount });
+});
+
+
+// Get view count
+implementsRouter.get('/:productId', async (req, res) => {
+  const { productId } = req.params;
+  const productView = await Implements.findOne({ productId });
+
+  if (!productView) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+
+  res.status(200).json({ viewCount: productView.viewCount });
+});
+
 export default implementsRouter;

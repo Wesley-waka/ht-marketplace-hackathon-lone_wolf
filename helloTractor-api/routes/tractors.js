@@ -42,7 +42,7 @@ const upload = multer({
 });
 
 tractorRouter.post('/tractors', async (req, res) => {
-  const uploadMiddleware = upload.array('images',5);
+  const uploadMiddleware = upload.array('images', 5);
 
   try {
     await new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ tractorRouter.post('/tractors', async (req, res) => {
       return res.status(400).send('Please upload an image file.');
     }
 
-    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures,cost } = req.body;
+    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures, cost } = req.body;
 
     const imageUrl = req.file.location;
 
@@ -109,7 +109,7 @@ tractorRouter.get('/tractors/:id', async (req, res) => {
 
 tractorRouter.get('/tractors', async (req, res) => {
   try {
-    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features,tractorType } = req.query;
+    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features, tractorType } = req.query;
     const query = {};
 
     if (dealer) query.dealer = dealer;
@@ -123,7 +123,7 @@ tractorRouter.get('/tractors', async (req, res) => {
         },
       };
     }
-    if(tractorType) query.tractorType = tractorType;
+    if (tractorType) query.tractorType = tractorType;
     if (cost) query.cost = { $lte: cost };
     if (HP) query.HPCategory = { $gte: HP.from, $lte: HP.to };
     if (price) query.price = { $gte: price.from, $lte: price.to };
@@ -185,6 +185,35 @@ tractorRouter.patch('/tractors/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Increment view count
+tractorRouter.post('/increment/:productId', async (req, res) => {
+  const { productId } = req.params;
+  let productView = await Tractor.findOne({ productId });
+
+  if (!productView) {
+    productView = new Tractor({ productId });
+  }
+
+  productView.viewCount += 1;
+  await productView.save();
+
+  res.status(200).json({ viewCount: productView.viewCount });
+});
+
+
+// Get view count
+tractorRouter.get('/:productId', async (req, res) => {
+  const { productId } = req.params;
+  const productView = await Tractor.findOne({ productId });
+
+  if (!productView) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+
+  res.status(200).json({ viewCount: productView.viewCount });
+});
+
 
 
 

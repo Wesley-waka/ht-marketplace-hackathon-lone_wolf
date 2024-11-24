@@ -21,6 +21,7 @@ const implementSchema = new Schema({
   width: Number,
   length: Number,
   totalWeigth: Number,
+  viewCount: { type: Number, default: 0 },
   widthOfCut: Number,
   powerRequired: Number,
   isApproved: { type: Boolean, default: false },
