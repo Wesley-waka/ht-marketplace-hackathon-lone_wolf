@@ -31,6 +31,16 @@ export const theme = {
       avenirRoman: ['AvenirLTStd-Roman'],
 
 
-    }
+    },
+    colors: {
+      'orangeBright': '#ff461e',
+      'orangeTint': '#ff623e',
+      'plumBright': '#2f1c54',
+      'plumTint': '#4a3970',
+      'hibiBright': '#f8285f',
+      'hibiTint': '#fa4a78',
+
+      // Add more custom colors here
+    },
   }
 };

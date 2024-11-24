@@ -26,8 +26,93 @@
 
     <!-- Hero -->
     <div>
-        <img src="../assets/images/hero-7.jpeg" class="h-[750px] bg-grad w-full object-cover" alt="">
-      
+        <!-- <img src="../assets/images/hero-7.jpeg" class="h-[750px] bg-grad w-full object-cover" alt=""> -->
+        <div class="hero-section">
+          <div class="relative ml-40 right-0 top-20">
+            <h1 class="text-white font-merriWeatherBold">You choose your car online. <br> We inspect it and deliver it </h1>
+            <div class="rounded-lg w-[600px] bg-white mt-10 flex flex-col space-y-8 py-8 px-8 ">
+              <div class="flex flex-row space-x-2">
+                <CustomInputContainer
+                    label="ID Type"
+                    required
+                    class="w-[200px]"
+                  >
+                  <Select
+                    v-model="formData.idType"
+                    :options="idTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select ID Type"
+                  />
+                </CustomInputContainer>
+                <CustomInputContainer
+                    label="ID Type"
+                    required
+                    class="w-[200px]"
+                  >
+                  <Select
+                    v-model="formData.idType"
+                    :options="idTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select ID Type"
+                  />
+                </CustomInputContainer>
+                <CustomInputContainer
+                    label="ID Type"
+                    required
+                    class="w-[200px]"
+                  >
+                  <Select
+                    v-model="formData.idType"
+                    :options="idTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select ID Type"
+                  />
+                </CustomInputContainer>
+              </div>
+
+              <div class="flex flex-row space-x-2">
+                <CustomInputContainer
+                    label="ID Type"
+                    required
+                    class="w-1/2"
+                  >
+                  <Select
+                    v-model="formData.idType"
+                    :options="idTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select ID Type"
+                  />
+                </CustomInputContainer>
+                <CustomInputContainer
+                    label="ID Type"
+                    required
+                    class="w-1/2"
+                  >
+                  <Select
+                    v-model="formData.idType"
+                    :options="idTypes"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select ID Type"
+                  />
+                </CustomInputContainer>
+              </div>
+
+              <div class="flex justify-end">
+                <button class="btn btn-primary">112 Offers</button>
+              </div>
+            <!-- <Select
+            optionLabel="label"
+            optionValue="value"
+            /> -->
+
+            </div>
+          </div>
+        </div>
       <div class="">
         <div class="w-[70rem] rounded-md absolute bg-[#e8f8fb] h-48 z-10 top-[50rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex py-[40px] px-[20px] gap-3">
           <div class="flex align-middle gap-3 my-auto">
@@ -115,20 +200,20 @@
         </div>
         <div class="mt-20 flex space-x-4">
           <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">FMD</h2>
-            <div><img src="../assets/images/caseIH.png" class="h-[120px] w-[200px]" alt=""></div>
+            <h2 class="pt-3 font-manropeSemiBold text-lg">CMC</h2>
+            <div><img src="../assets/images/companies/logo.png" class="h-[100px] w-[120px]" alt=""></div>
           </div>
             <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
             <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
-            <div><img src="../assets/images/caseIH.png" class="h-[120px] w-[200px]" alt=""></div>
+            <div><img src="../assets/images/companies/mobilitylogo.png" class="h-[100px] w-[150px]" alt=""></div>
             </div>
             <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
             <h2 class="pt-3 font-manropeSemiBold text-lg">Mascor</h2>
-            <div><img src="../assets/images/caseIH.png" class="h-[120px] w-[200px]" alt=""></div>
+            <div><img src="../assets/images/companies/Mascor.png" class="h-[100px] w-[150px]" alt=""></div>
             </div>
             <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">CMC</h2>
-            <div><img src="../assets/images/caseIH.png" class="h-[120px] w-[200px]" alt=""></div>
+            <h2 class="pt-3 font-manropeSemiBold text-lg">FMD</h2>
+            <div><img src="../assets/images/companies/FMD_2C_RGB.webp" class="h-[120px] w-[200px]" alt=""></div>
             </div>
           
         </div>
@@ -141,28 +226,28 @@
           </div>
           <div class=" flex space-x-4">
             <div class="mt-24 flex space-x-4">
-              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
+              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
               <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
               <div><img src="/Sunset Blaze/Hello Tractor_RGB_RED_-Payment.png" class="h-[100px] w-[100px]" alt=""></div>
               </div>
             </div>
 
             <div class="mt-24 flex space-x-4">
-              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
+              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
               <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
               <div><img src="/Sunset Blaze/Hello Tractor_RGB_RED_-Payment.png" class="h-[100px] w-[100px]" alt=""></div>
               </div>
             </div>
 
             <div class="mt-24 flex space-x-4">
-              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
+              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
               <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
               <div><img src="/Sunset Blaze/Hello Tractor_RGB_RED_-Payment.png" class="h-[100px] w-[100px]" alt=""></div>
               </div>
             </div>
 
             <div class="mt-24 flex space-x-4">
-              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
+              <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
               <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
               <div><img src="/Sunset Blaze/Hello Tractor_RGB_RED_-Payment.png" class="h-[100px] w-[100px]" alt=""></div>
               </div>
@@ -179,23 +264,23 @@
         </div>
         <div class="flex space-x-4">
           <div class="mt-24 flex space-x-4">
-            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
+            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
+            <h2 class="pt-3 font-manropeSemiBold text-lg">Nairobi</h2>
             <div><img src="/Sunset Blaze/HT_ICONS_ORANGE-13.png" class="h-[100px] w-[100px]" alt=""></div>
             </div>
 
-            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
+            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
+            <h2 class="pt-3 font-manropeSemiBold text-lg">Eldoret</h2>
             <div><img src="/Sunset Blaze/HT_ICONS_ORANGE-13.png" class="h-[100px] w-[100px]" alt=""></div>
             </div>
 
-            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
+            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
+            <h2 class="pt-3 font-manropeSemiBold text-lg">Nanyuki</h2>
             <div><img src="/Sunset Blaze/HT_ICONS_ORANGE-13.png" class="h-[100px] w-[100px]" alt=""></div>
             </div>
 
-            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col justify-center items-center space-y-2 mx-auto p-4">
-            <h2 class="pt-3 font-manropeSemiBold text-lg">CFAO Motors</h2>
+            <div class="bg-white border-slate-200  shadow-md border-[0.75px] rounded-md w-[310px] h-[190px] flex flex-col-reverse justify-center items-center space-y-2 mx-auto p-4">
+            <h2 class="pt-3 font-manropeSemiBold text-lg">Nakuru</h2>
             <div><img src="/Sunset Blaze/HT_ICONS_ORANGE-13.png" class="h-[100px] w-[100px]" alt=""></div>
             </div>
 
@@ -438,13 +523,16 @@
 import useVuelidate from "@vuelidate/core";
 import { email, required, helpers } from "@vuelidate/validators";
 
-    definePageMeta({
-        layout: "default",
-    });
+definePageMeta({
+    layout: "default",
+});
 
 const emailAddress = ref("");
 const loading = ref(false);
 
+const filterformData = ref({
+  idType: "",
+});
 
 const rules = computed(() => {
   return {
@@ -518,6 +606,24 @@ const handleSubmit = async () => {
        background-size: 'cover';
        
     }
+
+    .hero-section {
+  height: 750px;
+  width: 100%;
+  position: relative;
+  background-image: 
+    radial-gradient(
+      ellipse farthest-corner at right top,
+      hsla(12, 100%, 97%, 0.3) 10%,  /* More transparent at 10% */
+      hsla(12, 100%, 96%, 0.4) 25%,  /* More transparent at 25% */
+      hsla(12, 100%, 82%, 0.85) 54%, /* Full opacity maintained */
+      hsla(12, 100%, 56%, 0.85) 100% /* Full opacity maintained */
+    ),
+    url('../assets/images/hero-7.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 </style>
 
 
