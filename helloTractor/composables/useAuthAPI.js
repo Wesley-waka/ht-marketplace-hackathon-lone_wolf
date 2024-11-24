@@ -34,6 +34,25 @@ export const useAuthAPI = () => {
     });
   };
 
+  const signUp = async (cartId) => {
+    return await useCustomFetch(`/orders/${cartId}`, {
+      method: "POST",
+    });
+  };
+
+  const googleLogin = async (cartId) => {
+    return await useCustomFetch(`/orders/${cartId}`, {
+      method: "POST",
+    });
+  };
+
+  const faceBookLogin = async (cartId) => {
+    return await useCustomFetch(`/orders/${cartId}`, {
+      method: "POST",
+    });
+  };
+
+
   const logOut = async (cartId) => {
     return await useCustomFetch(`/orders/${cartId}`, {
       method: "POST",

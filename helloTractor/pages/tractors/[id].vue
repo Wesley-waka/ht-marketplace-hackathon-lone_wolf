@@ -108,10 +108,13 @@
                 <h2>Seller deatails</h2>
 
                 <h2>Seller Name</h2>
-                <p>Kinyambi</p>
+                <p>Jason</p>
 
                 <h2>Total Reviews</h2>
                 <p>91</p>
+
+                <h2>Price ratio</h2>
+                <p>9%</p>
 
                 <button class="btn btn-secondary outlined">
                     match

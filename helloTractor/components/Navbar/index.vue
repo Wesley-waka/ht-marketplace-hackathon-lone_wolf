@@ -5,6 +5,7 @@
           <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
           <div class="flex flex-row space-x-5 mt-3">
             <h3>Buy</h3>
+            <h3>Sell</h3>
             <h3>How it works</h3>
             <h3>Services</h3>
             <h3>Farm Equipments</h3>

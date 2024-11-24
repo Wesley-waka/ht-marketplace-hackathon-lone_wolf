@@ -337,6 +337,23 @@ authRouter.patch('/users/:userId', async (req, res) => {
   }
 });
 
+// Get all users with optional query for isApproved field
+authRouter.get('/users', async (req, res) => {
+  try {
+    const { isApproved } = req.query;
+    let query = {};
+
+    if (isApproved !== undefined) {
+      query.isApproved = isApproved === 'true';
+    }
+
+    const users = await User.find(query);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).send(`Error fetching users: ${error.message}`);
+  }
+});
+
 
 authRouter.use(passport.initialize());
 authRouter.use(passport.session());
