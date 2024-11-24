@@ -75,7 +75,7 @@ authRouter.get('/google',
     passport.authenticate('google', {
       scope: ['profile', 'email'],
       prompt: 'select_account',
-      state: JSON.stringify(userType)
+      state: JSON.stringify(userType),
     })(req, res, next);
   }
 );
@@ -183,7 +183,8 @@ authRouter.post('/signup', async (req, res) => {
       location,
       phoneNumber,
       user,
-      name
+      name,
+      isApproved: user === 'buyer' ? true : false
     });
 
     await newUser.save();
@@ -239,7 +240,7 @@ authRouter.post('/signin', async (req, res) => {
   }
 });
 
-app.post('/users/:userId/favoriteProducts', async (req, res) => {
+authRouter.post('/users/:userId/favoriteProducts', async (req, res) => {
   try {
     const { userId } = req.params;
     const { productId } = req.body;
@@ -259,7 +260,7 @@ app.post('/users/:userId/favoriteProducts', async (req, res) => {
 });
 
 // Get all favorite products
-app.get('/users/:userId/favoriteProducts', async (req, res) => {
+authRouter.get('/users/:userId/favoriteProducts', async (req, res) => {
   try {
     const { userId } = req.params;
 
@@ -271,6 +272,68 @@ app.get('/users/:userId/favoriteProducts', async (req, res) => {
     res.status(200).json(user.favoriteProducts);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+});
+
+
+// Route to toggle isApproved field for a user
+authRouter.patch('/users/:userId/toggleApproval', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.isApproved = !user.isApproved;
+    await user.save();
+
+    res.status(200).send(`User approval status changed to ${user.isApproved}`);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+
+// Update user details including images
+authRouter.patch('/users/:userId', async (req, res) => {
+  const uploadMiddleware = upload.single('image');
+
+  try {
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const { userId } = req.params;
+    const { name, email, location, phoneNumber } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    if (req.file) {
+      user.images = req.file.location; // Update image URL
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (location) user.location = location;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    await user.save();
+
+    res.status(200).send('User updated successfully');
+  } catch (error) {
+    console.error('Update user error:', error);
+    res.status(500).send(`Error updating user: ${error.message}`);
   }
 });
 

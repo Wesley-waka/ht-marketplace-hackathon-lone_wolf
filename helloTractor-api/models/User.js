@@ -46,7 +46,12 @@ const userSchema = new Schema({
   },
   user: {
     type: String,
-    required: true
+    required: true,
+    enum: ['"admin"', '"seller"', '"buyer"', "buyer", "seller", "admin"],
+  },
+  isApproved: {
+    type: Boolean,
+    default: false
   },
   images: {
     type: [String],

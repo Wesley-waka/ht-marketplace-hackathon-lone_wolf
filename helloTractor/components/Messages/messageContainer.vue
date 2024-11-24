@@ -1,66 +1,55 @@
 <template>
-	<div class="md:min-w-[450px] flex flex-col"></div>
-		<div v-if="!selectedConversation"></div>
-			<NoChatSelected />
-		</div>
-		<div v-else></div>
-			<!-- Header -->
-			<div class="bg-slate-500 px-4 py-2 mb-2"></div>
-				<span class="label-text">To:</span>
-				<span class="text-gray-900 font-bold">{{ selectedConversation.fullName }}</span>
-			</div>
-			<Messages />
-			<MessageInput />
-		</div>
-	</div>
+    <div class="md:min-w-[450px] flex flex-col">
+        <div v-if="!selectedConversation">
+            <NoChatSelected />
+        </div>
+        <div v-else>
+            <!-- Header -->
+            <div class="bg-slate-500 px-4 py-2 mb-2">
+                <span class="label-text">To:</span>
+                <span class="text-gray-900 font-bold">{{ selectedConversation.fullName }}</span>
+            </div>
+            <MessagesMessage />
+            <MessagesMessageInput />
+        </div>
+    </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onUnmounted } from 'vue';
-import useConversation from '../../zustand/useConversation';
-import MessageInput from './MessageInput.vue';
-import Messages from './Messages.vue';
 import { TiMessages } from 'react-icons/ti';
-import { useAuthContext } from '../../context/AuthContext';
+import { useConversationStore } from '~/stores/useConversationStore';
+import { useAuthStore } from '~/stores/useAuthStore';
 
-export default {
-	components: {
-		MessageInput,
-		Messages,
-		TiMessages,
-		NoChatSelected
-	},
-	setup() {
-		const { selectedConversation, setSelectedConversation } = useConversation();
-
-		onUnmounted(() => {
-			setSelectedConversation(null);
-		});
-
-		return {
-			selectedConversation,
-			setSelectedConversation
-		};
-	}
-};
-
+// Define NoChatSelected as a separate component
 const NoChatSelected = {
-	template: `
-		<div class="flex items-center justify-center w-full h-full">
-			<div class="px-4 text-center sm:text-lg md:text-xl text-gray-200 font-semibold flex flex-col items-center gap-2">
-				<p>Welcome 👋 {{ authUser.fullName }} ❄</p>
-				<p>Select a chat to start messaging</p>
-				<TiMessages class="text-3xl md:text-6xl text-center" />
-			</div>
-		</div>
-	`,
-	setup() {
-		const { authUser } = useAuthContext();
-		return {
-			authUser
-		};
-	}
+    name: 'NoChatSelected',
+    components: {
+        TiMessages
+    },
+    setup() {
+        const { authUser } = useAuthStore();
+        return {
+            authUser
+        };
+    },
+    template: `
+        <div class="flex items-center justify-center w-full h-full">
+            <div class="px-4 text-center sm:text-lg md:text-xl text-gray-200 font-semibold flex flex-col items-center gap-2">
+                <p>Welcome 👋 {{ authUser.fullName }} ❄</p>
+                <p>Select a chat to start messaging</p>
+               <img src="/public/Black/HT_ICONS_BLACK_RGB-66.png" alt='messages empty'/>
+            </div>
+        </div>
+    `
 };
+
+const { selectedConversation, setSelectedConversation } = useConversationStore();
+
+onUnmounted(() => {
+    setSelectedConversation(null);
+});
+
 </script>
 
 <style scoped>

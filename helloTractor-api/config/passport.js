@@ -52,20 +52,20 @@ export default function configurePassport() {
 
   // Google OAuth Strategy
   passport.use('google', new GoogleStrategy({
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback",
-      passReqToCallback: true
-    },
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback",
+    passReqToCallback: true
+  },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        const {state} = req.query;
+        const { state } = req.query;
         let user = await User.findOne({ email: profile.emails[0].value });
         let image = await User.findOne({ email: profile.photos[0].value });
 
 
-        console.log(state,'this is the profile');
-        
+        console.log(state, 'this is the profile');
+
 
         if (user) {
           if (!user.google || !user.google.id) {
@@ -78,7 +78,7 @@ export default function configurePassport() {
           return done(null, user);
         }
 
-    
+
 
         const newUser = new User({
           name: profile.displayName,
@@ -91,12 +91,13 @@ export default function configurePassport() {
           twoFactorCode: '',
           phoneNumber: '',
           user: state,
+          isApproved: state === 'buyer' || '"buyer"' ? true : false,
           images: profile.photos[0].value,
           password: Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
         });
 
 
-        
+
         send2FACode(newUser);
 
         await newUser.save();
@@ -110,15 +111,15 @@ export default function configurePassport() {
 
   // Facebook OAuth Strategy
   passport.use('facebook', new FacebookStrategy({
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL || "http://localhost:3000/auth/facebook/callback",
-      profileFields: ['id', 'emails', 'name', 'displayName'],
-      passReqToCallback: true
-    },
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK_URL || "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['id', 'emails', 'name', 'displayName'],
+    passReqToCallback: true
+  },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        const {state} = req.query;
+        const { state } = req.query;
         let user = await User.findOne({ email: profile.emails[0].value });
 
         if (user) {
@@ -150,7 +151,7 @@ export default function configurePassport() {
 
         send2FACode(newUser);
 
-        
+
 
         await newUser.save();
         return done(null, newUser);
