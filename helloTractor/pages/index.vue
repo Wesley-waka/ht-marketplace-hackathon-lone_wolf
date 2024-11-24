@@ -434,7 +434,7 @@
         <div class="w-[70rem] mx-auto">
           <h1 class="mx-auto my-[50px] text-center">You are not risking anything when you buy a <br> vehicle on Carvago</h1>
           <div class="">
-            <div class="rounded-lg bg-white h-48 z-10 flex py-[40px] px-[20px] gap-3">
+            <div class="rounded-lg bg-white h-48 z-10 flex py-[40px] px-[20px] gap-3 my-8 max-w-[84rem] mx-auto">
               <div class="flex align-middle gap-3 my-auto">
                 <img class="h-[40px]" src="/caraudit.svg" alt="">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>

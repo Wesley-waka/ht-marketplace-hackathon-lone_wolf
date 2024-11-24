@@ -35,16 +35,15 @@ const __dirname = path.dirname(__filename);
 app.use(json());
 app.use('/uploads', serveStatic(path.join(__dirname, 'uploads')));
 
-app.use('/tractor',tractorRouter);
-app.use('/implements',implementsRouter);
+app.use('/tractor', tractorRouter);
+app.use('/implements', implementsRouter);
 app.use("/api", reviewRouter);
 app.use('/auth', authRouter);
-app.use('/messages',messageRouter);
-app.use('/childDealer',childDealerRouter);
+app.use('/messages', messageRouter);
+app.use('/childDealer', childDealerRouter);
 
 app.get('/', (req, res) => {
-  console.log('Hello, world!');
-  res.send('Hello, world!');
+  res.redirect(`https://www.wesleywaka.com`);
 });
 
 const PORT = process.env.PORT || 3000;

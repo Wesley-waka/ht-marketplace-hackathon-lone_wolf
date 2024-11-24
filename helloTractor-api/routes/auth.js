@@ -69,10 +69,10 @@ authRouter.use(cookieParser());
 //   res.redirect('/verify-2fa');
 // });
 
-authRouter.get('/google', 
+authRouter.get('/google',
   (req, res, next) => {
-    const {userType} = req.query;
-    passport.authenticate('google', { 
+    const { userType } = req.query;
+    passport.authenticate('google', {
       scope: ['profile', 'email'],
       prompt: 'select_account',
       state: JSON.stringify(userType)
@@ -80,11 +80,13 @@ authRouter.get('/google',
   }
 );
 
-authRouter.get('/google/callback', 
+authRouter.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     // Successful authentication, redirect to the desired page
     res.redirect('/verify-2fa?email=' + req.user.email);
+    // res.redirect(`https://wes.com/verify-2fa?email=${req.user.email}`);
+    // res.redirect(`https://wes.com/verify-2fa?email=${req.user.email}`);
   }
 );
 
@@ -92,7 +94,7 @@ authRouter.get('/google/callback',
 authRouter.get('/facebook', (req, res, next) => {
   const { userType } = req.query;
 
-  passport.authenticate('facebook', { 
+  passport.authenticate('facebook', {
     scope: ['email'],
     state: JSON.stringify(userType)
   })(req, res, next);
@@ -146,7 +148,7 @@ const transporter = createTransport({
 authRouter.post('/signup', async (req, res) => {
   // Wrap the multer upload in a promise to handle errors better
   const uploadMiddleware = upload.single('image');
-  
+
   try {
     await new Promise((resolve, reject) => {
       uploadMiddleware(req, res, (err) => {
@@ -186,11 +188,11 @@ authRouter.post('/signup', async (req, res) => {
 
     await newUser.save();
 
-    
+
 
     // Generate verification link
     const verificationLink = `${process.env.APP_URL}/verify-2FA?email=${email}`;
-    
+
     // Send 2FA code via email
     const mailOptions = {
       from: process.env.EMAIL,
@@ -236,6 +238,42 @@ authRouter.post('/signin', async (req, res) => {
     res.status(500).send('Error signing in. Please try again.');
   }
 });
+
+app.post('/users/:userId/favoriteProducts', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { productId } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.favoriteProducts.push(productId);
+    await user.save();
+
+    res.status(200).send('Product added to favorites');
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// Get all favorite products
+app.get('/users/:userId/favoriteProducts', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate('favoriteProducts');
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.status(200).json(user.favoriteProducts);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 
 authRouter.use(passport.initialize());
 authRouter.use(passport.session());

@@ -35,6 +35,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  favoriteProducts: [{ type: Schema.Types.ObjectId, ref: 'Tractor' }],
   twoFactorCode: {
     type: String,
     default: ''
@@ -67,13 +68,13 @@ userSchema.index({ email: 1 });
 userSchema.index({ 'google.id': 1 });
 
 // Pre-save middleware to handle password hashing if needed
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   // You can add password hashing logic here if needed
   next();
 });
 
 // Method to validate if the user has completed 2FA
-userSchema.methods.has2FACompleted = function() {
+userSchema.methods.has2FACompleted = function () {
   return this.isVerified && !this.twoFactorCode;
 };
 

@@ -2,7 +2,7 @@
     <hr>
 
 <div class="h-[380px]">
-  <div class="max-w-[84rem] mx-auto my-auto">
+  <div class="max-w-[84rem] mx-auto my-auto px-4">
     <div class="h-[300px] align-bottom my-auto flex flex-row justify-between max-w-[65rem] items-center">
       <div>
         <img src="../../assets/images/logo_medium.png" alt="" class="h-[70px]" srcset="">
