@@ -148,6 +148,7 @@ export default defineNuxtConfig({
     "@/assets/fonts/mdi/materialdesignicons.scss",
     "@/assets/scss/theme.scss",
     "primeicons/primeicons.css",
+    "@/assets/css/fonts.css",
   ],
 
   ssr: false,
