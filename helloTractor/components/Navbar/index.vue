@@ -26,7 +26,113 @@
     <hr>
   
     <Dialog v-model:visible="visible" modal header="Welcome Back" :style="{ width: '900px' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-      <Stepper :value="currentStep" linear @update:value="currentStep = $event">
+      
+      
+      <!-- <div class="h-full overflow-auto flex flex-col">
+        <div class="flex items-center mx-auto px-3">
+        <img src="/logo.png" alt="logo" class="h-12 mb-4" />
+
+          <div class="flex items-center gap-1">
+            
+          </div>
+        </div>
+
+        <div class="my-auto flex flex-col space-y-2">
+        
+        <form
+          class="m-auto max-w-[400px] flex-grow space-y-3"
+          @submit.prevent="handleSubmit"
+        >
+          <div>
+            <h1 class="text-2xl font-semibold text-center">Login</h1>
+            <p class="text-center text-gray-500 mb-6">
+              Login to your account to continue
+            </p>
+          </div>
+          <CustomInputContainer
+            label="Email"
+            required
+            :error="v$.emailAddress.$error"
+            :errorMessage="v$.emailAddress.$errors[0]?.$message"
+          >
+            <InputGroup>
+              <InputGroupAddon>
+                <i class="fas fa-envelope"></i>
+              </InputGroupAddon>
+              <InputText
+                v-model="emailAddress"
+                placeholder="Email Address"
+                @blur="v$.emailAddress.$touch()"
+                :invalid="v$.emailAddress.$error"
+              />
+            </InputGroup>
+          </CustomInputContainer>
+          <CustomInputContainer
+            label="Password"
+            required:error="v$.password.$error"
+            :errorMessage="v$.password.$errors[0]?.$message"
+          >
+            <InputGroup>
+              <InputGroupAddon>
+                <i class="fas fa-lock"></i>
+              </InputGroupAddon>
+              <Password
+                v-model="password"
+                toggleMask
+                :feedback="false"
+                placeholder="Password"
+                @blur="v$.password.$touch()"
+                :invalid="v$.password.$error"
+              />
+            </InputGroup>
+          </CustomInputContainer>
+          <div class="flex justify-between flex-col space-y-2 items-center w-full">
+            
+            <button class="w-full btn btn-primary" type="submit" :disabled="loading">
+              <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
+              Login
+            </button>
+
+            
+          </div>
+        </form>
+
+        <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto" type="submit" :disabled="loading">
+              <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
+              Sign Up
+            </button>
+            </div>
+      </div> -->
+
+
+      <div>
+        <div class="w-full mx-auto">
+          <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
+          <div class="flex flex-row justify-around my-12">
+            <div class="w-[300px] h-[140px] py-2 px-4 bg-slate-100 rounded-lg">
+              <div>
+                <img src="/public/Black/Hello Tractor_RGB_BLACK_-User.png" class="w-[50px]" alt="">
+              </div>
+              <p class="font-manropeSemiBold">Buyer,Buy farm equipment <br>and other products</p>
+            </div>
+
+            <div class="w-[300px] h-[140px] py-2 px-4 bg-slate-100 rounded-lg">
+              <div>
+                <img src="/public/Black/HT_ICONS_BLACK_RGB-02.png" class="w-[50px]" alt="">
+              </div>
+              <p class="font-manropeSemiBold">Seller,Sell used Tractors  <br>and other products</p>
+            </div>
+
+            
+            
+          </div>
+
+          <div class="flex flex-col items-center justify-center w-full">
+  <button class="btn btn-primary w-[300px]">Join as a Buyer</button>
+</div>
+        </div>
+      </div>
+      <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
         <StepList>
           <Step value="1" :class="{ 'p-complete': Number(currentStep) > 1 }">
             Personal Details
@@ -185,19 +291,42 @@
             </div>
           </StepPanel>
         </StepPanels>
-      </Stepper>
+      </Stepper> -->
     </Dialog>
   </template>
   
-  <script setup>
+<script setup>
   import { ref } from 'vue';
   import moment from 'moment';
-  import { useNuxtApp, useRouter } from '#app';
+  import useVuelidate from "@vuelidate/core";
+  import { email, required, helpers } from "@vuelidate/validators";
+  // import { useNuxtApp, useRouter } from '#app';
+
+  // for login
+  // const { signIn } = useAuth();
+  const emailAddress = ref("");
+  const password = ref("");
+  const loading = ref(false);
   
   const visible = ref(false);
   const { $toast } = useNuxtApp();
   const router = useRouter();
   
+  const rules = computed(() => {
+  return {
+    emailAddress: {
+      required: helpers.withMessage("Email Address is required", required),
+      email: helpers.withMessage("Invalid Email Address", email),
+    },
+    password: {
+      required: helpers.withMessage("Password is required", required),
+    },
+  };
+});
+
+const v$ = useVuelidate(rules, { emailAddress, password });
+
+
   const personal = ref({
     first_name: "",
     last_name: "",
@@ -225,6 +354,8 @@
     upline_phone_number: "",
     next_of_kin_email: "",
   });
+
+
   
   const products = ref([]);
   const terms = ref(false);
@@ -290,5 +421,38 @@
     //   .finally(() => {
     //     isLoading.value = false;
     //   });
+
+
+
+
+    // for login
+
+
+
+
+
+const handleSubmit = async () => {
+  loading.value = true;
+  v$.value.$touch();
+
+  if (v$.value.$error) {
+    $toast.error("Please fill in the required fields");
+    loading.value = false;
+    return;
+  }
+
+  // await signIn("credentials", {
+  //   email: emailAddress.value,
+  //   password: password.value,
+  //   callbackUrl: "/",
+  // })
+  //   .catch((err) => {
+  //     $toast.error("Email or password is incorrect!");
+  //     console.log(err);
+  //   })
+  //   .finally(() => {
+  //     loading.value = false;
+  //   });
+};
   };
   </script>

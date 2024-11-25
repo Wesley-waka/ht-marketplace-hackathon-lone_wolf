@@ -18,9 +18,9 @@
                 <div>
                     <h3 class="font-manropeBold">Brand</h3>
                     <CustomInputContainer
-                        label="ID Type"
-                        required
-                        class="w-1/2"
+                        label=""
+                        
+                        class="w-[full]"
                       >
                       <Select
                         
@@ -42,9 +42,9 @@
                 <div>
                     <h3 class="font-manropeBold">Location</h3>
                     <CustomInputContainer
-                        label="ID Type"
-                        required
-                        class="w-1/2"
+                        label=""
+                        
+                        class="w-[full]"
                       >
                       <Select
                        
@@ -63,10 +63,10 @@
                     </div>
                     <div class="flex flex-row space-x-2">
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -77,10 +77,10 @@
                         
                         </CustomInputContainer>
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -100,10 +100,10 @@
                     </div>
                     <div class="flex flex-row space-x-2">
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -114,10 +114,10 @@
                         
                         </CustomInputContainer>
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -137,10 +137,10 @@
                     </div>
                     <div class="flex flex-row space-x-2">
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -151,10 +151,10 @@
                         
                         </CustomInputContainer>
                         <CustomInputContainer
-                            label="ID Type"
-                            required
+                            label=""
+                            
                         
-                            class="flex flex-row space-x-2 w-[120px]"
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -172,12 +172,11 @@
                         <h3 class="font-manropeBold">HP</h3>
                         
                     </div>
+                    
                     <div class="flex flex-row space-x-2">
                         <CustomInputContainer
-                            label="ID Type"
-                            required
-                        
-                            class="flex flex-row space-x-2 w-[120px]"
+                            label=""
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -188,10 +187,8 @@
                         
                         </CustomInputContainer>
                         <CustomInputContainer
-                            label="ID Type"
-                            required
-                        
-                            class="flex flex-row space-x-2 w-[120px]"
+                            label=""
+                            class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
                             :options="idTypes"
@@ -209,9 +206,9 @@
                 <div>
                     <h3 class="font-manropeBold">Track Type</h3>
                     <CustomInputContainer
-                        label="ID Type"
-                        required
-                        class="w-1/2"
+                        label=""
+                        
+                        class="w-full"
                       >
                       <Select
                         
