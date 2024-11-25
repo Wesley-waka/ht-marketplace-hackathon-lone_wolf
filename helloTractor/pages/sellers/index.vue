@@ -1,5 +1,5 @@
 <script default>
-
+'use client'
 import { useAuthAPI } from '~/composables/useAuthAPI';
 import { useTractorsAPI } from '~/composables/useTractorsAPI';
 
