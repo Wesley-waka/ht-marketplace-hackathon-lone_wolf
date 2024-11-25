@@ -230,6 +230,13 @@
                     <h3>Welcome to your one stop shop for tractors</h3>
                 </div>
 
+                <div
+                    class="grid gap-x-5 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                    v-if="dataLoading"
+                    >
+                    <LoaderProductCard v-for="n in 10" :key="n" />
+                </div>
+
                 <div class="">
                     <div class="p-2 bg-orangeTint flex flex-row items-center justify-around my-4 w-max rounded-md"> 
                         <p class="font-manropeBold text-white">First Registration from 2023
@@ -243,7 +250,15 @@
                                 <h3>300 results</h3>
                             </div>
                             <Paginator
-                            :alwaysShow="false" :rows="10" :totalRecords="120"  ></Paginator>
+                                :alwaysShow="false"
+                                :rows="pageSize"
+                                :totalRecords="totalSize"
+                                template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                                currentPageReportTemplate="{first} - {last} of {totalRecords}"
+                                @page="(e) => (page = e.page + 1)"
+                                class="!rounded-b-xl border-t mt-3"
+                            >
+                            </Paginator>
                         </div>
 
                         <div class="flex-row space-y-4">
@@ -382,6 +397,12 @@
                         </div>
 
                     </div>
+
+                    <TractorDetails 
+                        v-for="product in dataList"
+                        :key="product._id"
+                        :product="product"
+                        @selectProduct="selectedProduct = product"/>
                 </div>
 
 
@@ -406,6 +427,13 @@
 </template>
 
 <script setup>
+const dataList = ref([]);
+const selectedProduct = ref(null);
+const searchText = ref("");
+const page = ref(1);
+const pageSize = ref(20);
+const { getAllTractors} = useTractorsAPI();
+
 
 const filterformData = ref({
   idType: { label: "Indo Farm", value: "indo-farm" },
@@ -442,6 +470,40 @@ const idTypes = ref([
   { label: "Indo Farm", value: "indo-farm" },
   { label: "Preet", value: "preet" },
   { label: "Captain", value: "captain" }]);
+
+
+  const fetchData = async () => {
+  dataLoading.value = true;
+  await getAllTractors({
+    page: page.value,
+    pageSize: pageSize.value,
+    search: searchText.value,
+  })
+    .then((res) => {
+      dataList.value = res.data;
+      totalSize.value = res.result || 0;
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+    .finally(() => {
+      dataLoading.value = false;
+      dataLoaded.value = true;
+    });
+};
+
+
+onMounted(() => {
+  fetchData();
+});
+
+watch(
+  [page, pageSize, searchText],
+  () => {
+    fetchData();
+  },
+  { deep: true }
+);
 
 definePageMeta({
   layout: "default",

@@ -527,6 +527,7 @@ definePageMeta({
     layout: "default",
 });
 
+
 const emailAddress = ref("");
 const loading = ref(false);
 
@@ -557,6 +558,9 @@ const formData = ref({
   imageCover: null,
   images: [],
 });
+
+
+
 
 const handleSubmit = async () => {
   v$.value.$touch();

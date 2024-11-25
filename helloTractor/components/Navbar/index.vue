@@ -105,7 +105,7 @@
       </div> -->
 
 
-      <div>
+      <!-- <div>
         <div class="w-full mx-auto">
           <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
           <div class="flex flex-row justify-around my-12">
@@ -131,7 +131,136 @@
   <button class="btn btn-primary w-[300px]">Join as a Buyer</button>
 </div>
         </div>
+      </div> -->
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <div class="w-full h-[600px]">
+        <h1 class="text-2xl text-center">Sign up to hire talent</h1>
+
+        
+
+        <div class=" mt-4">
+        <Divider layout="vertical" class="!hidden md:!flex"><b>OR</b></Divider>
+        <!--  -->
+
+       <CustomUpload></CustomUpload>
+
+        <div class="max-w-[400px] mx-auto my-6">
+          <form @submit.prevent="handleSubmit" >
+        <div class="flex flex-row space-x-2 w-full">
+          <CustomInputContainer
+              label="First Name"
+              required
+              :error="v$.first_name.$error"
+              :errorMessage="v$.first_name.$errors[0]?.$message"
+              class="w-1/2"
+            >
+          
+              <InputText
+                v-model="formData.first_name"
+                @blur="v$.first_name.$touch"
+                :invalid="v$.first_name.$error"
+              />
+            </CustomInputContainer>
+            <CustomInputContainer
+              label="Last Name"
+              required
+              :error="v$.last_name.$error"
+              class="w-1/2"
+              :errorMessage="v$.last_name.$errors[0]?.$message"
+            >
+              <InputText
+                v-model="formData.last_name"
+                @blur="v$.last_name.$touch"
+                :invalid="v$.last_name.$error"
+              />
+            </CustomInputContainer>
+        </div>
+
+          <CustomInputContainer
+            label="Email"
+            required
+            :error="v$.email.$error"
+            :errorMessage="v$.email.$errors[0]?.$message"
+          >
+            <InputText
+              v-model="formData.email"
+              @blur="v$.email.$touch"
+              :invalid="v$.email.$error"
+            />
+          </CustomInputContainer>
+
+          <CustomInputContainer
+            label="Phone Number"
+            required
+            :error="v$.phone_number.$error"
+            :errorMessage="v$.phone_number.$errors[0]?.$message"
+          >
+            <InputText
+              type="number"
+              v-model="formData.phone_number"
+              @blur="v$.phone_number.$touch"
+              :invalid="v$.phone_number.$error"
+            />
+          </CustomInputContainer>
+
+          <div class="flex flex-row space-x-2 w-full">
+            <CustomInputContainer
+              label="ID Type"
+              required
+              class="w-1/2"
+
+              :error="v$.id_type.$error"
+              :errorMessage="v$.id_type.$errors[0]?.$message"
+            >
+              <Select
+                v-model="formData.id_type"
+                :options="idTypes"
+                optionLabel="label"
+                optionValue="value"
+                @blur="v$.id_type.$touch"
+                :invalid="v$.id_type.$error"
+              />
+            </CustomInputContainer>
+            <CustomInputContainer
+              label="ID Number"
+              required
+              class="w-1/2"
+              :error="v$.id_number.$error"
+              :errorMessage="v$.id_number.$errors[0]?.$message"
+            >
+              <InputText
+                type="number"
+                v-model="formData.id_number"
+                @blur="v$.id_number.$touch"
+                :invalid="v$.id_number.$error"
+              />
+            </CustomInputContainer>
+          </div>
+
+          <CustomInputContainer required label="Location">
+            <InputText type="text" v-model="formData.location" readonly />
+          </CustomInputContainer>
+
+          <button class="btn btn-primary w-full my-4">
+            Sign Up
+          </button>
+            
+        </form>
+        </div>
+       
+    </div>
       </div>
+      
+      
       <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
         <StepList>
           <Step value="1" :class="{ 'p-complete': Number(currentStep) > 1 }">
@@ -299,7 +428,9 @@
   import { ref } from 'vue';
   import moment from 'moment';
   import useVuelidate from "@vuelidate/core";
-  import { email, required, helpers } from "@vuelidate/validators";
+  import { email, required, helpers,
+  minLength,
+  maxLength } from "@vuelidate/validators";
   // import { useNuxtApp, useRouter } from '#app';
 
   // for login
@@ -311,9 +442,62 @@
   const visible = ref(false);
   const { $toast } = useNuxtApp();
   const router = useRouter();
+  const formData = ref({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      date_of_birth: new Date(),
+      id_type: "",
+      id_number: "",
+      ssn: "",
+      address: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    });
   
-  const rules = computed(() => {
+
+
+const rules = computed(() => {
   return {
+    first_name: {
+      required: helpers.withMessage("First name is required", required),
+    },
+    last_name: {
+      required: helpers.withMessage("Last name is required", required),
+    },
+    email: {
+      required: helpers.withMessage("Email is required", required),
+      email: helpers.withMessage("Invalid email", email),
+    },
+    phone_number: {
+      required: helpers.withMessage("Phone number is required", required),
+    },
+    date_of_birth: {
+      required: helpers.withMessage("Date of birth is required", required),
+    },
+    id_type: { required: helpers.withMessage("ID type is required", required) },
+    id_number: {
+      required: helpers.withMessage("ID number is required", required),
+    },
+    ssn: {
+      required: helpers.withMessage("SSN is required", required),
+      minLengthValue: helpers.withMessage(
+        "SSN must be 11 characters",
+        minLength(11)
+      ),
+      maxLengthValue: helpers.withMessage(
+        "SSN must be 11 characters",
+        maxLength(11)
+      ),
+    },
+    address: {
+      required: helpers.withMessage("Address line 1 is required", required),
+    },
+    city: { required: helpers.withMessage("City is required", required) },
+    state: { required: helpers.withMessage("State is required", required) },
+    zipcode: { required: helpers.withMessage("Zipcode is required", required) },
     emailAddress: {
       required: helpers.withMessage("Email Address is required", required),
       email: helpers.withMessage("Invalid Email Address", email),
@@ -324,7 +508,7 @@
   };
 });
 
-const v$ = useVuelidate(rules, { emailAddress, password });
+const v$ = useVuelidate(rules, formData);
 
 
   const personal = ref({
@@ -427,7 +611,53 @@ const v$ = useVuelidate(rules, { emailAddress, password });
 
     // for login
 
+    const fetchLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.setPosition, this.showError);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+    const setPosition = (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      this.location = [longitude, latitude];
+    }
+    const showError = (error) => {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred.");
+          break;
+      }
+    }
 
+    onMounted(() => {
+      this.fetchLocation();
+    });
+
+    const reverseGeocode = (latitude, longitude) =>{
+      const apiKey = 'YOUR_API_KEY'; // Replace with your reverse geocoding API key
+      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          this.formData.location = data.city || data.locality || data.principalSubdivision || 'Location not found';
+        })
+        .catch(error => {
+          console.error('Error fetching location name:', error);
+          this.formData.location = 'Location not found';
+        });
+    }
 
 
 
