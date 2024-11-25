@@ -70,7 +70,5 @@ reviewRouter.get('/sellers/:sellerId/reviews', async (req, res) => {
 });
 
 
-reviewRouter.post("/reviews", createReview);
-reviewRouter.get("/reviews/:userId", getReviews);
 
 export default reviewRouter;

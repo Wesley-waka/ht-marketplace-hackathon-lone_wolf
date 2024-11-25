@@ -1,6 +1,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useConversation } from '../zustand/useConversation'
 import { useToast } from 'vue-toastification'
+import { useCustomFetch } from './useCustomFetch'
 
 const useGetMessages = () => {
   const loading = ref(false)
@@ -10,7 +11,7 @@ const useGetMessages = () => {
   const getMessages = async () => {
     loading.value = true
     try {
-      const res = await fetch(`/api/messages/${selectedConversation.value._id}`)
+      const res = await useCustomFetch(`/api/messages/${selectedConversation.value._id}`)
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setMessages(data)

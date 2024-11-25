@@ -45,7 +45,7 @@ const upload = multer({
   }
 });
 
-implementsRouter.post('/implements', async (req, res) => {
+implementsRouter.post('/', async (req, res) => {
   try {
     const uploadMiddleware = upload.array('images', 5);
 
@@ -100,10 +100,14 @@ implementsRouter.post('/implements', async (req, res) => {
 });
 
 // New endpoint to get all implements with optional filtering by brand or category
-implementsRouter.get('/implements', async (req, res) => {
+implementsRouter.get('/', async (req, res) => {
   try {
-    const { brand, category } = req.query;
+    const { brand, category, isApproved, search, limit } = req.query;
     const filter = {};
+
+    if (search) {
+      query.keyword = { $regex: search, $options: 'i' }; // Assuming you have a keyword field
+    }
 
     if (brand) {
       filter.dealer = brand;
@@ -113,14 +117,18 @@ implementsRouter.get('/implements', async (req, res) => {
       filter.implementCategory = category;
     }
 
-    const implementsList = await Implements.find(filter).populate('dealer');
+    if (isApproved) {
+      filter.isApproved = isApproved;
+    }
+
+    const implementsList = await Implements.find(filter).populate('dealer').limit(parseInt(limit, 10));;
     res.json(implementsList);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-implementsRouter.get('/implements/:id', async (req, res) => {
+implementsRouter.get('/:id', async (req, res) => {
   try {
     const implementCultivator = await Implements.findById(req.params.id).populate('dealer');
     if (!implementCultivator) {
@@ -132,7 +140,7 @@ implementsRouter.get('/implements/:id', async (req, res) => {
   }
 });
 
-implementsRouter.patch('/implements/:id', async (req, res) => {
+implementsRouter.patch('/:id', async (req, res) => {
   try {
     const uploadMiddleware = upload.array('images', 5);
 
@@ -202,7 +210,7 @@ implementsRouter.post('/increment/:productId', async (req, res) => {
 
 
 // Get view count
-implementsRouter.get('/:productId', async (req, res) => {
+implementsRouter.get('/count/:productId', async (req, res) => {
   const { productId } = req.params;
   const productView = await Implements.findOne({ productId });
 

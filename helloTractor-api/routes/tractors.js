@@ -41,7 +41,7 @@ const upload = multer({
   }
 });
 
-tractorRouter.post('/tractors', async (req, res) => {
+tractorRouter.post('/', async (req, res) => {
   const uploadMiddleware = upload.array('images', 5);
 
   try {
@@ -89,7 +89,7 @@ tractorRouter.post('/tractors', async (req, res) => {
   }
 });
 
-tractorRouter.get('/tractors/:id', async (req, res) => {
+tractorRouter.get('/:id', async (req, res) => {
   try {
     const tractor = await Tractor.findById(req.params.id).populate('dealer');
 
@@ -107,12 +107,18 @@ tractorRouter.get('/tractors/:id', async (req, res) => {
   }
 });
 
-tractorRouter.get('/tractors', async (req, res) => {
+tractorRouter.get('/', async (req, res) => {
   try {
-    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features, tractorType } = req.query;
+    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features, tractorType, isApproved, search, limit } = req.query;
     const query = {};
 
     if (dealer) query.dealer = dealer;
+    if (isApproved) query.isApproved = isApproved;
+    if (search) {
+      query.keyword = { $regex: search, $options: 'i' }; // Assuming you have a keyword field
+    }
+
+
     if (budget) query.cost = { $lte: budget };
     if (location) {
       const [lng, lat] = location.split(',').map(Number);
@@ -131,14 +137,17 @@ tractorRouter.get('/tractors', async (req, res) => {
     if (engineHoursUsed) query.engineHoursUsed = { $gte: engineHoursUsed.from, $lte: engineHoursUsed.to };
     if (features) query.features = { $in: features.split(',') };
 
-    const tractors = await Tractor.find(query);
+    const tractors = await Tractor.find(query).limit(parseInt(limit, 10));
+
+    // const tractors = await Tractor.find(query).populate('dealer').limit(parseInt(limit, 10));
+    // .populate('dealer')
     res.json(tractors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-tractorRouter.patch('/tractors/:id', async (req, res) => {
+tractorRouter.patch('/:id', async (req, res) => {
   const uploadMiddleware = upload.array('images', 5); // Allow up to 5 images
 
   try {
@@ -203,7 +212,7 @@ tractorRouter.post('/increment/:productId', async (req, res) => {
 
 
 // Get view count
-tractorRouter.get('/:productId', async (req, res) => {
+tractorRouter.get('/view/:productId', async (req, res) => {
   const { productId } = req.params;
   const productView = await Tractor.findOne({ productId });
 

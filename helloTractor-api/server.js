@@ -18,9 +18,7 @@ const app = express();
 
 const { json: _json } = pkg;
 const { initialize: _initialize, session: _session } = passport;
-// app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
-// app.use(pkgPassport.initialize());
-// app.use(pkgPassport.session());
+
 app.use(_json());
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
@@ -35,15 +33,15 @@ const __dirname = path.dirname(__filename);
 app.use(json());
 app.use('/uploads', serveStatic(path.join(__dirname, 'uploads')));
 
-app.use('/tractor', tractorRouter);
-app.use('/implements', implementsRouter);
-app.use("/api", reviewRouter);
-app.use('/auth', authRouter);
-app.use('/messages', messageRouter);
-app.use('/childDealer', childDealerRouter);
+app.use('/api/tractor', tractorRouter);
+app.use('/api/implement', implementsRouter);
+app.use("/api/review", reviewRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/messages', messageRouter);
+app.use('/api/child-dealer', childDealerRouter);
 
 app.get('/', (req, res) => {
-  res.redirect(`https://www.wesleywaka.com`);
+  res.send('Hello Tractor API is running....');
 });
 
 const PORT = process.env.PORT || 3000;

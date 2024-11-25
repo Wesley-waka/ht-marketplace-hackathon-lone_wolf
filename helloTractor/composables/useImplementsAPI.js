@@ -1,21 +1,15 @@
+import { useCustomFetch } from "./useCustomFetch";
+
 export const useImplementsAPI = () => {
 
-  const getAllImplements = async ({ search = '', page = 1, pageSize = 100, sort = '', order = 'asc' }) => {
+  const getAllImplements = async ({ search = '', pageSize = 100 }) => {
 
-    let url = '/products?page=' + page + '&limit=' + pageSize;
+    let url = '/implement/implements?limit=' + pageSize;
 
     if (search) {
       url += `&keyword=${search}`;
     }
 
-    if (sort) {
-      if (order === 'asc') {
-        url += `&sort=${sort}`;
-      }
-      else {
-        url += `&sort=-${sort}`;
-      }
-    }
 
     return await useCustomFetch(url, {
       method: "GET",
@@ -23,36 +17,45 @@ export const useImplementsAPI = () => {
   };
 
   const getImplementById = async (id) => {
-    return await useCustomFetch(`/products/${id}`, {
+    return await useCustomFetch(`/implement/${id}`, {
       method: "GET",
     });
   };
 
   const createImplement = async (data) => {
-    return await useCustomFetch('/products', {
+    return await useCustomFetch('/implement/', {
       method: "POST",
       body: data,
     });
   };
 
   const updateImplement = async (id, data) => {
-    return await useCustomFetch(`/products/${id}`, {
+    return await useCustomFetch(`/implement/${id}`, {
       method: "PATCH",
       body: data,
     });
   };
 
-  const deleteImplement = async (id) => {
-    return await useCustomFetch(`/products/${id}`, {
-      method: "DELETE",
+  const createImplementView = async (id) => {
+    return await useCustomFetch(`/implement/increment/${id}`, {
+      method: "POST",
     });
   };
+
+  const getImplement = async (id, data) => {
+    return await useCustomFetch(`/implements/count/${id}`, {
+      method: "GET",
+    });
+  };
+
 
   return {
     getAllImplements,
     getImplementById,
     createImplement,
+    getImplement,
+    createImplementView,
     updateImplement,
-    deleteImplement,
+
   };
 };

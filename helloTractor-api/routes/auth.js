@@ -340,18 +340,37 @@ authRouter.patch('/users/:userId', async (req, res) => {
 // Get all users with optional query for isApproved field
 authRouter.get('/users', async (req, res) => {
   try {
-    const { isApproved } = req.query;
+    const { isApproved, user, search } = req.query;
     let query = {};
+
+    if (user) {
+      query.user = user;
+    }
 
     if (isApproved !== undefined) {
       query.isApproved = isApproved === 'true';
     }
 
-    const users = await User.find(query);
+    if (search) {
+      query.keyword = { $regex: search, $options: 'i' }; // Assuming you have a keyword field
+    }
+
+    const users = await User.find(query).limit(parseInt(limit, 10));
     res.status(200).json(users);
   } catch (error) {
     res.status(500).send(`Error fetching users: ${error.message}`);
   }
+});
+
+// Logout route
+authRouter.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).send('Error logging out. Please try again.');
+    }
+    res.status(200).send('Logout successful.');
+  });
 });
 
 

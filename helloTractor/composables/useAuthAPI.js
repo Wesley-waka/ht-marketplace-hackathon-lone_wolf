@@ -1,21 +1,21 @@
 export const useAuthAPI = () => {
 
-  const getAllUsers = async ({ search = '', page = 1, pageSize = 100, sort = '', order = 'asc' }) => {
+  const getAllUsers = async ({ user = '', isApproved = '', search = '', pageSize = 10 }) => {
 
-    let url = '/orders?page=' + page + '&limit=' + pageSize;
+    let url = '/users?limit=' + pageSize;
 
     if (search) {
       url += `&keyword=${search}`;
     }
 
-    if (sort) {
-      if (order === 'asc') {
-        url += `&sort=${sort}`;
-      }
-      else {
-        url += `&sort=-${sort}`;
-      }
+    if (user) {
+      url += `&user=${user}`;
     }
+
+    if (isApproved) {
+      url += `&isApproved=${isApproved}`;
+    }
+
 
     return await useCustomFetch(url, {
       method: "GET",
@@ -23,76 +23,97 @@ export const useAuthAPI = () => {
   };
 
   const getUserById = async (id) => {
-    return await useCustomFetch(`/orders/${id}`, {
+    return await useCustomFetch(`/auth/${id}`, {
       method: "GET",
     });
   };
 
-  const logIn = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+  const logIn = async (data) => {
+    return await useCustomFetch(`/signin`, {
       method: "POST",
+      body: data
     });
   };
 
-  const signUp = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+  const signUp = async (id, data) => {
+    return await useCustomFetch(`/auth/signup`, {
       method: "POST",
+      body: data
     });
   };
 
   const googleLogin = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
-      method: "POST",
+    return await useCustomFetch(`/auth/google`, {
+      method: "GET",
     });
   };
 
   const faceBookLogin = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
-      method: "POST",
+    return await useCustomFetch(`/auth/facebook`, {
+      method: "GET",
     });
   };
 
 
-  const logOut = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+  const updateUser = async (id, data) => {
+    return await useCustomFetch(`/auth/users/${id}`, {
       method: "POST",
+      body: data
     });
   };
 
-  const updateUser = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+  const approveUser = async (id, data) => {
+    return await useCustomFetch(`/auth/users/${id}/toggleApproval`, {
       method: "POST",
-    });
-  };
-
-  const approveUser = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
-      method: "POST",
+      body: data
     });
   };
 
 
-  const verification = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+  const verification = async (data) => {
+    return await useCustomFetch(`/auth/verify-2fa`, {
       method: "POST",
+      body: data
     });
   };
 
-  const disApproveUser = async (cartId) => {
-    return await useCustomFetch(`/orders/${cartId}`, {
+
+  const favCreateProducts = async (id, data) => {
+    return await useCustomFetch(`/auth/users/${id}/favoriteProducts`, {
       method: "POST",
+      body: data
     });
   };
+
+  const favGetProducts = async (id) => {
+    return await useCustomFetch(`/auth/users/${id}/favoriteProducts`, {
+      method: "GET",
+    });
+  };
+
+
+  const logOut = async (id) => {
+    return await useCustomFetch(`/auth/logout`, {
+      method: "GET",
+    });
+  };
+
+
 
 
 
   return {
-    getAllOrders,
-    getOrderById,
-    createOrder,
-    createCheckoutSession,
-    updateToPaid,
-    updateToDelivered,
-    deleteOrder
+    logOut,
+    favGetProducts,
+    favCreateProducts,
+    disApproveUser,
+    verification,
+    approveUser,
+    updateUser,
+    faceBookLogin,
+    googleLogin,
+    logIn,
+    getUserById,
+    getAllUsers
   };
 };
