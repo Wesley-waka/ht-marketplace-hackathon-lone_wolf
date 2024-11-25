@@ -275,6 +275,44 @@ authRouter.get('/users/:userId/favoriteProducts', async (req, res) => {
   }
 });
 
+// Remove a favorite product
+authRouter.delete('/users/:userId/favoriteProducts/:productId', async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.favoriteProducts = user.favoriteProducts.filter(id => id.toString() !== productId);
+    await user.save();
+
+    res.status(200).send('Product removed from favorites');
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+// Clear all favorite products
+authRouter.delete('/users/:userId/favoriteProducts', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.favoriteProducts = [];
+    await user.save();
+
+    res.status(200).send('All favorite products cleared');
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 
 // Route to toggle isApproved field for a user
 authRouter.patch('/users/:userId/toggleApproval', async (req, res) => {

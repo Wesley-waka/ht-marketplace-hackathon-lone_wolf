@@ -1,11 +1,5 @@
 <template>
-    <Navbar/>
-
-    <h2>
-        Total Favourite products
-    </h2>
-    <p>46</p>
-
+    <nuxt-link :to="`/tractors/${tractor._id}`">
     <div class="flex flex-row space-x-8 bg-white">
                                 <div>
                                     <img src="../../assets/images/JohnDeere6R.png" alt="" class="h-[230px] w-[300px] p-2 bg-[#e8f8fb]">
@@ -67,45 +61,12 @@
                                 </div>
 
                             </div>
-
-    <Footer/>
+                        </nuxt-link>
 </template>
 
+
 <script setup>
-import { useFavouriteStore } from '~/stores/useFavouriteStore';
-import { useFavouriteApi } from '~/api/useFavouriteApi';
-
-// const auth = useAuth();
-// const emits = defineEmits(["close"]);
-const favouriteStore = useFavouriteStore();
-
-const { 
-    isFavouriteLoaded,
-    favouriteItems,
-    fetchFavourite,
-    updateItem,
-    removeItem,
-    clearAll,
-} = useFavouriteStore();
-
-
-const products = ref([]);
-
-const cartItems = computed(() => favouriteStore.favouriteItems);
-
-
-const getFavourite = async () => {
-  await fetchFavourite()
-    .then((response) => {
-      products.value = response.data;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
-
-onMounted(() => {
-  getFavourite();
-});
+const props = defineProps(["product"]);
+const emit = defineEmits(["selectProduct"]);
 
 </script>

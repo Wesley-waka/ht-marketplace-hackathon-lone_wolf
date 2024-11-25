@@ -132,9 +132,40 @@
 
 
 
-<script setup lang="ts">
+<script setup >
 
-const route = useRoute()
+const route = useRoute();
+const dataList = ref([]);
+const { $toast } = useNuxtApp();
+const { fetchCart, updateItem, removeItem } = useFavouriteStore();
+const cartStore = useFavouriteStore();
+const { addToCart } = useFavouriteAPI();
+
+const fetchTractorData = async () => {
+  dataLoading.value = true;
+  await getAllTractors({
+    page: page.value,
+    pageSize: pageSize.value,
+    search: searchText.value,
+  })
+    .then((res) => {
+      dataList.value = res.data;
+      totalSize.value = res.result || 0;
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+    .finally(() => {
+      dataLoading.value = false;
+      dataLoaded.value = true;
+    });
+};
+
+onMounted(() => {
+    fetchTractorData();
+});
+
+
 
 // When accessing /posts/1, route.params.id will be 1
 console.log(route.params.id)

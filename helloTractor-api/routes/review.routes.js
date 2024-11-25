@@ -37,6 +37,24 @@ reviewRouter.post('/reviews/:id/feedback', async (req, res) => {
 });
 
 
+// Route to create a new rating
+reviewRouter.post('/ratings', async (req, res) => {
+  const { buyerId, sellerId, rating } = req.body;
+  try {
+    const review = new Review({ buyer: buyerId, seller: sellerId, rating });
+    await review.save();
+
+    const seller = await User.findById(sellerId);
+    seller.totalRating += rating;
+    seller.ratingCount += 1;
+    await seller.save();
+
+    res.status(201).send(review);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 
 // Route to get the average rating of a seller
 reviewRouter.get('/sellers/:id/rating', async (req, res) => {

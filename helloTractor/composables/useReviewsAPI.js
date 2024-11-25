@@ -21,6 +21,14 @@ export const useReviewsAPI = () => {
     });
   };
 
+  const createRating = async (data) => {
+    return await useCustomFetch('/review/ratings', {
+      method: "POST",
+      body: data,
+    });
+  };
+
+
   const createFeedBackReview = async (id, data) => {
     return await useCustomFetch(`/review/reviews/${id}/feeeedback`, {
       method: "POST",
@@ -52,6 +60,8 @@ export const useReviewsAPI = () => {
     getReviewsSeller,
     getReviewById,
     createReview,
-    createFeedBackReview
+    createFeedBackReview,
+    getRatingReview,
+    createRating
   };
 };

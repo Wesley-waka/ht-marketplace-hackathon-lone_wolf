@@ -230,12 +230,7 @@
                     <h3>Welcome to your one stop shop for tractors</h3>
                 </div>
 
-                <div
-                    class="grid gap-x-5 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-                    v-if="dataLoading"
-                    >
-                    <LoaderProductCard v-for="n in 10" :key="n" />
-                </div>
+                
 
                 <div class="">
                     <div class="p-2 bg-orangeTint flex flex-row items-center justify-around my-4 w-max rounded-md"> 
@@ -259,6 +254,13 @@
                                 class="!rounded-b-xl border-t mt-3"
                             >
                             </Paginator>
+                        </div>
+
+                        <div
+                            class="grid gap-x-5 gap-y-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                            v-if="dataLoading"
+                            >
+                            <LoaderProductCard v-for="n in 10" :key="n" />
                         </div>
 
                         <div class="flex-row space-y-4">
@@ -398,11 +400,24 @@
 
                     </div>
 
-                    <TractorDetails 
-                        v-for="product in dataList"
-                        :key="product._id"
-                        :product="product"
-                        @selectProduct="selectedProduct = product"/>
+                    <div v-if="dataList.length">
+                        <div v-for="tractor in dataList" class="flex-row space-y-4" :key="tractor._id">
+                            
+                            <TractorCard 
+                                :tractor="tractor"
+                                @selectProduct="selectedProduct = product"
+                            />
+                        </div>
+                    </div>
+
+                    <div v-else class="flex flex-col justify-center items-center h-full">
+                    <!-- icon -->
+                    <i class="fas fa-triangle-exclamation text-8xl text-gray-400" />
+                    <!-- statement -->
+                    <p class="text-3xl text-gray-400">No Data Found</p>
+                    </div>
+
+                    
                 </div>
 
 
@@ -472,6 +487,7 @@ const idTypes = ref([
   { label: "Captain", value: "captain" }]);
 
 
+  // add your filters here
   const fetchData = async () => {
   dataLoading.value = true;
   await getAllTractors({

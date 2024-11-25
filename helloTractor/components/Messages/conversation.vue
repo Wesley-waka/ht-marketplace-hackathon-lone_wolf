@@ -25,9 +25,9 @@
     </div>
   </template>
   
-  <script setup>
+<script setup>
   import { computed } from 'vue';
-import { useConversationStore } from '~/stores/useConversationStore';
+  import { useConversationStore } from '~/stores/useConversationStore';
 
   const props = defineProps({
     conversation: Object,
@@ -40,4 +40,4 @@ import { useConversationStore } from '~/stores/useConversationStore';
   
   const isSelected = computed(() => selectedConversation?._id === props.conversation._id);
   const isOnline = computed(() => onlineUsers.includes(props.conversation._id));
-  </script>
+</script>
