@@ -1,6 +1,59 @@
 <template>
 
-        <Paginator
+  <Navbar/>
+
+  <div class="card w-[80rem] mx-auto py-2">
+    <Tabs value="0">
+        <TabList>
+            <Tab value="0">Overview
+
+              <i class="pi pi-chart-line" />
+            </Tab>
+            <Tab value="1">Sellers
+              <i class="pi pi-list" />
+              <img src="/Black/Hello Tractor_RGB_BLACK_-Income.png" class="w-[40px]" alt="">
+              
+            </Tab>
+            <Tab value="2">Buyers
+              <i class="pi pi-list" />
+              <img src="/Black/Hello Tractor_RGB_BLACK_-Cart-03.png" class="w-[40px]" alt="">
+
+              
+            </Tab>
+            <Tab value="3">Products
+              <i class="pi pi-list" />
+              <img src="/Black/Hello Tractor_RGB_BLACK_-Production Cycle.png" class="w-[40px]" alt="">
+              
+            </Tab>
+        </TabList>
+        <TabPanels>
+            <TabPanel value="0">
+               <div class="flex flex-row  w-full justify-between">
+                 <AdminDashBoardProducts/>
+                 <AdminDashBoardUserGrowth/>
+                </div>
+                <AdminDashBoardSales/>
+            </TabPanel>
+            <TabPanel value="1">
+                <div class="flex bg-green-200  p-4">
+                  <div class="w-1/6 bg-gray-200">he</div>
+                  <div class="w-3/6 bg-gray-400">hy</div>
+                  <div class="w-2/6 bg-gray-600">hy</div>
+                </div>
+            </TabPanel>
+            <TabPanel value="2">
+                <p class="m-0">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                    qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                </p>
+            </TabPanel>
+        </TabPanels>
+    </Tabs>
+  </div>
+
+  <Footer/>
+
+        <!-- <Paginator
             :alwaysShow="false"
             :rows="pageSize"
             :totalRecords="totalSize"
@@ -9,14 +62,13 @@
             @page="(e) => (page = e.page + 1)"
             class="!rounded-b-xl border-t mt-3"
         >
-        </Paginator>
+        </Paginator> -->
 
 </template>
 
 <script setup>
 import { useAuthAPI } from '~/composables/useAuthAPI';
 import { useTractorsAPI } from '~/composables/useTractorsAPI';
-
 const page = ref(1);
 const pageSize = ref(10);
 const searchText = ref('');
@@ -99,7 +151,7 @@ const calculateUserGrowth = async () => {
 };
 
 
-const { approvedCount, notApprovedCount } = products.reduce(
+const { approvedCount, notApprovedCount } = dataList.value.reduce(
   (acc, product) => {
     if (product.isApproved) {
       acc.approvedCount += 1;
@@ -110,6 +162,14 @@ const { approvedCount, notApprovedCount } = products.reduce(
   },
   { approvedCount: 0, notApprovedCount: 0 }
 );
+
+
+const items = ref([
+    { route: '/dashboard', label: 'Dashboard', icon: 'pi pi-home' },
+    { route: '/transactions', label: 'Transactions', icon: 'pi pi-chart-line' },
+    { route: '/products', label: 'Products', icon: 'pi pi-list' },
+    { route: '/messages', label: 'Messages', icon: 'pi pi-inbox' }
+]);
 
 
 

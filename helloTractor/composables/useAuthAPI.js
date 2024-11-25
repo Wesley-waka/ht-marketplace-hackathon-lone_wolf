@@ -106,7 +106,7 @@ export const useAuthAPI = () => {
     logOut,
     favGetProducts,
     favCreateProducts,
-    disApproveUser,
+    // disApproveUser,
     verification,
     approveUser,
     updateUser,

@@ -33,8 +33,7 @@
             <div class="rounded-lg w-[600px] bg-white mt-10 flex flex-col space-y-8 py-8 px-8 ">
               <div class="flex flex-row space-x-2">
                 <CustomInputContainer
-                    label="ID Type"
-                    required
+                    label=" "
                     class="w-[200px]"
                   >
                   <Select
@@ -42,12 +41,11 @@
                     :options="idTypes"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select ID Type"
+                    placeholder="Type"
                   />
                 </CustomInputContainer>
                 <CustomInputContainer
-                    label="ID Type"
-                    required
+                    label=" "
                     class="w-[200px]"
                   >
                   <Select
@@ -55,12 +53,11 @@
                     :options="idTypes"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select ID Type"
+                    placeholder="Brand"
                   />
                 </CustomInputContainer>
                 <CustomInputContainer
-                    label="ID Type"
-                    required
+                    label=" "
                     class="w-[200px]"
                   >
                   <Select
@@ -68,15 +65,14 @@
                     :options="idTypes"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select ID Type"
+                    placeholder="Engine hours"
                   />
                 </CustomInputContainer>
               </div>
 
               <div class="flex flex-row space-x-2">
                 <CustomInputContainer
-                    label="ID Type"
-                    required
+                    label=" "
                     class="w-1/2"
                   >
                   <Select
@@ -84,12 +80,12 @@
                     :options="idTypes"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select ID Type"
+                    placeholder="Registration From "
                   />
                 </CustomInputContainer>
                 <CustomInputContainer
-                    label="ID Type"
-                    required
+                    label=" "
+                    
                     class="w-1/2"
                   >
                   <Select
@@ -97,7 +93,7 @@
                     :options="idTypes"
                     optionLabel="label"
                     optionValue="value"
-                    placeholder="Select ID Type"
+                    placeholder="Price up To"
                   />
                 </CustomInputContainer>
               </div>

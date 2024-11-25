@@ -3,6 +3,10 @@
     <div class="bg-slate-100 py-10 h-max">
         <div class="max-w-[72rem] px-6 mx-auto grid grid-cols-4 gap-4 ">
             <div class="col-span-1 bg-white rounded-md " style="height: 400px;">
+                <div class=" border-b-[1px] mb-4 pb-[8px] px-4 py-3">
+                    <h2>Messages</h2>
+
+                </div>
                 <div>
                     <div class="flex items-center p-4 hover:bg-gray-50 transition-colors duration-200 rounded-lg">
                         <!-- Avatar section with improved styling -->
@@ -43,19 +47,28 @@
                             </div>
                         </div>
                         </div>
-                    </div>
+                </div>
             </div>
             <div class="col-span-3  rounded-md flex-col justify-end  p-2" style="height: 100px;">
                 
-                <div class="h-[360px] p-4 bg-white row-span-3 " style="height: 340px;">
+                <div class="h-[360px]  bg-white row-span-3 rounded-md" style="height: 340px;">
+                    <div class=" border-b-[1px]  py-4 px-4">
+                        <h2>JohnDeere6R</h2>
+                        <p class="text-xs">Last replied: 2days ago</p>
 
-                    <div class="text-xs flex flex-col space-y-2 flex-wrap max-w-[300px]">
-                        <div class="items-center bg-slate-200 w-max p-4">
-                        <p>Hi from Labda do You ahav</p>
-
-                        </div>
-                        <p>11:20 Tuesday</p>
                     </div>
+
+                    <div class="p-4">
+                        <div class="text-xs flex flex-col space-y-2 flex-wrap max-w-[300px]">
+                            <div class="items-center bg-slate-100 w-max p-3 rounded-sm">
+                            <p>Hi from Labda do You ahav</p>
+    
+                            </div>
+                            <p class="text-xs">11:20 Tuesday</p>
+                        </div>
+                    </div>
+
+                    
 
                     
                     
@@ -68,8 +81,8 @@
                             placeholder="Type a message"
                             class="w-full p-4 border-b border-gray-200"
                         />
-                        <div class="w-[90px]  bg-slate-600 border-4 rounded-md" style="border: 20px; background-color: orange;">
-                            <img src="/public/Black/HT_ICONS_BLACK_RGB-66.png" alt="" class="bg-orange-800 p-1 w-[50px] border-2 ">
+                        <div class="  rounded-md" >
+                            <img src="/public/Black/HT_ICONS_BLACK_RGB-66.png" alt="" class=" bg-orangeBright rounded-md h-[43px] w-[63px] border-2 ">
                         </div>
                 </div>      
                 

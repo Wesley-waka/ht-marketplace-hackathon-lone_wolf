@@ -16,6 +16,15 @@
 
             <div class="flex flex-col space-y-8 p-5">
                 <div>
+                    <div class="my-4 py-2 border-b flex justify-between gap-2">
+                        <CustomSearch v-model="searchText" placeholder="Search Tractor"/>
+              
+                        <!-- <button
+                          class="btn-secondary !rounded-full outlined text-xl !py-0 !px-1.5"
+                        >
+                          <i class="mdi mdi-filter" />
+                        </button> -->
+                      </div>
                     <h3 class="font-manropeBold">Brand</h3>
                     <CustomInputContainer
                         label=""
@@ -233,10 +242,12 @@
                 
 
                 <div class="">
-                    <div class="p-2 bg-orangeTint flex flex-row items-center justify-around my-4 w-max rounded-md"> 
-                        <p class="font-manropeBold text-white">First Registration from 2023
+                    
+                    <div class="p-1 bg-orange-200 flex flex-row items-center justify-around my-4 w-max rounded-md"> 
+                        <p class="font-manropeBold text-orangeTint text-[12px]">First Registration from 2023
                         </p>
-                        <img src="/public/White/HT_ICONS_WHITE_RGB-21.png" class="h-[30px] w-[30px]">
+                        <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-21.png" class="h-[20px] w-[20px]">
+
                     </div>
                     <div class="mt-2">
                         <h2 class="font-manropeBold">Verified Cars</h2>
@@ -267,13 +278,16 @@
                             
 
 
-                            <div class="flex flex-row space-x-8 bg-white">
-                                <div>
-                                    <img src="../../assets/images/JohnDeere6R.png" alt="" class="h-[230px] w-[300px] p-2 bg-[#e8f8fb]">
+                            <div class="flex flex-row  bg-white rounded-md">
+                                <div class="w-2/6">
+                                    <img src="../../assets/images/JohnDeere6R.png" alt="" class="h-[230px]  bg-[#e8f8fb]">
                                 </div>
-                                <div class="">
-                                    <h4>JohnDeere6R</h4>
-                                    <div class="flex flex-row space-x-4">
+                                <div class="w-4/6">
+                                    <div class="flex flex-row space-x-96">
+                                        <h4 class="text-3xl my-1">JohnDeere6R</h4>
+                                        <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-50.png" class="w-[40px] " alt="">
+                                    </div>
+                                    <div class="flex flex-row space-x-4 my-3">
                                         <!-- E/hr used -->
                                         <div class="flex flex-row space-x-1 items-center">
                                             <img src="/public/Black/Hello Tractor_RGB_BLACK_-Settings.png" class="h-[30px] w-[30px]" alt="" >
@@ -299,20 +313,36 @@
                                     </div>
 
                                     <div class="flex flex-row space-x-4 mt-4">
-                                        <div class="p-1 bg-[#ff81a2] flex flex-row items-center justify-around my-4 w-max rounded-md"> 
-                                        <p class="font-manropeBold text-black text-sm">First Registration from 2023
-                                        </p>
+                                        <div class="flex flex-row flex-wrap w-full space-x-2 ">
                                         
-                                    </div>
+                                        <div class="p-1 bg-orange-200 flex flex-row items-center justify-around my-4 w-max rounded-md"> 
+                                            <p class="font-manropeBold text-orangeTint text-[10px]">First Registration from 2023
+                                            </p>
+                                        </div>
+
+                                        <div class="p-1 bg-orange-200 flex flex-row items-center justify-around my-4 w-max rounded-md"> 
+                                            <p class="font-manropeBold text-orangeTint text-[10px]">First Registration from 2023
+                                            </p>
+                                        </div>
+
+                                        
+
+                                        
+
+
+                                        
+                                            
+                                        
+                                        </div>
 
                                     </div>
 
-                                    <div class="flex flex-row justify-between mt-2 ">
+                                    <div class="flex flex-row space-x-48 items-center mt-2 w-full">
                                         <div class="flex flex-row">
                                             <img src="/public/Black/HT_ICONS_BLACK_RGB-05.png" class="h-[40px] w-[40px]" alt="">
                                             
                                             <div>
-                                                <h2>Netherlands,delivery:</h2>
+                                                <h4 class="text-lg">Netherlands,delivery:</h4>
                                                 <p>Delivery not available</p>
                                             </div>
                                         </div>
@@ -330,67 +360,10 @@
                             </div>
 
 
-                            <div class="flex flex-row space-x-8 bg-white">
-                                <div>
-                                    <img src="../../assets/images/JohnDeere6R.png" alt="" class="h-[230px] w-[300px] p-2 bg-[#e8f8fb]">
-                                </div>
-                                <div class="">
-                                    <h4>JohnDeere6R</h4>
-                                    <div class="flex flex-row space-x-4">
-                                        <!-- E/hr used -->
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/Hello Tractor_RGB_BLACK_-Settings.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>0 hrs</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/Hello Tractor_RGB_BLACK_-Schedule.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>9/2024</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-55.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>125hp</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-56.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>Hydraulic Cost</p>
-                                        </div>
-
-                                        
-                                    </div>
-
-                                    <div class="flex flex-row space-x-4 mt-4">
-                                        <div class="p-1 bg-[#ff81a2] flex flex-row items-center justify-around my-4 w-max rounded-md"> 
-                                        <p class="font-manropeBold text-black text-sm">First Registration from 2023
-                                        </p>
-                                        
-                                    </div>
-
-                                    </div>
-
-                                    <div class="flex flex-row justify-between mt-2 ">
-                                        <div class="flex flex-row">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-05.png" class="h-[40px] w-[40px]" alt="">
-                                            
-                                            <div>
-                                                <h2>Netherlands,delivery:</h2>
-                                                <p>Delivery not available</p>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <h3 class="font-merriWeatherBold">KES 300,000</h3>
-                                            <h3 class="text-sm">KES 300,000 without VAT</h3>
-                                        </div>
+                            
 
 
-                                    </div>
 
-                                </div>
-
-                            </div>
                             
 
 
