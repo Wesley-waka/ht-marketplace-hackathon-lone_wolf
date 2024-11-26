@@ -137,15 +137,6 @@
 </div>
         </div>
       </div>
-      
-      
-      
-      
-      
-      
-      
-      
-      
       <!-- SIgn Up form -->
        
       <div v-if="sign_up"> 
