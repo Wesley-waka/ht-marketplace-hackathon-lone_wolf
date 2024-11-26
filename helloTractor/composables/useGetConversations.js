@@ -10,7 +10,9 @@ const toast = useToast()
 const useGetConversations = async () => {
   loading.value = true
   try {
-    const { data, error } = await useCustomFetch('/api/users')
+    // const { data, error } = await useCustomFetch('/users/')
+    // write api
+    const { data, error } = await useCustomFetch('/')
     // api for getting matched users
     if (error.value) {
       throw new Error(error.value.message)
