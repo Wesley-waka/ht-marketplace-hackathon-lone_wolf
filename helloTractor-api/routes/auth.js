@@ -1,5 +1,5 @@
 import express from "express";
-import User from '../models/user.js';
+import User from "../models/User.js"
 import passport from 'passport';
 import { createTransport } from 'nodemailer';
 import { randomBytes } from 'crypto';
