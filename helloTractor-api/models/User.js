@@ -63,7 +63,11 @@ const userSchema = new Schema({
   updatedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  matchedUsers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
 }, {
   timestamps: true
 });

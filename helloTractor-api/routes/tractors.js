@@ -42,7 +42,7 @@ const upload = multer({
 });
 
 tractorRouter.post('/', async (req, res) => {
-  const uploadMiddleware = upload.array('images', 5);
+  const uploadMiddleware = upload.single('images');
 
   try {
     await new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ tractorRouter.post('/', async (req, res) => {
       return res.status(400).send('Please upload an image file.');
     }
 
-    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures, cost } = req.body;
+    const { tractorName, model, year, dealer, HPCategory, engineHoursUsed, vehicleID, engineCapacity, fuelType, engineConditions, engineConsumption, tyreConditions, exteriorFeatures, interiorFeatures, cost, tractorType } = req.body;
 
     const imageUrl = req.file.location;
 
@@ -74,6 +74,7 @@ tractorRouter.post('/', async (req, res) => {
       engineCapacity,
       fuelType,
       cost,
+      tractorType,
       engineConditions,
       engineConsumption,
       tyreConditions,
@@ -109,15 +110,13 @@ tractorRouter.get('/:id', async (req, res) => {
 
 tractorRouter.get('/', async (req, res) => {
   try {
-    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features, tractorType, isApproved, search, limit } = req.query;
-    const query = {};
+    const { dealer, budget, location, cost, HP, price, year, engineHoursUsed, features, tractorType, search, limit } = req.query;
+    const query = { isApproved: true }; //
 
     if (dealer) query.dealer = dealer;
-    if (isApproved) query.isApproved = isApproved;
     if (search) {
       query.keyword = { $regex: search, $options: 'i' }; // Assuming you have a keyword field
     }
-
 
     if (budget) query.cost = { $lte: budget };
     if (location) {
@@ -139,8 +138,6 @@ tractorRouter.get('/', async (req, res) => {
 
     const tractors = await Tractor.find(query).limit(parseInt(limit, 10));
 
-    // const tractors = await Tractor.find(query).populate('dealer').limit(parseInt(limit, 10));
-    // .populate('dealer')
     res.json(tractors);
   } catch (error) {
     res.status(500).json({ error: error.message });

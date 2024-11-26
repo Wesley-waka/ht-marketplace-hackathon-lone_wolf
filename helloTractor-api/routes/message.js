@@ -4,10 +4,21 @@ import protectRoute from "../middlewares/protectRoute.js";
 
 const messageRouter = express.Router();
 
-messageRouter.get("/:id", protectRoute, getMessages);
-messageRouter.post("/send/:id", protectRoute, sendMessage);
-messageRouter.get("/", protectRoute, getUsersForSidebar);
-messageRouter.get('/match-user/:id',protectRoute,getMatchedUser)
+const attachUser = (req, res, next) => {
+  req.user = { _id: '67456d3e68a5c4e8e06bf299' }; // Attach the user object
+  next();
+};
+
+// messageRouter.get("/:id", protectRoute, getMessages);
+// messageRouter.post("/send/:id", protectRoute, sendMessage);
+// messageRouter.get("/", protectRoute, getUsersForSidebar);
+// messageRouter.get('/match-user/:id', protectRoute, getMatchedUser)
+
+
+messageRouter.get("/:id", attachUser, getMessages);
+messageRouter.post("/send/:id", attachUser, sendMessage);
+messageRouter.get("/", attachUser, getUsersForSidebar);
+messageRouter.get('/match-user/:id', attachUser, getMatchedUser)
 // messageRouter.get("/", protectRoute, getUsersForSidebar); - get users depending on the ones you have chatted with
 
 // const attachUser = (req, res, next) => {

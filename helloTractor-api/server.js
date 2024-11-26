@@ -12,6 +12,7 @@ import messageRouter from './routes/message.js';
 import tractorRouter from './routes/tractors.js';
 import implementsRouter from './routes/implements.js';
 import childDealerRouter from './routes/childDealer.js';
+import DealerRouter from './routes/dealer.js';
 
 config();
 const app = express();
@@ -24,7 +25,7 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+connect(process.env.MONGO_URI);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,8 +40,9 @@ app.use("/api/review", reviewRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/messages', messageRouter);
 app.use('/api/child-dealer', childDealerRouter);
+app.use('/api/dealer', DealerRouter)
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hello Tractor API is running....');
 });
 

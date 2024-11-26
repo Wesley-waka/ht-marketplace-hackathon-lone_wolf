@@ -3,7 +3,7 @@ import User from "../models/User.js"
 import passport from 'passport';
 import { createTransport } from 'nodemailer';
 import { randomBytes } from 'crypto';
-import sign from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { hash, compare } from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import { S3Client } from "@aws-sdk/client-s3";
@@ -82,9 +82,29 @@ authRouter.get('/google',
 
 authRouter.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
+  async (req, res) => {
     // Successful authentication, redirect to the desired page
-    res.redirect('/verify-2fa?email=' + req.user.email);
+    console.log('this is our user', req.user);
+    const { email } = req.user;
+    try {
+      const user = await User.findOne({ email });
+
+
+      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+
+      res.cookie('token', token, { httpOnly: true });
+
+      // res.status(200).send('2FA verification successful.');
+      // res.redirect('/verify-2fa?email=' + req.user.email);
+
+      if (!user) {
+        return res.status(400).send('User not found.');
+      }
+
+      // res.redirect('/verify-2fa?email=' + req.user.email);
+    } catch (error) {
+      res.status(500).send('Error verifying 2FA code. Please try again.');
+    }
     // res.redirect(`https://wes.com/verify-2fa?email=${req.user.email}`);
     // res.redirect(`https://wes.com/verify-2fa?email=${req.user.email}`);
   }
@@ -115,12 +135,16 @@ authRouter.post('/verify-2fa', async (req, res) => {
       return res.status(400).send('User not found.');
     }
 
+    console.log(user.twoFactorCode, 'this is our 2FA code', twoFactorCode)
     if (user.twoFactorCode === twoFactorCode) {
       user.isVerified = true;
       await user.save();
+      console.log('this is our token')
 
-      const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+
       res.cookie('token', token, { httpOnly: true });
+
       res.status(200).send('2FA verification successful.');
     } else {
       res.status(400).send('Invalid 2FA code.');
@@ -147,7 +171,7 @@ const transporter = createTransport({
 // Updated sign-up route with error handling
 authRouter.post('/signup', async (req, res) => {
   // Wrap the multer upload in a promise to handle errors better
-  const uploadMiddleware = upload.single('image');
+  const uploadMiddleware = upload.single('images');
 
   try {
     await new Promise((resolve, reject) => {
@@ -214,10 +238,9 @@ authRouter.post('/signup', async (req, res) => {
 // Sign-in route
 authRouter.post('/signin', async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body)
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).send('User not found.');
     }
@@ -232,13 +255,13 @@ authRouter.post('/signin', async (req, res) => {
     }
 
     generateTokenAndSetCookie(user._id, res);
-    // const token = sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    // res.cookie('token', token, { httpOnly: true });
     res.status(200).send('Sign-in successful.');
   } catch (error) {
+    console.error(error);
     res.status(500).send('Error signing in. Please try again.');
   }
 });
+
 
 authRouter.post('/users/:userId/favoriteProducts', async (req, res) => {
   try {

@@ -1,8 +1,9 @@
-import ChildDealers from '../models/ChildDealers';
-import Dealer, { findById, find } from '../models/Dealer';
-import user from '../models/user';
+// import Dealer, { findById, find } from '../models/Dealer';
+import Dealer from '../models/Dealer.js';
+import { createTransport } from 'nodemailer';
+import express from "express";
 
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   service: 'gmail',
   host: "smtp.gmail.com",
   port: 465,
@@ -13,8 +14,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const DealersRouter = express.Router();
+
 // Endpoint to create a main dealer and its child dealers
-router.post('/dealers', async (req, res) => {
+DealersRouter.post('/', async (req, res) => {
   try {
     const { name, location, number } = req.body;
 
@@ -39,7 +42,7 @@ router.post('/dealers', async (req, res) => {
   }
 });
 
-router.post('/dealers/:dealerId/dealers', async (req, res) => {
+DealersRouter.post('/:dealerId/dealers', async (req, res) => {
   try {
     const { name, specialty } = req.body;
     const { dealerId } = req.params;
@@ -76,7 +79,7 @@ router.post('/dealers/:dealerId/dealers', async (req, res) => {
   }
 });
 
-router.post('/dealer-submit', async (req, res) => {
+DealersRouter.post('/dealer-submit', async (req, res) => {
   try {
     const { name, email, state } = req.body;
 
@@ -99,7 +102,7 @@ router.post('/dealer-submit', async (req, res) => {
 });
 
 // Endpoint to get all dealers or based on query
-router.get('/dealers', async (req, res) => {
+DealersRouter.get('/', async (req, res) => {
   try {
     const { lng, lat } = req.query;
     const maxDistance = 10000;
@@ -122,7 +125,7 @@ router.get('/dealers', async (req, res) => {
     }
 
 
-    
+
     res.status(200).json(dealers);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -130,7 +133,7 @@ router.get('/dealers', async (req, res) => {
 });
 
 
-router.get('/dealers-nearby', async (req, res) => {
+DealersRouter.get('/dealers-nearby', async (req, res) => {
   const { lat, lng } = req.query;
   const drivers = await find({
     location: {
@@ -145,7 +148,7 @@ router.get('/dealers-nearby', async (req, res) => {
 
 // Endpoint to get dealer details including its child dealers
 
-// router.get('/dealers/:id', async (req, res) => {
+// DealersRouter.get('/dealers/:id', async (req, res) => {
 //   try {
 //     const dealer = await Dealer.findById(req.params.id).populate('childDealers');
 //     if (!dealer) {
@@ -198,4 +201,4 @@ router.get('/dealers-nearby', async (req, res) => {
 
 // export default App;
 
-export default router;
+export default DealersRouter;
