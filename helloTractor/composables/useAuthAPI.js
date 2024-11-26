@@ -1,4 +1,5 @@
 export const useAuthAPI = () => {
+  const authStore = useUserStore()
 
   const getAllUsers = async ({ user = '', isApproved = '', search = '', pageSize = 10 }) => {
 
@@ -28,19 +29,52 @@ export const useAuthAPI = () => {
     });
   };
 
-  const logIn = async (data) => {
-    return await useCustomFetch(`/signin`, {
-      method: "POST",
-      body: data
-    });
-  };
+  // const logIn = async (data) => {
+  //   return await useCustomFetch(`/signin`, {
+  //     method: "POST",
+  //     body: data
+  //   });
+  // };
 
-  const signUp = async (id, data) => {
-    return await useCustomFetch(`/auth/signup`, {
-      method: "POST",
-      body: data
-    });
-  };
+  const logIn = async (credentials) => {
+    try {
+      const result = await authStore.login(credentials)
+      // Handle successful login (e.g., redirect to dashboard)
+      return result
+    } catch (error) {
+      // Handle login error
+      console.error('Login failed', error)
+    }
+  }
+
+  const logOut = async () => {
+    try {
+      await authStore.logout()
+      // Redirect to login page or home page
+    } catch (error) {
+      console.error('Logout failed', error)
+    }
+  }
+
+  // const signUp = async (id, data) => {
+  //   return await useCustomFetch(`/auth/signup`, {
+  //     method: "POST",
+  //     body: data
+  //   });
+  // };
+
+  // Signup form handler
+  const signUp = async (signupData) => {
+    try {
+      const result = await authStore.signup(signupData)
+      // Handle successful signup (e.g., redirect, show success message)
+      return result
+    } catch (error) {
+      // Handle signup error
+      console.error('Signup failed', error)
+    }
+  }
+
 
   const googleLogin = async (cartId) => {
     return await useCustomFetch(`/auth/google`, {
@@ -92,11 +126,11 @@ export const useAuthAPI = () => {
   };
 
 
-  const logOut = async (id) => {
-    return await useCustomFetch(`/auth/logout`, {
-      method: "GET",
-    });
-  };
+  // const logOut = async (id) => {
+  //   return await useCustomFetch(`/auth/logout`, {
+  //     method: "GET",
+  //   });
+  // };
 
 
 

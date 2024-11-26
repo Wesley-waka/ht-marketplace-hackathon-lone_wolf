@@ -7,14 +7,16 @@ const conversations = ref([])
 
 const toast = useToast()
 
-const getConversations = async () => {
+const useGetConversations = async () => {
   loading.value = true
   try {
-    const { data, error } = await useFetch('/api/users')
+    const { data, error } = await useCustomFetch('/api/users')
+    // api for getting matched users
     if (error.value) {
       throw new Error(error.value.message)
     }
-    conversations.value = data.value
+    // conversations.value = data.value
+    return { data }
   } catch (error) {
     toast.error(error.message)
   } finally {
@@ -23,7 +25,7 @@ const getConversations = async () => {
 }
 
 onMounted(() => {
-  getConversations()
+  useGetConversations()
 })
 
-export default useGetMessages
+export default useGetConversations
