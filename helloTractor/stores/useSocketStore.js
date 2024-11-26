@@ -11,7 +11,7 @@ export const useSocketStore = defineStore('useSocketStore', () => {
 
   onMounted(() => {
     if (authUser.value) {
-      socket.value = io('http://localhost:4000', {
+      socket.value = io('http://localhost:4000/api/message', {
         query: {
           userId: authUser.value._id,
         },

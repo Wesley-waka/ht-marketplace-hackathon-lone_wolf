@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     [
       "@pinia/nuxt",
       {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
+        autoImports: ['defineStore', 'acceptHMRUpdate', 'storeToRefs'],
       }
     ]],
 
@@ -67,9 +67,19 @@ export default defineNuxtConfig({
     },
   },
 
+
+
   build: {
     transpile: ['vue-sonner']
   },
+
+  // pinia: {
+  //   autoImports: [
+  //     'defineStore',
+  //     'storeToRefs',
+  //     'acceptHMRUpdate'
+  //   ]
+  // },
 
   // auth: {
   //   baseURL: process.env.API_URL,

@@ -1,11 +1,11 @@
 // useCustomFetch.js
 import { ref } from 'vue'
-
+const config = useRuntimeConfig();
 // Persistent token storage
 const bearerToken = ref(localStorage.getItem('bearerToken') || null)
-
+let mainUrl = config.public.apiURL;
 // Custom fetch wrapper with token management
-export function useCustomFetch(url, options = {}) {
+export function useCustomFetch(options = {}) {
   // Prepare headers
   const headers = new Headers({
     'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export function useCustomFetch(url, options = {}) {
   }
 
   // Perform the actual fetch
-  return fetch(url, fetchOptions)
+  return fetch(mainUrl, fetchOptions)
     .then(async (response) => {
       // Handle unauthorized access
       if (response.status === 401) {
@@ -45,31 +45,31 @@ export function useCustomFetch(url, options = {}) {
     })
 }
 
-// Authentication management
-export function useAuth() {
-  // Login - persist token
-  function login(token) {
-    bearerToken.value = token
-    localStorage.setItem('bearerToken', token)
-  }
+// // Authentication management
+// export function useAuth() {
+//   // Login - persist token
+//   function login(token) {
+//     bearerToken.value = token
+//     localStorage.setItem('bearerToken', token)
+//   }
 
-  // Logout - clear token
-  function logout() {
-    bearerToken.value = null
-    localStorage.removeItem('bearerToken')
-  }
+//   // Logout - clear token
+//   function logout() {
+//     bearerToken.value = null
+//     localStorage.removeItem('bearerToken')
+//   }
 
-  // Get current token
-  function getToken() {
-    return bearerToken.value
-  }
+//   // Get current token
+//   function getToken() {
+//     return bearerToken.value
+//   }
 
-  return {
-    login,
-    logout,
-    getToken
-  }
-}
+//   return {
+//     login,
+//     logout,
+//     getToken
+//   }
+// }
 
 // Optionally export the token ref if needed for reactive operations
 export const token = bearerToken

@@ -11,11 +11,11 @@
     </div>
   </template>
   
-  <script setup>
+<script setup>
 //   import { useConversationsStore } from '~/stores/conversations';
 //   import { getRandomEmoji } from '~/utils/emojis';
 //   import Conversation from '~/components/Conversation.vue';
   
 const { loading, conversations } = useGetConversations();
   
-  </script>
+</script>

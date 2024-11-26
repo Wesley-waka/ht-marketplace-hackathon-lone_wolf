@@ -1,10 +1,9 @@
 import { onMounted, onUnmounted } from 'vue';
-import { useSocketContext } from '../context/SocketContext';
 import useConversation from '../zustand/useConversation';
-import notificationSound from '../assets/sounds/notification.mp3';
+import notificationSound from '/Sounds/notification.mp3';
 
 const useListenMessages = () => {
-  const { socket } = useSocketContext();
+  const { socket } = useSocketStore();
   const { messages, setMessages } = useConversation();
 
   onMounted(() => {

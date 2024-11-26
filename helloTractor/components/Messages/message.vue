@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import { useAuthContext } from "../../context/AuthContext";
 import { extractTime } from "../../utils/extractTime";
-import useConversation from "../../zustand/useConversation";
+import useConversation from '../../stores/useConversationStore';
+import { useMyStore } from '../../stores/useAuthStore'
 
 export default {
 	props: {
@@ -23,7 +23,10 @@ export default {
 		}
 	},
 	setup(props) {
-		const { authUser } = useAuthContext();
+
+		const store = useMyStore()
+		const authUser = computed(() => store.currentUser)
+		// const { authUser } = useAuthContext();
 		const { selectedConversation } = useConversation();
 		const fromMe = props.message.senderId === authUser._id;
 		const formattedTime = extractTime(props.message.createdAt);
