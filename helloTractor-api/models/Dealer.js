@@ -8,7 +8,7 @@ const dealerSchema = new Schema({
   location: {
     type: {
       type: String,
-      enum: ['Point'],
+      default: 'Point',
       required: true
     },
     coordinates: {
@@ -20,7 +20,6 @@ const dealerSchema = new Schema({
     type: String,
     required: true
   },
-  location: String,
   childDealers: [{ type: Schema.Types.ObjectId, ref: 'ChildDealer' }],
   // mechanics: [{
   //   type: mongoose.Schema.Types.ObjectId,

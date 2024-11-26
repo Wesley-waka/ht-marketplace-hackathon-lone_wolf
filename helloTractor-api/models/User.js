@@ -64,6 +64,20 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  // location: {
+  //   type: {
+  //     type: String,
+  //     default: 'Point',
+  //     required: false
+  //   },
+  //   coordinates: {
+  //     type: [Number],
+  //     required: false
+  //   }
+  // },
+  location: {
+    type: String
+  },
   matchedUsers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

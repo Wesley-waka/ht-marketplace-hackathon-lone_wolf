@@ -28,7 +28,8 @@
     <Dialog v-model:visible="visible" modal header="Welcome Back" :style="{ width: '900px' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       
       
-      <!-- <div class="h-full overflow-auto flex flex-col">
+      <!-- LOGIN FORM -->
+      <div v-if="sign_in" class="h-full overflow-auto flex flex-col">
         <div class="flex items-center mx-auto px-3">
         <img src="/logo.png" alt="logo" class="h-12 mb-4" />
 
@@ -41,7 +42,7 @@
         
         <form
           class="m-auto max-w-[400px] flex-grow space-y-3"
-          @submit.prevent="handleSubmit"
+          @submit.prevent="handleSignInSubmit"
         >
           <div>
             <h1 class="text-2xl font-semibold text-center">Login</h1>
@@ -97,15 +98,19 @@
           </div>
         </form>
 
-        <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto" type="submit" :disabled="loading">
+        <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto" @click="sign_in = false,user_selector = true" :disabled="loading">
               <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
               Sign Up
             </button>
             </div>
-      </div> -->
+      </div>
 
 
-      <!-- <div>
+
+
+
+      <!-- USER TYPE SELECTOR -->
+      <div v-if="user_selector">
         <div class="w-full mx-auto">
           <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
           <div class="flex flex-row justify-around my-12">
@@ -128,10 +133,10 @@
           </div>
 
           <div class="flex flex-col items-center justify-center w-full">
-  <button class="btn btn-primary w-[300px]">Join as a Buyer</button>
+  <button class="btn btn-primary w-[300px]" @click="user_selector = false,sign_up = true">Join as a Buyer</button>
 </div>
         </div>
-      </div> -->
+      </div>
       
       
       
@@ -141,20 +146,43 @@
       
       
       
-      
-      <div class="w-full h-[600px]">
+      <!-- SIgn Up form -->
+       
+      <div v-if="sign_up"> 
+        <div class="w-full h-[600px]">
         <h1 class="text-2xl text-center">Sign up to hire talent</h1>
 
         
 
         <div class=" mt-4">
         <Divider layout="vertical" class="!hidden md:!flex"><b>OR</b></Divider>
-        <!--  -->
-
-       <CustomUpload></CustomUpload>
-
         <div class="max-w-[400px] mx-auto my-6">
-          <form @submit.prevent="handleSubmit" >
+          <form @submit.prevent="handleSignUpSubmit" >
+            <div>
+            <CustomInputContainer
+              label="Images"
+              required
+              :error="v$.src.$error"
+              :errorMessage="v$.src.$errors[0]?.$message">
+              <div class="card flex flex-col items-center gap-6">
+              <img v-if="src" :invalid="v$.src.$error" :src="src" alt="Image" class="shadow-md rounded-full w-40" />
+              <div v-else class="outlined">
+                <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-32.png" class="w-40" alt="">
+              </div>
+              <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary" class="p-button-outlined">
+                <template #uploadicon>
+                  <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-29.png" alt="">
+                </template>
+                <template #content>
+                  <span class="p-button-label">Upload</span>
+                </template>
+              </FileUpload>
+            </div>
+            </CustomInputContainer>
+            
+          </div>
+
+       
         <div class="flex flex-row space-x-2 w-full">
           <CustomInputContainer
               label="First Name"
@@ -165,7 +193,7 @@
             >
           
               <InputText
-                v-model="formData.first_name"
+                v-model="formDataSignUp.first_name"
                 @blur="v$.first_name.$touch"
                 :invalid="v$.first_name.$error"
               />
@@ -178,7 +206,7 @@
               :errorMessage="v$.last_name.$errors[0]?.$message"
             >
               <InputText
-                v-model="formData.last_name"
+                v-model="formDataSignUp.last_name"
                 @blur="v$.last_name.$touch"
                 :invalid="v$.last_name.$error"
               />
@@ -192,7 +220,7 @@
             :errorMessage="v$.email.$errors[0]?.$message"
           >
             <InputText
-              v-model="formData.email"
+              v-model="formDataSignUp.email"
               @blur="v$.email.$touch"
               :invalid="v$.email.$error"
             />
@@ -206,7 +234,7 @@
           >
             <InputText
               type="number"
-              v-model="formData.phone_number"
+              v-model="formDataSignUp.phone_number"
               @blur="v$.phone_number.$touch"
               :invalid="v$.phone_number.$error"
             />
@@ -222,7 +250,7 @@
               :errorMessage="v$.id_type.$errors[0]?.$message"
             >
               <Select
-                v-model="formData.id_type"
+                v-model="formDataSignUp.id_type"
                 :options="idTypes"
                 optionLabel="label"
                 optionValue="value"
@@ -239,18 +267,23 @@
             >
               <InputText
                 type="number"
-                v-model="formData.id_number"
+                v-model="formDataSignUp.location"
                 @blur="v$.id_number.$touch"
                 :invalid="v$.id_number.$error"
               />
             </CustomInputContainer>
           </div>
 
-          <CustomInputContainer required label="Location">
-            <InputText type="text" v-model="formData.location" readonly />
-          </CustomInputContainer>
+          <!-- <CustomInputContainer :error="v$.id_number.$error"
+          :errorMessage="v$.location.$errors[0]?.$message" required label="Location">
+            <InputText type="text" :invalid="v$.location.$error" v-model="formDataSignUp.location" readonly />
+            <InputText type="text" :invalid="v$.location.$error" v-model="formDataSignUp.location"  />
+          </CustomInputContainer> -->
 
-          <button class="btn btn-primary w-full my-4">
+          
+
+          
+          <button class="btn btn-primary w-full my-4" >
             Sign Up
           </button>
             
@@ -259,8 +292,16 @@
        
     </div>
       </div>
+    </div>
+     
+
+
+
       
+    
       
+
+
       <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
         <StepList>
           <Step value="1" :class="{ 'p-complete': Number(currentStep) > 1 }">
@@ -425,7 +466,6 @@
   </template>
   
 <script setup>
-  import { ref } from 'vue';
   import moment from 'moment';
   import useVuelidate from "@vuelidate/core";
   import { email, required, helpers,
@@ -435,10 +475,85 @@
 
   // for login
   // const { signIn } = useAuth();
+
+  //intializa ref
+
+  const onSelectedFiles = (event) => {
+    files.value = event.files;
+    form.value.images = files.value;
+    console.log(files.value, 'this is the file');
+    files.value.forEach((file) => {
+      totalSize.value += parseInt(formatSize(file.size));
+    });
+};
+
+const location = ['36.811667','-1.266944']
+
+const onRemoveTemplatingFile = (file, removeFileCallback, index) => {
+  removeFileCallback(index);
+  totalSize.value -= parseInt(formatSize(file.size));
+  totalSizePercent.value = totalSize.value / 10;
+};
+
+const onClearTemplatingUpload = (clear) => {
+  clear();
+  totalSize.value = 0;
+  totalSizePercent.value = 0;
+};
+
+
+const uploadEvent = (callback) => {
+  totalSizePercent.value = totalSize.value / 10;
+  callback();
+};
+
+const onTemplatedUpload = (event) => {
+  console.log(event.files, 'Uploaded files');
+  toast.add({ severity: "info", summary: "Success", detail: "File Uploaded", life: 3000 });
+};
+
+const formatSize = (bytes) => {
+  const k = 1024;
+  const dm = 3;
+  const sizes = $primevue.config.locale.fileSizeTypes;
+
+  if (bytes === 0) {
+    return `0 ${sizes[0]}`;
+  }
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+
+  return `${formattedSize} ${sizes[i]}`;
+};
+
+
+
+
+function onFileSelect(event) {
+  const file = event.files[0];
+  const reader = new FileReader();
+  console.log(file, 'this is the file');
+  reader.onload = async (e) => {
+    src.value = e.target.result;
+    formDataSignUp.value.images = [file.objectURL];
+  };
+
+  reader.readAsDataURL(file);
+}
   const emailAddress = ref("");
   const password = ref("");
   const loading = ref(false);
+  const sign_in = ref(true);
+  const user_selector = ref(false);
+  const sign_up = ref(false);
+  const dataLoading = ref(false);
+
+  const current = ref(false);
+  const next = ref(false);
   
+
+  const src = ref(null);
   const visible = ref(false);
   const { $toast } = useNuxtApp();
   const router = useRouter();
@@ -455,9 +570,32 @@
       city: "",
       state: "",
       zipcode: "",
+      location: "",
+    });
+
+    const formDataSignUp = ref({
+      first_name: "",
+      last_name: "",
+      src,
+      email: "",
+      
+      phone_number: "",
+      date_of_birth: new Date(),
+      id_type: "",
+      id_number: "",
+      ssn: "",
+      address: "",
+      city: "",
+      state: "",
+      zipcode: "",
+      location: "",
     });
   
-
+    const handleModalDisplay = (current, next) => {
+      // console.log(current, next);
+      current = false;
+      next = true;
+    };
 
 const rules = computed(() => {
   return {
@@ -466,6 +604,15 @@ const rules = computed(() => {
     },
     last_name: {
       required: helpers.withMessage("Last name is required", required),
+    },
+    src: {
+      required: helpers.withMessage("Image is required", required),
+    },
+    image: {
+      required: helpers.withMessage("Image is required", required),
+    },
+    location: {
+      required: helpers.withMessage("Location is required", required),
     },
     email: {
       required: helpers.withMessage("Email is required", required),
@@ -499,16 +646,18 @@ const rules = computed(() => {
     state: { required: helpers.withMessage("State is required", required) },
     zipcode: { required: helpers.withMessage("Zipcode is required", required) },
     emailAddress: {
-      required: helpers.withMessage("Email Address is required", required),
-      email: helpers.withMessage("Invalid Email Address", email),
+      // required: helpers.withMessage("Email Address is required", required),
+      // email: helpers.withMessage("Invalid Email Address", email),
     },
     password: {
-      required: helpers.withMessage("Password is required", required),
+      // required: helpers.withMessage("Password is required", required),
     },
   };
 });
 
-const v$ = useVuelidate(rules, formData);
+// const v$ = useVuelidate(rules, formData);
+
+const v$ = useVuelidate(rules, {formDataSignUp,formData});
 
 
   const personal = ref({
@@ -545,7 +694,112 @@ const v$ = useVuelidate(rules, formData);
   const terms = ref(false);
   const currentStep = ref("1");
   const isLoading = ref(false);
+
+  const reverseGeocode = (latitude, longitude) =>{
+      const apiKey = 'YOUR_API_KEY'; // Replace with your reverse geocoding API key
+      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=-1.266944&longitude=36.811667&localityLanguage=en`;
+     
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          this.formDataSignUp.location = data.city || data.locality || data.principalSubdivision || 'Location not found';
+        })
+        .catch(error => {
+          console.error('Error fetching location name:', error);
+          this.formData.location = 'Location not found';
+        });
+    }
+
+    // for login
+
+    const fetchLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            reverseGeocode(latitude, longitude);
+          },
+          (error) => {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                location.value = "User denied the request for Geolocation.";
+                break;
+              case error.POSITION_UNAVAILABLE:
+                location.value = "Location information is unavailable.";
+                break;
+              case error.TIMEOUT:
+                location.value = "The request to get user location timed out.";
+                break;
+              case error.UNKNOWN_ERROR:
+                location.value = "An unknown error occurred.";
+                break;
+            }
+          }
+        );
+      } else {
+        location.value = "Geolocation is not supported by this browser.";
+      }
+    };
+
+  const handleSignInSubmit = async() => {
+    loading.value = true;
+    v$.value.$touch();
   
+    if (v$.value.$error) {
+      $toast.error("Please fill in the required fields");
+      loading.value = false;
+      return;
+    }
+  
+    // await signIn("credentials", {
+    //   email: emailAddress.value,
+    //   password: password.value,
+    //   callbackUrl: "/",
+    // })
+    //   .catch((err) => {
+    //     $toast.error("Email or password is incorrect!");
+    //     console.log(err);
+    //   })
+    //   .finally(() => {
+    //     loading.value = false;
+    //      visible.value = false;
+    //   });
+  }
+
+
+  
+  const handleSignUpSubmit = async() => {
+    console.log(formDataSignUp.value, 'this is the form data');
+    console.log(reverseGeocode(-1.266944,36.811667),'this is our location')
+
+    loading.value = true;
+    v$.value.$touch();
+  
+
+    if (v$.value.$error) {
+      $toast.error("Please fill in the required fields");
+      loading.value = false;
+      return;
+    }
+    // await signUp({
+    //   email: emailAddress.value,
+    //   password: password.value,
+    // })
+    //   .then(() => {
+    //     $toast.success("Registration successful. Please check your email for login details");
+    //     router.push("/auth/login");
+    //   })
+    //   .catch((err) => {
+    //     $toast.error("Registration failed");
+    //     console.log(err);
+    //   })
+    //   .finally(() => {
+    //     loading.value = false;
+    //      visible.value = false;
+    //   });
+  }
+
   const handleSubmit = async () => {
     isLoading.value = true;
   
@@ -608,21 +862,6 @@ const v$ = useVuelidate(rules, formData);
 
 
 
-
-    // for login
-
-    const fetchLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.setPosition, this.showError);
-      } else {
-        alert("Geolocation is not supported by this browser.");
-      }
-    }
-    const setPosition = (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      this.location = [longitude, latitude];
-    }
     const showError = (error) => {
       switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -641,23 +880,12 @@ const v$ = useVuelidate(rules, formData);
     }
 
     onMounted(() => {
-      this.fetchLocation();
+      fetchLocation();
+      reverseGeocode(-1.266944,36.811667);
     });
 
-    const reverseGeocode = (latitude, longitude) =>{
-      const apiKey = 'YOUR_API_KEY'; // Replace with your reverse geocoding API key
-      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
 
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          this.formData.location = data.city || data.locality || data.principalSubdivision || 'Location not found';
-        })
-        .catch(error => {
-          console.error('Error fetching location name:', error);
-          this.formData.location = 'Location not found';
-        });
-    }
+
 
 
 

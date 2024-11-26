@@ -33,7 +33,7 @@
                       >
                       <Select
                         
-                        :options="idTypes"
+                        :options="BrandList"
                         optionLabel="label"
                         optionValue="value"
                         placeholder="Track Brand"
@@ -57,10 +57,10 @@
                       >
                       <Select
                        
-                        :options="idTypes"
+                        :options="LocationList"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Track Brand"
+                        placeholder="Track Location"
                       />
                     </CustomInputContainer>
                 </div>
@@ -78,11 +78,13 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="priceList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="From"
+                            v-model="priceFrom"
                           />
+                          
                         
                         </CustomInputContainer>
                         <CustomInputContainer
@@ -92,10 +94,11 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="priceList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="To"
+                            v-model="priceTo"
                           />
                         
                         </CustomInputContainer>
@@ -115,7 +118,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="registrationFromList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="From"
@@ -129,7 +132,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="registrationToList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="To"
@@ -152,7 +155,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="engineHoursFromList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="From"
@@ -166,7 +169,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="engineHoursToList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="To"
@@ -188,7 +191,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="HPFromList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="From"
@@ -200,7 +203,7 @@
                             class="flex flex-row space-x-2 w-[180px]"
                           >
                           <Select
-                            :options="idTypes"
+                            :options="HPToList"
                             optionLabel="label"
                             optionValue="value"
                             placeholder="To"
@@ -221,10 +224,10 @@
                       >
                       <Select
                         
-                        :options="idTypes"
+                        :options="TrackTypeList"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="Track Brand"
+                        placeholder="Track Type"
                       />
                     </CustomInputContainer>
                 </div>
@@ -274,111 +277,19 @@
                             <LoaderProductCard v-for="n in 10" :key="n" />
                         </div>
 
-                        <div class="flex-row space-y-4">
-                            
-
-
-                            <div class="flex flex-row  bg-white rounded-md">
-                                <div class="w-2/6">
-                                    <img src="../../assets/images/JohnDeere6R.png" alt="" class="h-[230px]  bg-[#e8f8fb]">
-                                </div>
-                                <div class="w-4/6">
-                                    <div class="flex flex-row space-x-96">
-                                        <h4 class="text-3xl my-1">JohnDeere6R</h4>
-                                        <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-50.png" class="w-[40px] " alt="">
-                                    </div>
-                                    <div class="flex flex-row space-x-4 my-3">
-                                        <!-- E/hr used -->
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/Hello Tractor_RGB_BLACK_-Settings.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>0 hrs</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/Hello Tractor_RGB_BLACK_-Schedule.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>9/2024</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-55.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>125hp</p>
-                                        </div>
-
-                                        <div class="flex flex-row space-x-1 items-center">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-56.png" class="h-[30px] w-[30px]" alt="" >
-                                            <p>Hydraulic Cost</p>
-                                        </div>
-
-                                        
-                                    </div>
-
-                                    <div class="flex flex-row space-x-4 mt-4">
-                                        <div class="flex flex-row flex-wrap w-full space-x-2 ">
-                                        
-                                        <div class="p-1 bg-orange-200 flex flex-row items-center justify-around my-4 w-max rounded-md"> 
-                                            <p class="font-manropeBold text-orangeTint text-[10px]">First Registration from 2023
-                                            </p>
-                                        </div>
-
-                                        <div class="p-1 bg-orange-200 flex flex-row items-center justify-around my-4 w-max rounded-md"> 
-                                            <p class="font-manropeBold text-orangeTint text-[10px]">First Registration from 2023
-                                            </p>
-                                        </div>
-
-                                        
-
-                                        
-
-
-                                        
-                                            
-                                        
-                                        </div>
-
-                                    </div>
-
-                                    <div class="flex flex-row space-x-48 items-center mt-2 w-full">
-                                        <div class="flex flex-row">
-                                            <img src="/public/Black/HT_ICONS_BLACK_RGB-05.png" class="h-[40px] w-[40px]" alt="">
-                                            
-                                            <div>
-                                                <h4 class="text-lg">Netherlands,delivery:</h4>
-                                                <p>Delivery not available</p>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <h3 class="font-merriWeatherBold">KES 300,000</h3>
-                                            <h3 class="text-sm">KES 300,000 without VAT</h3>
-                                        </div>
-
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            
-
-
-
-                            
-
-
-                           
-
-                        </div>
+                        
 
                     </div>
 
-                    <div v-if="dataList.length">
+                    <TractorCard :all-products="false"/>
+
+                    <div v-if="dataList.length" class="w-full flex flex-col space-y-2 h-[600px] overflow-y-auto">
                         <div v-for="tractor in dataList" class="flex-row space-y-4" :key="tractor._id">
                             
                             <TractorCard 
                                 :tractor="tractor"
                                 @selectProduct="selectedProduct = product"
+                                :all-products="false"
                             />
                         </div>
                     </div>
@@ -419,6 +330,19 @@ const dataList = ref([]);
 const selectedProduct = ref(null);
 const searchText = ref("");
 const page = ref(1);
+const brand = ref("");
+const tractorType = ref("");
+const priceTo = ref("");
+const priceFrom = ref("");
+const regFrom = ref("");
+const regTo = ref("");
+const engineHoursFrom = ref("");
+const engineHoursTo = ref("");
+const hpFrom = ref("");
+const hpTo = ref("");
+const trackType = ref("");
+const dataLoading = ref(false);
+const dataLoaded = ref(false);
 const pageSize = ref(20);
 const { getAllTractors} = useTractorsAPI();
 
