@@ -91,6 +91,9 @@ export const getMatchedUser = async (req, res) => {
 		const { id: matchedUserId } = req.params;
 		const loggedInUserId = req.user._id;
 
+		console.log("matchedUserId: ", matchedUserId);
+		console.log("loggedInUserId: ", loggedInUserId);
+
 		const matchedUser = await User.findById(matchedUserId);
 		const loggedInUser = await User.findById(loggedInUserId);
 

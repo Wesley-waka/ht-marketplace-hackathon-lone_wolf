@@ -2,7 +2,9 @@
   <div class="bg-white mx-auto justify-center">
     <div class="h-16 p-2 flex space-x-8 align-middle max-w-[84rem] px-6 mx-auto px-10 justify-between">
       <div class="flex flex-row space-x-5 align-middle">
-        <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
+        <NuxtLink to="/">
+         <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
+       </NuxtLink>
         <div class="flex flex-row space-x-5 mt-3">
           <NuxtLink to="/tractors">Buy</NuxtLink>
           <h3>Sell</h3>
@@ -439,7 +441,7 @@ const handleSignInSubmit = async () => {
     console.log(user, 'this is the user');
     localStorage.setItem('user', JSON.stringify(user));
     $toast.success("Login successful");
-    router.push("/tractors");
+    router.push("/favourites");
   } catch (error) {
     $toast.error("Email or password is incorrect!");
     console.log(error);

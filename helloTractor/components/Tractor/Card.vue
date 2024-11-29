@@ -105,7 +105,7 @@ const removeFromFavorites = async () => {
 
 const matchUser = async () => {
   try {
-    const res = await useCustomFetch(`/messages/match_user?id=${props.product.createdByUser}`, { method: 'GET' })
+    const res = await useCustomFetch(`/messages/match-user?id=${props.product.createdByUser}`, { method: 'GET' })
 
     if (res.status !== 200) {
       throw new Error('Failed to match user')
