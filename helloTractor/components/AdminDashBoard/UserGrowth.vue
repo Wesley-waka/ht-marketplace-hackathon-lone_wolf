@@ -1,7 +1,7 @@
 
 <template>
     <div class="card">
-        <Chart type="bar" :data="chartData" :options="chartOptions"  class=" h-[30rem]"/>
+        <Chart type="bar" :data="chartData" :options="chartOptions" class="h-[30rem] w-[40rem]"  />
     </div>
 </template>
 
@@ -17,15 +17,22 @@ const chartData = ref();
 const chartOptions = ref();
 
 const setChartData = () => {
+    const documentStyle = getComputedStyle(document.documentElement);
+
     return {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
             {
-                label: 'Sales',
-                data: [540, 325, 702, 620],
-                backgroundColor: ['rgba(249, 115, 22, 0.2)', 'rgba(6, 182, 212, 0.2)', 'rgb(107, 114, 128, 0.2)', 'rgba(139, 92, 246 0.2)'],
-                borderColor: ['rgb(249, 115, 22)', 'rgb(6, 182, 212)', 'rgb(107, 114, 128)', 'rgb(139, 92, 246)'],
-                borderWidth: 1
+                label: 'My First dataset',
+                backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
+                borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
+                data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+                label: 'My Second dataset',
+                backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
+                borderColor: documentStyle.getPropertyValue('--p-gray-500'),
+                data: [28, 48, 40, 19, 86, 27, 90]
             }
         ]
     };
@@ -37,6 +44,8 @@ const setChartOptions = () => {
     const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
     return {
+        maintainAspectRatio: false,
+        aspectRatio: 0.8,
         plugins: {
             legend: {
                 labels: {
@@ -47,19 +56,23 @@ const setChartOptions = () => {
         scales: {
             x: {
                 ticks: {
-                    color: textColorSecondary
+                    color: textColorSecondary,
+                    font: {
+                        weight: 500
+                    }
                 },
                 grid: {
-                    color: surfaceBorder
+                    display: false,
+                    drawBorder: false
                 }
             },
             y: {
-                beginAtZero: true,
                 ticks: {
                     color: textColorSecondary
                 },
                 grid: {
-                    color: surfaceBorder
+                    color: surfaceBorder,
+                    drawBorder: false
                 }
             }
         }

@@ -1,7 +1,7 @@
 
 <template>
     <div class="card flex justify-center">
-        <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-[20rem]" />
+        <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-[30rem]" />
     </div>
 </template>
 

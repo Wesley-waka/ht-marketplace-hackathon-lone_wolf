@@ -1,6 +1,6 @@
 
 <template>
-    <div class="card">
+    <div class="card mt-14">
         <Chart type="line" :data="chartData" :options="chartOptions" class="h-[30rem]" />
     </div>
 </template>
