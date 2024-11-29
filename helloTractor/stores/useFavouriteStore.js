@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-import useFavouriteApi from '../api/useFavouriteApi'
+// import useFavouriteApi from '../api/useFavouriteApi'
+import { useFavouriteAPI } from '../composables/useFavouriteAPI'
 
 export const useFavouriteStore = defineStore('useFavouriteStore', () => {
 
   const { getFavourite,
     addToFavourite,
     deleteFavourite,
-    clearFavourite } = useFavouriteApi();
+    clearFavourite } = useFavouriteAPI();
 
   /**
    * States

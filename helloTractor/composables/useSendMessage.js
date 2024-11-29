@@ -1,9 +1,9 @@
 // composables/useSendMessage.js
-import { useState } from '#app'
-import { useToast } from 'vue-toastification' // You'll need to install this or similar
+// import { useState } from '#app'
+// import { useToast } from 'vue-toastification' // You'll need to install this or similar
 // import { useConversationStore } from '~/stores/conversation' // Assuming you're using Pinia for state management
 import { useCustomFetch } from './useCustomFetch'
-import { useConversationStore } from '~/stores/useConversationStore'
+// import { useConversationStore } from '~/stores/useConversationStore'
 
 export const useSendMessage = () => {
   const loading = ref(false)
@@ -12,7 +12,7 @@ export const useSendMessage = () => {
   const sendMessage = async (message) => {
     loading.value = true
     try {
-      const { data, error } = await useCustomFetch(`/api/messages/send/${conversationStore.selectedConversation._id}`, {
+      const { data, error } = await useCustomFetch(`/messages/send/${conversationStore.selectedConversation._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

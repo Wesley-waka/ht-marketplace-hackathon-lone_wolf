@@ -1,7 +1,7 @@
 // composables/useSocket.js
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useAuthStore } from '~/stores/auth'
+import { useAuthStore } from '../stores/useAuthStore'
 
 export const useSocket = () => {
   const nuxtApp = useNuxtApp()

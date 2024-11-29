@@ -1,53 +1,36 @@
-export const useCartAPI = () => {
+// import { useAuthStore } from '@/stores/authStore'
 
-  const getFavourite = async (id) => {
-    return await useCustomFetch(`/users/${id}/favoriteProoducts`, {
+// import auth from "~/middleware/auth";
+
+export const useFavouriteAPI = (user_id) => {
+  console.log(user_id, 'user_id')
+  const getFavourite = async () => {
+    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
       method: "GET",
     });
   };
 
-  // const getCartItem = async (productId) => {
-  //   return await useCustomFetch(`/cart/${productId}`, {
-  //     method: "GET",
-  //   });
-  // };
-
-  const addToFavourite = async (id, data) => {
+  const addToFavourite = async (productId) => {
     const data = {
       productID: productId,
-      // quantity: quantity
     };
-    return await useCustomFetch(`/users/${id}/favoriteProducts`, {
+    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
       method: "POST",
       body: data,
     });
   };
 
-  // const updateCartItem = async (productId, quantity) => {
-  //   return await useCustomFetch(`/cart/${productId}`, {
-  //     method: "PATCH",
-  //     // body: { quantity },
-  //   });
-  // };
-
-  const deleteFavourite = async (id, productId) => {
-    return await useCustomFetch(`/users/${id}/favoriteProducts/${productId}`, {
+  const deleteFavourite = async (productId) => {
+    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts/${productId}`, {
       method: "DELETE",
     });
   };
 
-  const clearFavourite = async (id) => {
-    return await useCustomFetch(`/users/${id}/favoriteProducts`, {
+  const clearFavourite = async () => {
+    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
       method: "DELETE",
     });
   };
-
-  // const applyCoupon = async (data) => {
-  //   return await useCustomFetch('/cart/applyCoupon', {
-  //     method: "POST",
-  //     body: data,
-  //   });
-  // };
 
   return {
     getFavourite,

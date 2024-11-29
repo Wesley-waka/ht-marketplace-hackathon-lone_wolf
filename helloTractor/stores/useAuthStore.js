@@ -1,9 +1,7 @@
-// stores/authStore.js
 import { defineStore } from 'pinia'
-import { useCustomFetch } from '../composables/useCustomFetch'
+import { useCookie } from 'nuxt/app'
 
 export const useAuthStore = defineStore('auth', {
-  // State
   state: () => ({
     user: null,
     token: null,
@@ -12,18 +10,16 @@ export const useAuthStore = defineStore('auth', {
     error: null
   }),
 
-  // Persist state
   persist: {
-    storage: persistedState.localStorage,
+    storage: localStorage,
+    paths: ['user', 'token', 'isAuthenticated']
   },
 
-  // Getters
   getters: {
     currentUser: (state) => state.user,
     isLoggedIn: (state) => state.isAuthenticated
   },
 
-  // Actions
   actions: {
     // Login Action
     async login(credentials) {
@@ -31,21 +27,32 @@ export const useAuthStore = defineStore('auth', {
       this.error = null
 
       try {
-        const response = await useCustomFetch('/api/auth/login', {
+        const response = await useCustomFetch('/auth/signin', {
           method: 'POST',
           body: credentials
         })
 
-        // Handle successful login
         if (response.token && response.user) {
           this.setUser(response.user)
           this.setToken(response.token)
-        }
 
-        return response
-      } catch (err) {
-        this.error = err.message
-        throw err
+          // Set authentication cookie and local storage
+          const authCookie = useCookie('auth_token', {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/'
+          })
+          authCookie.value = response.token
+
+          // Optional: Persist token in localStorage for additional redundancy
+          localStorage.setItem('auth_token', response.token)
+
+          return response
+        } else {
+          throw new Error('Login failed')
+        }
+      } catch (error) {
+        this.error = error.message
+        throw error
       } finally {
         this.loading = false
       }
@@ -62,16 +69,27 @@ export const useAuthStore = defineStore('auth', {
           body: userData
         })
 
-        // Handle successful signup
         if (response.token && response.user) {
           this.setUser(response.user)
           this.setToken(response.token)
+
+          // Set authentication cookie and local storage
+          const authCookie = useCookie('auth_token', {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/'
+          })
+          authCookie.value = response.token
+
+          // Optional: Persist token in localStorage for additional redundancy
+          localStorage.setItem('auth_token', response.token)
+
+          return response
         }
 
-        return response
-      } catch (err) {
-        this.error = err.message
-        throw err
+        throw new Error('Signup failed')
+      } catch (error) {
+        this.error = error.message
+        throw error
       } finally {
         this.loading = false
       }
@@ -81,19 +99,13 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       try {
         // Optional: Call backend logout endpoint
-        await useCustomFetch('/api/auth/logout', {
-          method: 'POST'
-        })
-
-        // Clear user and token
-        this.clearUser()
-
-        // Redirect to login page
-        navigateTo('/login')
-      } catch (err) {
-        this.error = err.message
-        throw err
+        await useCustomFetch('/api/auth/logout', { method: 'POST' })
+      } catch (error) {
+        console.error('Logout API call failed', error)
       }
+
+      // Clear authentication state
+      this.clearUser()
     },
 
     // Set User
@@ -105,13 +117,8 @@ export const useAuthStore = defineStore('auth', {
     // Set Token
     setToken(token) {
       this.token = token
-
-      // Set token in cookies for server-side use
-      const cookie = useCookie('auth_token', {
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: '/'
-      })
-      cookie.value = token
+      // Optional: Store token in localStorage
+      localStorage.setItem('auth_token', token)
     },
 
     // Clear User
@@ -120,15 +127,23 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.isAuthenticated = false
 
-      // Clear auth cookie
-      const cookie = useCookie('auth_token')
-      cookie.value = null
+      // Clear authentication cookie
+      const authCookie = useCookie('auth_token')
+      authCookie.value = null
+
+      // Clear localStorage
+      localStorage.removeItem('auth_token')
+
+      // Navigate to login page
+      navigateTo('/login')
     },
 
     // Check Authentication Status
     async checkAuthStatus() {
-      // Check if token exists in cookie
-      const token = useCookie('auth_token').value
+      // Check both cookie and localStorage for token
+      const cookieToken = useCookie('auth_token').value
+      const localStorageToken = localStorage.getItem('auth_token')
+      const token = cookieToken || localStorageToken
 
       if (!token) {
         this.clearUser()
@@ -137,15 +152,18 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const response = await useCustomFetch('/api/auth/me', {
-          method: 'GET'
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         })
 
         if (response) {
           this.setUser(response)
+          this.isAuthenticated = true
           return true
         }
-      } catch (err) {
-        // Token might be expired or invalid
+      } catch (error) {
         this.clearUser()
         return false
       }

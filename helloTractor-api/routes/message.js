@@ -9,16 +9,16 @@ const attachUser = (req, res, next) => {
   next();
 };
 
-// messageRouter.get("/:id", protectRoute, getMessages);
-// messageRouter.post("/send/:id", protectRoute, sendMessage);
-// messageRouter.get("/", protectRoute, getUsersForSidebar);
-// messageRouter.get('/match-user/:id', protectRoute, getMatchedUser)
+messageRouter.get("/:id", protectRoute, getMessages);
+messageRouter.post("/send/:id", protectRoute, sendMessage);
+messageRouter.get("/", protectRoute, getUsersForSidebar);
+messageRouter.get('/match-user/:id', protectRoute, getMatchedUser)
 
 
-messageRouter.get("/:id", attachUser, getMessages);
-messageRouter.post("/send/:id", attachUser, sendMessage);
-messageRouter.get("/", attachUser, getUsersForSidebar);
-messageRouter.post('/match-user/:id', attachUser, getMatchedUser)
+// messageRouter.get("/:id", attachUser, getMessages);
+// messageRouter.post("/send/:id", attachUser, sendMessage);
+// messageRouter.get("/", attachUser, getUsersForSidebar);
+// messageRouter.get('/match-user/:id', attachUser, getMatchedUser)
 // messageRouter.get("/", protectRoute, getUsersForSidebar); - get users depending on the ones you have chatted with
 
 // const attachUser = (req, res, next) => {

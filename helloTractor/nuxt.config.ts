@@ -8,13 +8,19 @@ export default defineNuxtConfig({
     // "@sidebase/nuxt-auth",
     "@nuxtjs/tailwindcss",
     // "@nuxtjs/google-fonts",
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+
     '@primevue/nuxt-module',
     [
       "@pinia/nuxt",
       {
         autoImports: ['defineStore', 'acceptHMRUpdate', 'storeToRefs'],
       }
-    ]],
+    ],
+
+
+  ],
 
   vite: {
     server: {
@@ -30,6 +36,10 @@ export default defineNuxtConfig({
       }
     }
   },
+
+  // plugins: [
+  //   '~/plugins/pinia.js',  // Make sure this file is registered
+  // ],
 
   app: {
     head: {
@@ -66,8 +76,6 @@ export default defineNuxtConfig({
       // host: process.env.NUXT_HOST,
     },
   },
-
-
 
   build: {
     transpile: ['vue-sonner']

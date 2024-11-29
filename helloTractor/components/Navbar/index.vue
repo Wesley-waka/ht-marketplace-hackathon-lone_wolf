@@ -1,299 +1,147 @@
 <template>
-    <div class="bg-white mx-auto justify-center">
-      <div class="h-16 p-2 flex space-x-8 align-middle max-w-[84rem] px-6 mx-auto px-10 justify-between">
-        <div class="flex flex-row space-x-5 align-middle">
-          <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
-          <div class="flex flex-row space-x-5 mt-3">
-            <h3>Buy</h3>
-            <h3>Sell</h3>
-            <h3>How it works</h3>
-            <h3>Services</h3>
-            <h3>Farm Equipments</h3>
-            <h3>Orders</h3>
-          </div>
+  <div class="bg-white mx-auto justify-center">
+    <div class="h-16 p-2 flex space-x-8 align-middle max-w-[84rem] px-6 mx-auto px-10 justify-between">
+      <div class="flex flex-row space-x-5 align-middle">
+        <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
+        <div class="flex flex-row space-x-5 mt-3">
+          <NuxtLink to="/tractors">Buy</NuxtLink>
+          <h3>Sell</h3>
+          <h3>How it works</h3>
+          <h3>Services</h3>
+          <h3>Farm Equipments</h3>
+          <h3>Orders</h3>
         </div>
-        <div class="flex space-x-4 mt-3 items-center">
-            <img src="/public/Black/HT_ICONS_BLACK_RGB-71.png" class="w-[50px]" alt="">
-          <i class="pi pi-heart" style="font-size: 1.5rem"></i>
+      </div>
+      <div class="flex space-x-4 mt-3 items-center">
+        <NuxtLink to="/messages">
+          <img src="/public/Black/HT_ICONS_BLACK_RGB-71.png" class="w-[50px]" alt="">
+        </NuxtLink>
+        <NuxtLink to='/favourites'><i class="pi pi-heart" style="font-size: 1.5rem"></i></NuxtLink>
 
-          <div class="flex align-middle mx-auto space-x-2" @click="visible = true">
-            <img src="/login.svg" class="h-8" alt="">
-            <h3 class="mt-1">Login</h3>
-          </div>
+        <div class="flex align-middle mx-auto space-x-2" @click="visible = true">
+          <img src="/login.svg" class="h-8" alt="">
+          <h3 class="mt-1">Login</h3>
         </div>
       </div>
     </div>
-    <hr>
-  
-    <Dialog v-model:visible="visible" modal header="Welcome Back" :style="{ width: '900px' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-      
-      
-      <!-- LOGIN FORM -->
-      <div v-if="sign_in" class="h-full overflow-auto flex flex-col">
-        <div class="flex items-center mx-auto px-3">
+  </div>
+  <hr>
+
+  <Dialog v-model:visible="visible" modal header="Welcome Back" :style="{ width: '900px' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+
+
+    <!-- LOGIN FORM -->
+    <div v-if="sign_in" class="h-full overflow-auto flex flex-col">
+      <div class="flex items-center mx-auto px-3">
         <img src="/logo.png" alt="logo" class="h-12 mb-4" />
 
-          <div class="flex items-center gap-1">
-            
-          </div>
-        </div>
+        <div class="flex items-center gap-1">
 
-        <div class="my-auto flex flex-col space-y-2">
-        
-        <form
-          class="m-auto max-w-[400px] flex-grow space-y-3"
-          @submit.prevent="handleSignInSubmit"
-        >
+        </div>
+      </div>
+
+      <div class="my-auto flex flex-col space-y-2">
+
+        <form class="m-auto max-w-[400px] flex-grow space-y-3" @submit.prevent="handleSignInSubmit">
           <div>
             <h1 class="text-2xl font-semibold text-center">Login</h1>
             <p class="text-center text-gray-500 mb-6">
               Login to your account to continue
             </p>
           </div>
-          <CustomInputContainer
-            label="Email"
-            required
-            :error="v$.emailAddress.$error"
-            :errorMessage="v$.emailAddress.$errors[0]?.$message"
-          >
+          <CustomInputContainer label="Email" required :error="v$.email.$error"
+            :errorMessage="v$.email.$errors[0]?.$message">
             <InputGroup>
               <InputGroupAddon>
                 <i class="fas fa-envelope"></i>
               </InputGroupAddon>
-              <InputText
-                v-model="emailAddress"
-                placeholder="Email Address"
-                @blur="v$.emailAddress.$touch()"
-                :invalid="v$.emailAddress.$error"
-              />
+              <InputText v-model="formDataLogin.email" placeholder="Email Address" @blur="v$.email.$touch()"
+                :invalid="v$.email.$error" />
             </InputGroup>
           </CustomInputContainer>
-          <CustomInputContainer
-            label="Password"
-            required:error="v$.password.$error"
-            :errorMessage="v$.password.$errors[0]?.$message"
-          >
+          <CustomInputContainer label="Password" required:error="v$.password.$error"
+            :errorMessage="v$.password.$errors[0]?.$message">
             <InputGroup>
               <InputGroupAddon>
                 <i class="fas fa-lock"></i>
               </InputGroupAddon>
-              <Password
-                v-model="password"
-                toggleMask
-                :feedback="false"
-                placeholder="Password"
-                @blur="v$.password.$touch()"
-                :invalid="v$.password.$error"
-              />
+              <Password v-model="formDataLogin.password" toggleMask :feedback="false" placeholder="Password"
+                @blur="v$.password.$touch()" :invalid="v$.password.$error" />
             </InputGroup>
           </CustomInputContainer>
           <div class="flex justify-between flex-col space-y-2 items-center w-full">
-            
+
             <button class="w-full btn btn-primary" type="submit" :disabled="loading">
               <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
               Login
             </button>
 
-            
+
           </div>
         </form>
 
-        <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto" @click="sign_in = false,user_selector = true" :disabled="loading">
-              <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
-              Sign Up
-            </button>
-            </div>
+        <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto"
+          @click="sign_in = false, user_selector = true" :disabled="loading">
+          Sign Up
+        </button>
       </div>
+    </div>
 
 
 
 
 
-      <!-- USER TYPE SELECTOR -->
-      <div v-if="user_selector">
-        <div class="w-full mx-auto">
-          <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
-          <div class="flex flex-row justify-around my-12">
-            <div class="w-[300px] h-[140px] py-2 px-4 bg-slate-100 rounded-lg">
-              <div>
-                <img src="/public/Black/Hello Tractor_RGB_BLACK_-User.png" class="w-[50px]" alt="">
-              </div>
-              <p class="font-manropeSemiBold">Buyer,Buy farm equipment <br>and other products</p>
-            </div>
-
-            <div class="w-[300px] h-[140px] py-2 px-4 bg-slate-100 rounded-lg">
-              <div>
-                <img src="/public/Black/HT_ICONS_BLACK_RGB-02.png" class="w-[50px]" alt="">
-              </div>
-              <p class="font-manropeSemiBold">Seller,Sell used Tractors  <br>and other products</p>
-            </div>
-
-            
-            
-          </div>
-
-          <div class="flex flex-col items-center justify-center w-full">
-  <button class="btn btn-primary w-[300px]" @click="user_selector = false,sign_up = true">Join as a Buyer</button>
-</div>
-        </div>
-      </div>
-      <!-- SIgn Up form -->
-       
-      <div v-if="sign_up"> 
-        <div class="w-full h-[600px]">
-        <h1 class="text-2xl text-center">Sign up to hire talent</h1>
-
-        
-
-        <div class=" mt-4">
-        <Divider layout="vertical" class="!hidden md:!flex"><b>OR</b></Divider>
-        <div class="max-w-[400px] mx-auto my-6">
-          <form @submit.prevent="handleSignUpSubmit" >
+    <!-- USER TYPE SELECTOR -->
+    <div v-if="user_selector">
+      <div class="w-full mx-auto">
+        <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
+        <div class="flex flex-row justify-around my-12">
+          <div
+            :class="`w-[300px] ${userType === 'buyer' ? 'border-orangeBright border-2 shadow-2xl' : ''} h-[140px] py-2 px-4 bg-slate-100 rounded-lg`"
+            @click="setUserType('buyer')">
             <div>
-            <CustomInputContainer
-              label="Images"
-              required
-              :error="v$.src.$error"
-              :errorMessage="v$.src.$errors[0]?.$message">
-              <div class="card flex flex-col items-center gap-6">
-              <img v-if="src" :invalid="v$.src.$error" :src="src" alt="Image" class="shadow-md rounded-full w-40" />
-              <div v-else class="outlined">
-                <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-32.png" class="w-40" alt="">
-              </div>
-              <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary" class="p-button-outlined">
-                <template #uploadicon>
-                  <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-29.png" alt="">
-                </template>
-                <template #content>
-                  <span class="p-button-label">Upload</span>
-                </template>
-              </FileUpload>
+              <img src="/public/Black/Hello Tractor_RGB_BLACK_-User.png" class="w-[50px]" alt="">
             </div>
-            </CustomInputContainer>
-            
+            <p class="font-manropeSemiBold">Buyer,Buy farm equipment <br>and other products</p>
           </div>
 
-       
-        <div class="flex flex-row space-x-2 w-full">
-          <CustomInputContainer
-              label="First Name"
-              required
-              :error="v$.first_name.$error"
-              :errorMessage="v$.first_name.$errors[0]?.$message"
-              class="w-1/2"
-            >
-          
-              <InputText
-                v-model="formDataSignUp.first_name"
-                @blur="v$.first_name.$touch"
-                :invalid="v$.first_name.$error"
-              />
-            </CustomInputContainer>
-            <CustomInputContainer
-              label="Last Name"
-              required
-              :error="v$.last_name.$error"
-              class="w-1/2"
-              :errorMessage="v$.last_name.$errors[0]?.$message"
-            >
-              <InputText
-                v-model="formDataSignUp.last_name"
-                @blur="v$.last_name.$touch"
-                :invalid="v$.last_name.$error"
-              />
-            </CustomInputContainer>
+          <div
+            :class="`w-[300px] h-[140px] py-2 ${userType === 'seller' ? 'border-orangeBright border-2 shadow-2xl' : ''} px-4 bg-slate-100 rounded-lg`"
+            @click="setUserType('seller')">
+            <div>
+              <img src="/public/Black/HT_ICONS_BLACK_RGB-02.png" class="w-[50px]" alt="">
+            </div>
+            <p class="font-manropeSemiBold">Seller, Sell used Tractors <br>and other products</p>
+          </div>
+
+
+
         </div>
 
-          <CustomInputContainer
-            label="Email"
-            required
-            :error="v$.email.$error"
-            :errorMessage="v$.email.$errors[0]?.$message"
-          >
-            <InputText
-              v-model="formDataSignUp.email"
-              @blur="v$.email.$touch"
-              :invalid="v$.email.$error"
-            />
-          </CustomInputContainer>
-
-          <CustomInputContainer
-            label="Phone Number"
-            required
-            :error="v$.phone_number.$error"
-            :errorMessage="v$.phone_number.$errors[0]?.$message"
-          >
-            <InputText
-              type="number"
-              v-model="formDataSignUp.phone_number"
-              @blur="v$.phone_number.$touch"
-              :invalid="v$.phone_number.$error"
-            />
-          </CustomInputContainer>
-
-          <div class="flex flex-row space-x-2 w-full">
-            <CustomInputContainer
-              label="ID Type"
-              required
-              class="w-1/2"
-
-              :error="v$.id_type.$error"
-              :errorMessage="v$.id_type.$errors[0]?.$message"
-            >
-              <Select
-                v-model="formDataSignUp.id_type"
-                :options="idTypes"
-                optionLabel="label"
-                optionValue="value"
-                @blur="v$.id_type.$touch"
-                :invalid="v$.id_type.$error"
-              />
-            </CustomInputContainer>
-            <CustomInputContainer
-              label="ID Number"
-              required
-              class="w-1/2"
-              :error="v$.id_number.$error"
-              :errorMessage="v$.id_number.$errors[0]?.$message"
-            >
-              <InputText
-                type="number"
-                v-model="formDataSignUp.location"
-                @blur="v$.id_number.$touch"
-                :invalid="v$.id_number.$error"
-              />
-            </CustomInputContainer>
-          </div>
-
-          <!-- <CustomInputContainer :error="v$.id_number.$error"
-          :errorMessage="v$.location.$errors[0]?.$message" required label="Location">
-            <InputText type="text" :invalid="v$.location.$error" v-model="formDataSignUp.location" readonly />
-            <InputText type="text" :invalid="v$.location.$error" v-model="formDataSignUp.location"  />
-          </CustomInputContainer> -->
-
-          
-
-          
-          <button class="btn btn-primary w-full my-4" >
-            Sign Up
+        <div class="flex flex-col items-center justify-center w-full">
+          <button class="btn btn-primary w-[300px]" @click="user_selector = false, sign_up = true">
+            {{ buyer ? 'Join as aBuyer' : 'Join as seller' }}
           </button>
-            
-        </form>
         </div>
-       
-    </div>
       </div>
     </div>
-     
+    <!-- SIgn Up form -->
+
+    <div v-if="sign_up">
+
+      <UserSignUp />
+    </div>
 
 
 
-      
-    
-      
 
 
-      <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
+
+
+
+
+    <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
         <StepList>
           <Step value="1" :class="{ 'p-complete': Number(currentStep) > 1 }">
             Personal Details
@@ -439,448 +287,143 @@
                         <span>{{ product?.title }} ({{ product?.selectedQty }})</span>
                       </div>
                     </template>
-                  </div>
-                </div>
-  
-                <div class="mt-2 pt-2 flex items-center border-t">
-                  <Checkbox v-model="terms" binary />
-                  <span class="ml-2 text-sm">
-                    I agree to the <NuxtLink to="#" class="text-blue-800 underline">terms and conditions</NuxtLink>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </StepPanel>
-        </StepPanels>
-      </Stepper> -->
-    </Dialog>
-  </template>
-  
+</div>
+</div>
+
+<div class="mt-2 pt-2 flex items-center border-t">
+  <Checkbox v-model="terms" binary />
+  <span class="ml-2 text-sm">
+    I agree to the <NuxtLink to="#" class="text-blue-800 underline">terms and conditions</NuxtLink>
+  </span>
+</div>
+</div>
+</div>
+</StepPanel>
+</StepPanels>
+</Stepper> -->
+  </Dialog>
+</template>
+
 <script setup>
-  import moment from 'moment';
-  import useVuelidate from "@vuelidate/core";
-  import { email, required, helpers,
-  minLength,
-  maxLength } from "@vuelidate/validators";
-  // import { useNuxtApp, useRouter } from '#app';
+import moment from 'moment';
+import useVuelidate from "@vuelidate/core";
+import { email, required, helpers, minLength, maxLength } from "@vuelidate/validators";
+// import { useAuth } from '../../composables/useAuth.js';
+import { useNuxtApp, useRouter } from '#app';
+import { ref, computed, onMounted } from 'vue';
 
-  // for login
-  // const { signIn } = useAuth();
+const { login, signUp } = useAuth();
 
-  //intializa ref
+const location = ref(['36.811667', '-1.266944']);
+// const email = ref("");
+const password = ref("");
+const loading = ref(false);
+const sign_in = ref(true);
+const user_selector = ref(false);
+const sign_up = ref(false);
+const dataLoading = ref(false);
+const current = ref(false);
+const next = ref(false);
+const src = ref(null);
+const visible = ref(false);
+const { $toast } = useNuxtApp();
+const router = useRouter();
+const userTypeValue = ref('');
 
-  const onSelectedFiles = (event) => {
-    files.value = event.files;
-    form.value.images = files.value;
-    console.log(files.value, 'this is the file');
-    files.value.forEach((file) => {
-      totalSize.value += parseInt(formatSize(file.size));
-    });
-};
-
-const location = ['36.811667','-1.266944']
-
-const onRemoveTemplatingFile = (file, removeFileCallback, index) => {
-  removeFileCallback(index);
-  totalSize.value -= parseInt(formatSize(file.size));
-  totalSizePercent.value = totalSize.value / 10;
-};
-
-const onClearTemplatingUpload = (clear) => {
-  clear();
-  totalSize.value = 0;
-  totalSizePercent.value = 0;
-};
-
-
-const uploadEvent = (callback) => {
-  totalSizePercent.value = totalSize.value / 10;
-  callback();
-};
-
-const onTemplatedUpload = (event) => {
-  console.log(event.files, 'Uploaded files');
-  toast.add({ severity: "info", summary: "Success", detail: "File Uploaded", life: 3000 });
-};
-
-const formatSize = (bytes) => {
-  const k = 1024;
-  const dm = 3;
-  const sizes = $primevue.config.locale.fileSizeTypes;
-
-  if (bytes === 0) {
-    return `0 ${sizes[0]}`;
-  }
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-  return `${formattedSize} ${sizes[i]}`;
-};
-
-
-
-
-function onFileSelect(event) {
-  const file = event.files[0];
-  const reader = new FileReader();
-  console.log(file, 'this is the file');
-  reader.onload = async (e) => {
-    src.value = e.target.result;
-    formDataSignUp.value.images = [file.objectURL];
-  };
-
-  reader.readAsDataURL(file);
-}
-  const emailAddress = ref("");
-  const password = ref("");
-  const loading = ref(false);
-  const sign_in = ref(true);
-  const user_selector = ref(false);
-  const sign_up = ref(false);
-  const dataLoading = ref(false);
-
-  const current = ref(false);
-  const next = ref(false);
-  
-
-  const src = ref(null);
-  const visible = ref(false);
-  const { $toast } = useNuxtApp();
-  const router = useRouter();
-  const formData = ref({
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone_number: "",
-      date_of_birth: new Date(),
-      id_type: "",
-      id_number: "",
-      ssn: "",
-      address: "",
-      city: "",
-      state: "",
-      zipcode: "",
-      location: "",
-    });
-
-    const formDataSignUp = ref({
-      first_name: "",
-      last_name: "",
-      src,
-      email: "",
-      
-      phone_number: "",
-      date_of_birth: new Date(),
-      id_type: "",
-      id_number: "",
-      ssn: "",
-      address: "",
-      city: "",
-      state: "",
-      zipcode: "",
-      location: "",
-    });
-  
-    const handleModalDisplay = (current, next) => {
-      // console.log(current, next);
-      current = false;
-      next = true;
-    };
-
-const rules = computed(() => {
-  return {
-    first_name: {
-      required: helpers.withMessage("First name is required", required),
-    },
-    last_name: {
-      required: helpers.withMessage("Last name is required", required),
-    },
-    src: {
-      required: helpers.withMessage("Image is required", required),
-    },
-    image: {
-      required: helpers.withMessage("Image is required", required),
-    },
-    location: {
-      required: helpers.withMessage("Location is required", required),
-    },
-    email: {
-      required: helpers.withMessage("Email is required", required),
-      email: helpers.withMessage("Invalid email", email),
-    },
-    phone_number: {
-      required: helpers.withMessage("Phone number is required", required),
-    },
-    date_of_birth: {
-      required: helpers.withMessage("Date of birth is required", required),
-    },
-    id_type: { required: helpers.withMessage("ID type is required", required) },
-    id_number: {
-      required: helpers.withMessage("ID number is required", required),
-    },
-    ssn: {
-      required: helpers.withMessage("SSN is required", required),
-      minLengthValue: helpers.withMessage(
-        "SSN must be 11 characters",
-        minLength(11)
-      ),
-      maxLengthValue: helpers.withMessage(
-        "SSN must be 11 characters",
-        maxLength(11)
-      ),
-    },
-    address: {
-      required: helpers.withMessage("Address line 1 is required", required),
-    },
-    city: { required: helpers.withMessage("City is required", required) },
-    state: { required: helpers.withMessage("State is required", required) },
-    zipcode: { required: helpers.withMessage("Zipcode is required", required) },
-    emailAddress: {
-      // required: helpers.withMessage("Email Address is required", required),
-      // email: helpers.withMessage("Invalid Email Address", email),
-    },
-    password: {
-      // required: helpers.withMessage("Password is required", required),
-    },
-  };
+const formDataLogin = ref({
+  email: "",
+  password: "",
 });
 
-// const v$ = useVuelidate(rules, formData);
+const userType = computed(() => {
+  return userTypeValue.value;
+});
 
-const v$ = useVuelidate(rules, {formDataSignUp,formData});
+const setUserType = (type) => {
+  userTypeValue.value = type;
+}
 
+const rules = computed(() => ({
+  email: {
+    required: helpers.withMessage("Email Address is required", required),
+    email: helpers.withMessage("Invalid Email Address", email),
+  },
+  password: {
+    required: helpers.withMessage("Password is required", required),
+  },
+}));
 
-  const personal = ref({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone_number: "",
-    date_of_birth: new Date(),
-    id_type: "",
-    id_number: "",
-    ssn: "",
-    address: "",
-    city: "",
-    state: "",
-    zipcode: "",
-  });
-  
-  const business = ref({
-    next_of_kin_first_name: "",
-    next_of_kin_last_name: "",
-    next_of_kin_phone_number: "",
-    sponsor_number: "",
-    sponsor_name: "",
-    sponsor_phone_number: "",
-    upline_number: "",
-    upline_name: "",
-    upline_phone_number: "",
-    next_of_kin_email: "",
-  });
+const v$ = useVuelidate(rules, formDataLogin);
 
+const personal = ref({
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone_number: "",
+  date_of_birth: new Date(),
+  id_type: "",
+  id_number: "",
+  ssn: "",
+  address: "",
+  city: "",
+  state: "",
+  zipcode: "",
+});
 
-  
-  const products = ref([]);
-  const terms = ref(false);
-  const currentStep = ref("1");
-  const isLoading = ref(false);
+const business = ref({
+  next_of_kin_first_name: "",
+  next_of_kin_last_name: "",
+  next_of_kin_phone_number: "",
+  sponsor_number: "",
+  sponsor_name: "",
+  sponsor_phone_number: "",
+  upline_number: "",
+  upline_name: "",
+  upline_phone_number: "",
+  next_of_kin_email: "",
+});
 
-  const reverseGeocode = (latitude, longitude) =>{
-      const apiKey = 'YOUR_API_KEY'; // Replace with your reverse geocoding API key
-      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=-1.266944&longitude=36.811667&localityLanguage=en`;
-     
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          this.formDataSignUp.location = data.city || data.locality || data.principalSubdivision || 'Location not found';
-        })
-        .catch(error => {
-          console.error('Error fetching location name:', error);
-          this.formData.location = 'Location not found';
-        });
-    }
-
-    // for login
-
-    const fetchLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            reverseGeocode(latitude, longitude);
-          },
-          (error) => {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                location.value = "User denied the request for Geolocation.";
-                break;
-              case error.POSITION_UNAVAILABLE:
-                location.value = "Location information is unavailable.";
-                break;
-              case error.TIMEOUT:
-                location.value = "The request to get user location timed out.";
-                break;
-              case error.UNKNOWN_ERROR:
-                location.value = "An unknown error occurred.";
-                break;
-            }
-          }
-        );
-      } else {
-        location.value = "Geolocation is not supported by this browser.";
-      }
-    };
-
-  const handleSignInSubmit = async() => {
-    loading.value = true;
-    v$.value.$touch();
-  
-    if (v$.value.$error) {
-      $toast.error("Please fill in the required fields");
-      loading.value = false;
-      return;
-    }
-  
-    // await signIn("credentials", {
-    //   email: emailAddress.value,
-    //   password: password.value,
-    //   callbackUrl: "/",
-    // })
-    //   .catch((err) => {
-    //     $toast.error("Email or password is incorrect!");
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     loading.value = false;
-    //      visible.value = false;
-    //   });
-  }
+const products = ref([]);
+const terms = ref(false);
+const currentStep = ref("1");
+const isLoading = ref(false);
 
 
-  
-  const handleSignUpSubmit = async() => {
-    console.log(formDataSignUp.value, 'this is the form data');
-    console.log(reverseGeocode(-1.266944,36.811667),'this is our location')
+const auth_user = useAuth()
+// const {user} = useAuthStore();
+const logStore = useAuthStore()
 
-    loading.value = true;
-    v$.value.$touch();
-  
+// const fetchLocation = () => {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         // const { latitude, longitude } = position.coords;
+//         // reverseGeocode(latitude, longitude);
+//       },
+//       (error) => {
+//         switch (error.code) {
+//           case error.PERMISSION_DENIED:
+//             location.value = "User denied the request for Geolocation.";
+//             break;
+//           case error.POSITION_UNAVAILABLE:
+//             location.value = "Location information is unavailable.";
+//             break;
+//           case error.TIMEOUT:
+//             location.value = "The request to get user location timed out.";
+//             break;
+//           case error.UNKNOWN_ERROR:
+//             location.value = "An unknown error occurred.";
+//             break;
+//         }
+//       }
+//     );
+//   } else {
+//     location.value = "Geolocation is not supported by this browser.";
+//   }
+// };
 
-    if (v$.value.$error) {
-      $toast.error("Please fill in the required fields");
-      loading.value = false;
-      return;
-    }
-    // await signUp({
-    //   email: emailAddress.value,
-    //   password: password.value,
-    // })
-    //   .then(() => {
-    //     $toast.success("Registration successful. Please check your email for login details");
-    //     router.push("/auth/login");
-    //   })
-    //   .catch((err) => {
-    //     $toast.error("Registration failed");
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     loading.value = false;
-    //      visible.value = false;
-    //   });
-  }
-
-  const handleSubmit = async () => {
-    isLoading.value = true;
-  
-    personal.value.date_of_birth = moment(personal.value.date_of_birth).format("DD/MM/YYYY");
-  
-    const payload = {
-      firstName: personal.value.first_name,
-      lastName: personal.value.last_name,
-      email: personal.value.email,
-      ssn: personal.value.ssn,
-      phone: personal.value.phone_number,
-      idType: personal.value.id_type,
-      idNumber: personal.value.id_number,
-      dateOfBirth: personal.value.date_of_birth,
-      role: "user",
-      addresses: [
-        {
-          location: personal.value.address,
-          city: personal.value.city,
-          state: personal.value.state,
-          zipCode: personal.value.zipcode,
-        },
-      ],
-      nextOfKin: {
-        name: `${business.value.next_of_kin_first_name} ${business.value.next_of_kin_last_name}`,
-        email: business.value.next_of_kin_email,
-        phone: business.value.next_of_kin_phone_number,
-      },
-      sponsor: {
-        sponsorNumber: business.value.sponsor_number,
-        sponsorName: business.value.sponsor_name,
-        phone: business.value.sponsor_phone_number,
-      },
-      uplineDistributor: {
-        uplineNumber: business.value.upline_number,
-        uplineName: business.value.upline_name,
-        phone: business.value.upline_phone_number,
-      },
-      wishlist: products.value.map((product) => product._id),
-    };
-  
-    // Uncomment and adjust the following lines to integrate with your authentication logic
-    // await auth.signUp(payload, undefined, { preventLoginFlow: true })
-    //   .then(() => {
-    //     $toast.success("Registration successful. Please check your email for login details");
-    //     router.push("/auth/login");
-    //   })
-    //   .catch((err) => {
-    //     const error = err.response?._data;
-    //     console.log(error);
-    //     if (error.err.length) {
-    //       $toast.error(error.err[0].msg);
-    //     } else {
-    //       $toast.error("Registration failed");
-    //     }
-    //   })
-    //   .finally(() => {
-    //     isLoading.value = false;
-    //   });
-
-
-
-    const showError = (error) => {
-      switch(error.code) {
-        case error.PERMISSION_DENIED:
-          alert("User denied the request for Geolocation.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          alert("Location information is unavailable.");
-          break;
-        case error.TIMEOUT:
-          alert("The request to get user location timed out.");
-          break;
-        case error.UNKNOWN_ERROR:
-          alert("An unknown error occurred.");
-          break;
-      }
-    }
-
-    onMounted(() => {
-      fetchLocation();
-      reverseGeocode(-1.266944,36.811667);
-    });
-
-
-
-
-
-
-const handleSubmit = async () => {
+const handleSignInSubmit = async () => {
+  console.log(formDataLogin.value, 'this is the form data');
   loading.value = true;
   v$.value.$touch();
 
@@ -889,19 +432,40 @@ const handleSubmit = async () => {
     loading.value = false;
     return;
   }
+  
 
-  // await signIn("credentials", {
-  //   email: emailAddress.value,
-  //   password: password.value,
-  //   callbackUrl: "/",
-  // })
+  try {
+    const user = await logStore.login(formDataLogin.value);
+    console.log(user, 'this is the user');
+    localStorage.setItem('user', JSON.stringify(user));
+    $toast.success("Login successful");
+    router.push("/tractors");
+  } catch (error) {
+    $toast.error("Email or password is incorrect!");
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+  
+  // await logStore.login(formDataLogin.value)
   //   .catch((err) => {
   //     $toast.error("Email or password is incorrect!");
   //     console.log(err);
+  //     if (!err) visible.value = false;
+  //     loading.value = false;
+  //     console.log(auth_user.error.value,'this is our user');
+
+
   //   })
   //   .finally(() => {
   //     loading.value = false;
   //   });
+
+    console.log(logStore.user)
 };
-  };
-  </script>
+
+onMounted(() => {
+  // fetchLocation();
+  // reverseGeocode(-1.266944, 36.811667);
+});
+</script>

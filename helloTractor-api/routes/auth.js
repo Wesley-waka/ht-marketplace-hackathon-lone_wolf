@@ -238,42 +238,81 @@ authRouter.post('/signup', async (req, res) => {
 // Sign-in route
 authRouter.post('/signin', async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body)
+
   try {
+    // Find user by email
     const user = await User.findOne({ email });
+
+    // Check if user exists
     if (!user) {
-      return res.status(400).send('User not found.');
+      return res.status(400).json({ error: 'User not found.' });
     }
 
+    // Check if user is verified
     if (!user.isVerified) {
-      return res.status(400).send('Email not verified.');
+      return res.status(400).json({ error: 'Email not verified. Please verify your email.' });
     }
 
+    // Verify password
     const isMatch = await compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).send('Invalid email or password.');
+      return res.status(400).json({ error: 'Invalid credentials.' });
     }
 
-    generateTokenAndSetCookie(user._id, res);
-    res.status(200).send('Sign-in successful.');
+    // Generate token
+    const token = generateTokenAndSetCookie(user._id);
+
+    // Prepare user data to store in cookie
+    const userData = {
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      isVerified: user.isVerified
+    };
+
+    // Set cookie with user data and token
+    res.cookie('user', JSON.stringify(userData), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
+    // Set token cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+
+    // Respond with user data and token
+    res.status(200).json({
+      token,
+      user: userData
+    });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Error signing in. Please try again.');
+    console.error('Signin error:', error);
+    res.status(500).json({ error: 'An unexpected error occurred. Please try again later.' });
   }
 });
-
 
 authRouter.post('/users/:userId/favoriteProducts', async (req, res) => {
   try {
     const { userId } = req.params;
-    const { productId } = req.body;
+    const { productID } = req.body;
+
+    if (!userId || userId === 'null') {
+      return res.status(400).send('Invalid user ID.');
+    }
 
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    user.favoriteProducts.push(productId);
+    user.favoriteProducts.push(productID);
     await user.save();
 
     res.status(200).send('Product added to favorites');

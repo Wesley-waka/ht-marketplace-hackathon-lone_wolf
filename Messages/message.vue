@@ -1,5 +1,5 @@
 <template>
-	<!-- <div :class="`chat ${chatClassName}`">
+	<div :class="`chat ${chatClassName}`">
 		<div class="chat-image avatar">
 			<div class="w-10 rounded-full">
 				<img :alt="altText" :src="profilePic" />
@@ -7,21 +7,13 @@
 		</div>
 		<div :class="`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`">{{ message.message }}</div>
 		<div class="chat-footer opacity-50 text-xs flex gap-1 items-center">{{ formattedTime }}</div>
-	</div> -->
-
-	<MessagesChatEnd v-if="fromMe" :src="profilePics" :alt="altText" :message="message.message" :time="formattedTime"
-		:bgColor="bubbleBgColor" />
-	<MessagesChatStart v-else :src="profilePics" :alt="altText" :message="message.message" :time="formattedTime"
-		:bgColor="bubbleBgColor" />
-
+	</div>
 </template>
 
 <script>
-import { extractTime } from "../../utils/extractTime.js";
-// import { useMyStore } from '../../stores/useAuthStore'
-// import useConversationStore from '@/stores/useConversationStore';
-// import { useConversationStore } from '~/stores/useConversationStore';
-
+import { extractTime } from "../../utils/extractTime";
+import useConversation from '../../stores/useConversationStore';
+import { useMyStore } from '../../stores/useAuthStore'
 
 export default {
 	props: {
@@ -32,10 +24,10 @@ export default {
 	},
 	setup(props) {
 
-		const store = useAuthStore()
+		const store = useMyStore()
 		const authUser = computed(() => store.currentUser)
 		// const { authUser } = useAuthContext();
-		const { selectedConversation } = useConversationStore();
+		const { selectedConversation } = useConversation();
 		const fromMe = props.message.senderId === authUser._id;
 		const formattedTime = extractTime(props.message.createdAt);
 		const chatClassName = fromMe ? "chat-end" : "chat-start";

@@ -1,11 +1,14 @@
 // useCustomFetch.js
 import { ref } from 'vue'
-const config = useRuntimeConfig();
+import { useRuntimeConfig } from 'nuxt/app'
+
 // Persistent token storage
 const bearerToken = ref(localStorage.getItem('bearerToken') || null)
-let mainUrl = config.public.apiURL;
-// Custom fetch wrapper with token management
-export function useCustomFetch(options = {}) {
+
+export function useCustomFetch(url, options = {}) {
+  const config = useRuntimeConfig()
+  const mainUrl = config.public.apiURL // Assuming you've set this in nuxt.config.ts
+
   // Prepare headers
   const headers = new Headers({
     'Content-Type': 'application/json',
@@ -21,7 +24,7 @@ export function useCustomFetch(options = {}) {
   }
 
   // Perform the actual fetch
-  return fetch(mainUrl, fetchOptions)
+  return fetch(`${mainUrl}${url}`, fetchOptions)
     .then(async (response) => {
       // Handle unauthorized access
       if (response.status === 401) {
@@ -71,5 +74,5 @@ export function useCustomFetch(options = {}) {
 //   }
 // }
 
-// Optionally export the token ref if needed for reactive operations
+// Export the token ref for reactive operations
 export const token = bearerToken

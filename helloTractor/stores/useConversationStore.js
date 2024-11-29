@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useConversationStore = defineStore('useConversationStore', {
+const useConversationStore = defineStore('useConversationStore', {
   state: () => ({
     selectedConversation: null,
     messages: [],
@@ -14,3 +14,5 @@ export const useConversationStore = defineStore('useConversationStore', {
     },
   },
 });
+
+export default useConversationStore;
