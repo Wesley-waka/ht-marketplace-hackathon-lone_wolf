@@ -25,7 +25,8 @@ const { initialize, session: passportSession } = passport;
 
 // Configure CORS to allow all origins
 app.use(cors({
-  origin: '*', // Allows all origins
+  // origin: '*', // Allows all origins
+  origin: ["http://localhost:3000","http://localhost:3001", "https://www.elitetreatforpets.com"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
 }));

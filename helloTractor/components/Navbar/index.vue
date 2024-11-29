@@ -6,12 +6,12 @@
          <img class="h-10" src="../../assets/images/logo_medium.png" alt="">
        </NuxtLink>
         <div class="flex flex-row space-x-5 mt-3">
-          <NuxtLink to="/tractors">Buy</NuxtLink>
-          <h3>Sell</h3>
-          <h3>How it works</h3>
-          <h3>Services</h3>
-          <h3>Farm Equipments</h3>
-          <h3>Orders</h3>
+          <h3><NuxtLink to="/tractors">Buy</NuxtLink></h3>
+          <h3><NuxtLink @click.prevent="navigateToSection('#how_works', '/')">Sell</NuxtLink></h3>
+          <h3><NuxtLink @click.prevent="navigateToSection('#how_works', '/')" to='/#how_works'>How it works</NuxtLink></h3>
+          <h3><NuxtLink @click.prevent="navigateToSection('#service', '/')" to='/#service'>Services</NuxtLink></h3>
+          <h3><NuxtLink @click.prevent="navigateToSection('#dealers', '/')" to='/#dealers'>Dealers</NuxtLink></h3>
+          <h3><NuxtLink @click.prevent="navigateToSection('#contact_us', '/')" to='/#contact_us'>Contact Us</NuxtLink></h3>
         </div>
       </div>
       <div class="flex space-x-4 mt-3 items-center">
@@ -331,6 +331,46 @@ const visible = ref(false);
 const { $toast } = useNuxtApp();
 const router = useRouter();
 const userTypeValue = ref('');
+
+    
+    // Function to handle smooth scrolling and cross-page navigation
+    const navigateToSection = (sectionId, path = null) => {
+      // If path is provided and different from current path, navigate first
+      if (path && router.currentRoute.value.path !== path) {
+        // Navigate to the specified path
+        router.push(path).then(() => {
+          // After navigation, scroll to the section
+          nextTick(() => {
+            scrollToSection(sectionId)
+          })
+        })
+      } else {
+        // If already on the correct page, just scroll to the section
+        scrollToSection(sectionId)
+      }
+    }
+    
+    // Smooth scrolling function
+    const scrollToSection = (sectionId) => {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        // Smooth scroll with offset (optional)
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
+    }
+    
+    // Handle route query parameters for section navigation
+    onMounted(() => {
+      const { section } = router.currentRoute.value.query
+      if (section) {
+        scrollToSection(section)
+      }
+    })
+    
+
 
 const formDataLogin = ref({
   email: "",

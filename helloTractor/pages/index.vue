@@ -105,38 +105,40 @@
         </div>
       </div>
 
-      <div class="bg-[#e8f8fb] max-w-full mx-auto py-2 ">
-        <div class="max-w-[84rem] px-6 mx-auto my-[100px]">
-          <h1 class="">How it works</h1>
-          <div class="flex flex-row justify-between my-32">
-            <div class="w-[400px] flex flex-col justify-center align-middle">
-              <img src="../assets/images/characters/Aziza Gesture.png" class="h-[270px]" alt="">
-              <h4>01.</h4>
-              <h2 class="mt-3">Choose anywhere in Europe</h2>
-              <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            </div>
-            <div class="w-[400px] flex flex-col justify-center align-middle">
-              <div class=" mx-auto">
-                <div class="">
-                  <img src="../assets/images/speechBubble/HT_BRAND ASSETS_SOLID SPEECHBUBBLES_RGB_Sunset Blaze.png"
-                    class="h-[140px] w-[140px]" alt="">
-                  <img src="../assets/images/speechBubble/HT_BRAND ASSETS_SOLID SPEECHBUBBLES_RGB_Plum.png"
-                    class="flip-horizontal h-[140px] w-[140px] ml-12" alt="">
-                </div>
+      <section id="how_works" class="section">
+        <div class="bg-[#e8f8fb] max-w-full mx-auto py-2 ">
+          <div class="max-w-[84rem] px-6 mx-auto my-[100px]">
+            <h1 class="">How it works</h1>
+            <div class="flex flex-row justify-between my-32">
+              <div class="w-[400px] flex flex-col justify-center align-middle">
+                <img src="../assets/images/characters/Aziza Gesture.png" class="h-[270px]" alt="">
+                <h4>01.</h4>
+                <h2 class="mt-3">Choose anywhere in Europe</h2>
+                <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
               </div>
-              <h4>03.</h4>
-              <h2 class="mt-3">We'll inspect the car closely</h2>
-              <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            </div>
-            <div class="w-[400px] flex flex-col justify-center align-middle">
-              <img src="../assets/images/characters/Caro Gesture.png" class="h-[270px]" alt="">
-              <h4>04.</h4>
-              <h2 class="mt-3">We'll inspect the car closely</h2>
-              <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+              <div class="w-[400px] flex flex-col justify-center align-middle">
+                <div class=" mx-auto">
+                  <div class="">
+                    <img src="../assets/images/speechBubble/HT_BRAND ASSETS_SOLID SPEECHBUBBLES_RGB_Sunset Blaze.png"
+                      class="h-[140px] w-[140px]" alt="">
+                    <img src="../assets/images/speechBubble/HT_BRAND ASSETS_SOLID SPEECHBUBBLES_RGB_Plum.png"
+                      class="flip-horizontal h-[140px] w-[140px] ml-12" alt="">
+                  </div>
+                </div>
+                <h4>03.</h4>
+                <h2 class="mt-3">We'll inspect the car closely</h2>
+                <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+              </div>
+              <div class="w-[400px] flex flex-col justify-center align-middle">
+                <img src="../assets/images/characters/Caro Gesture.png" class="h-[270px]" alt="">
+                <h4>04.</h4>
+                <h2 class="mt-3">We'll inspect the car closely</h2>
+                <p class="w-80">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <div class="max-w-[84rem] px-6 mx-auto py-32">
         <div class="">
@@ -249,174 +251,182 @@
         </div>
       </div>
 
-      <div class="bg-[#e8f8fb] max-w-full mx-auto  py-6 my-16 ">
-        <div class="max-w-[84rem] px-6 mx-auto">
-          <h1 class="text-center">Servicing</h1>
-          <div class="flex flex-row my-8 align-middle">
-            <img src="../assets/images/characters/Wekeza Neutral.png" class="h-[400px]" alt="">
-            <div class="flex flex-col space-y-6 my-auto">
-              <div>
-                <h2>Get our top dealers and service maintainers to check your tractor</h2>
-                <p>Carvago will even finance cars from abroad, which is rare. Furthermore, we are able to do so purely
-                  online and within few hours. Try out our financing calculator - there is no hidden fine print!</p>
-              </div>
-              <form class="pt-1 pb-6 flex flex-row space-x-3 w-f" @submit.prevent="handleSubmit">
-                <CustomInputContainer label="Email" required :error="v$.emailAddress.$error"
-                  :errorMessage="v$.emailAddress.$errors[0]?.$message" class="w-[300px]">
-                  <InputGroup>
-                    <InputGroupAddon>
-                      <i class="fas fa-envelope"></i>
-                    </InputGroupAddon>
-                    <InputText v-model="emailAddress" placeholder="Email Address" @blur="v$.emailAddress.$touch()"
-                      :invalid="v$.emailAddress.$error" />
-                  </InputGroup>
-                </CustomInputContainer>
-                <button class="btn btn-primary">
-                  <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>Submit
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <section id="service" class="section">
 
-      <div class="max-w-[84rem] px-6 mx-auto text-center py-28">
-        <h1> Comprehensive services just a few clicks away</h1>
-        <div class="my-32 flex flex-row justify-around">
-          <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
-            <template #content>
-              <div class="flex flex-col justify-center align-middle">
-                <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
-                  src="/caraudit.svg" />
-                <div class="mx-auto mt-4">Deal Allocators</div>
-              </div>
-              <div class="mt-4 mx-3 flex-col space-y-1">
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
+        <div class="bg-[#e8f8fb] max-w-full mx-auto  py-6 my-16 ">
+          <div class="max-w-[84rem] px-6 mx-auto">
+            <h1 class="text-center">Servicing</h1>
+            <div class="flex flex-row my-8 align-middle">
+              <img src="../assets/images/characters/Wekeza Neutral.png" class="h-[400px]" alt="">
+              <div class="flex flex-col space-y-6 my-auto">
+                <div>
+                  <h2>Get our top dealers and service maintainers to check your tractor</h2>
+                  <p>Carvago will even finance cars from abroad, which is rare. Furthermore, we are able to do so purely
+                    online and within few hours. Try out our financing calculator - there is no hidden fine print!</p>
                 </div>
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-              </div>
-            </template>
-          </Card>
-
-          <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
-            <template #content>
-              <div class="flex flex-col justify-center align-middle">
-                <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
-                  src="/caraudit.svg" />
-                <div class="mx-auto mt-4">Deal Allocators</div>
-              </div>
-              <div class="mt-4 mx-3 flex-col space-y-1">
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-              </div>
-            </template>
-          </Card>
-
-          <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
-            <template #content>
-              <div class="flex flex-col justify-center align-middle">
-                <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
-                  src="/caraudit.svg" />
-                <div class="mx-auto mt-4">Deal Allocators</div>
-              </div>
-              <div class="mt-4 mx-3 flex-col space-y-1">
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-                <div class="flex flex-row space-x-2">
-                  <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
-                    class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
-
-                  <p>Complete with no fine hours</p>
-                </div>
-
-              </div>
-            </template>
-          </Card>
-        </div>
-      </div>
-
-      <div class="bg-[#ecfcff] max-w-full mx-auto py-16 my-auto">
-        <div class="max-w-[84rem] px-6 mx-auto flex justify-center align-middle">
-          <div class="w-[800px] bg-white">
-            <div class="flex flex-row justify-between p-10">
-              <div class="flex flex-col space-y-4">
-                <h4>Your next car <br> is waiting for you here...</h4>
-                <button class="btn btn-primary">133 offers</button>
-              </div>
-              <img src="../assets/images/characters/Gitonga Neutral.png" class="h-[240px]" alt="">
-            </div>
-            <hr>
-            <div class="bg-slate-50 flex flex-row justify-around py-8">
-              <div>
-                <h3>Call us</h3>
-                <h3>+420 246 034 700</h3>
-                <h3>Mo–Su 8 am-8 pm</h3>
-              </div>
-              <div>
-                <h3>Email</h3>
-                <h3>+420 246 034 700</h3>
+                <form class="pt-1 pb-6 flex flex-row space-x-3 items-center align-middle" @submit.prevent="handleSubmit">
+                  <CustomInputContainer label="Email" required :error="v$.emailAddress.$error"
+                    :errorMessage="v$.emailAddress.$errors[0]?.$message" class="w-[300px]">
+                    <InputGroup>
+                      <InputGroupAddon>
+                        <i class="fas fa-envelope"></i>
+                      </InputGroupAddon>
+                      <InputText v-model="emailAddress" placeholder="Email Address" @blur="v$.emailAddress.$touch()"
+                        :invalid="v$.emailAddress.$error" />
+                    </InputGroup>
+                  </CustomInputContainer>
+                  <button class="btn btn-primary p-2 mt-6">
+                    <i v-if="loading" class="animate-spin mr-2  pi pi-spinner"></i>Submit
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
-        <div class="w-[70rem] mx-auto">
-          <h1 class="mx-auto my-[50px] text-center">You are not risking anything when you buy a <br> vehicle on Carvago
-          </h1>
-          <div class="">
-            <div class="rounded-lg bg-white h-48 z-10 flex py-[40px] px-[20px] gap-3 my-8 max-w-[84rem] mx-auto">
-              <div class="flex align-middle gap-3 my-auto">
-                <img class="h-[40px]" src="/caraudit.svg" alt="">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+      </section>
+
+      <section id="dealers" class="section">
+        <div class="max-w-[84rem] px-6 mx-auto text-center py-28">
+          <h1> Comprehensive services just a few clicks away</h1>
+          <div class="my-32 flex flex-row justify-around">
+            <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
+              <template #content>
+                <div class="flex flex-col justify-center align-middle">
+                  <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
+                    src="/caraudit.svg" />
+                  <div class="mx-auto mt-4">Deal Allocators</div>
+                </div>
+                <div class="mt-4 mx-3 flex-col space-y-1">
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                </div>
+              </template>
+            </Card>
+  
+            <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
+              <template #content>
+                <div class="flex flex-col justify-center align-middle">
+                  <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
+                    src="/caraudit.svg" />
+                  <div class="mx-auto mt-4">Deal Allocators</div>
+                </div>
+                <div class="mt-4 mx-3 flex-col space-y-1">
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                </div>
+              </template>
+            </Card>
+  
+            <Card style="width: 23rem; height: 18rem; overflow: hidden; padding: 10px;">
+              <template #content>
+                <div class="flex flex-col justify-center align-middle">
+                  <img alt="user header" class="w-[78px] h-[78px] bg-[#ecfcff] p-4 rounded-full mx-auto"
+                    src="/caraudit.svg" />
+                  <div class="mx-auto mt-4">Deal Allocators</div>
+                </div>
+                <div class="mt-4 mx-3 flex-col space-y-1">
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+                  <div class="flex flex-row space-x-2">
+                    <img src="/White/HT_ICONS_WHITE_RGB-39.png" alt=""
+                      class=" rounded-full w-[20px] h-[20px] bg-[#ff461e]">
+  
+                    <p>Complete with no fine hours</p>
+                  </div>
+  
+                </div>
+              </template>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact_us" class="section">
+      
+        <div class="bg-[#ecfcff] max-w-full mx-auto py-16 my-auto">
+          <div class="max-w-[84rem] px-6 mx-auto flex justify-center align-middle">
+            <div class="w-[800px] bg-white">
+              <div class="flex flex-row justify-between p-10">
+                <div class="flex flex-col space-y-4">
+                  <h4>Your next car <br> is waiting for you here...</h4>
+                  <button class="btn btn-primary">133 offers</button>
+                </div>
+                <img src="../assets/images/characters/Gitonga Neutral.png" class="h-[240px]" alt="">
               </div>
-              <Divider layout="vertical" />
-              <div class="flex align-middle gap-3 my-auto">
-                <img src="/finance.svg" class="h-[40px]" alt="">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+              <hr>
+              <div class="bg-slate-50 flex flex-row justify-around py-8">
+                <div>
+                  <h3>Call us</h3>
+                  <h3>+420 246 034 700</h3>
+                  <h3>Mo–Su 8 am-8 pm</h3>
+                </div>
+                <div>
+                  <h3>Email</h3>
+                  <h3>+420 246 034 700</h3>
+                </div>
               </div>
-              <Divider layout="vertical" />
-              <div class="flex align-middle gap-3 my-auto">
-                <img src="/legal.svg" class="h-[40px]" alt="">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </div>
+          </div>
+          <div class="w-[70rem] mx-auto">
+            <h1 class="mx-auto my-[50px] text-center">You are not risking anything when you buy a <br> vehicle on Carvago
+            </h1>
+            <div class="">
+              <div class="rounded-lg bg-white h-48 z-10 flex py-[40px] px-[20px] gap-3 my-8 max-w-[84rem] mx-auto">
+                <div class="flex align-middle gap-3 my-auto">
+                  <img class="h-[40px]" src="/caraudit.svg" alt="">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <Divider layout="vertical" />
+                <div class="flex align-middle gap-3 my-auto">
+                  <img src="/finance.svg" class="h-[40px]" alt="">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <Divider layout="vertical" />
+                <div class="flex align-middle gap-3 my-auto">
+                  <img src="/legal.svg" class="h-[40px]" alt="">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
     <!-- Hero -->
 
