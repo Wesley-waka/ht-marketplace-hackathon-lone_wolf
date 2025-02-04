@@ -25,8 +25,8 @@ const { initialize, session: passportSession } = passport;
 
 // Configure CORS to allow all origins
 app.use(cors({
-  // origin: '*', // Allows all origins
-  origin: ["http://localhost:3000","http://localhost:3001", "https://www.elitetreatforpets.com"],
+  origin: '*', // Allows all origins
+  // origin: ["http://localhost:3000", "http://localhost:3001", "https://www.elitetreatforpets.com"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
 }));
@@ -57,11 +57,11 @@ app.use('/api/messages', messageRouter);
 app.use('/api/child-dealer', childDealerRouter);
 app.use('/api/dealer', DealerRouter);
 
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Hello Tractor API is running....');
 });
 
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
