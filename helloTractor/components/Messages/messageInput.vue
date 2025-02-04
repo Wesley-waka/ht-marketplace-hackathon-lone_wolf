@@ -10,19 +10,26 @@
 			</button>
 		</div> -->
 
-		<div class=" mt-4 border-t  h-[40px] flex flex-row space-x-2">
-			<CustomInputContainer placeholder="Type a message">
+<!--		<div class=" mt-4 border-t  h-[40px] flex flex-row space-x-2">-->
+		<InputGroup>
+<!--    <CustomInputContainer placeholder="Type a message">-->
 				<InputText class="w-full p-4 border-b border-gray-200" />
-				<button class="  rounded-md">
-					<div v-if="loading" class="loading loading-spinner"></div>
-					<!-- <pi-send v-else /> -->
-					<img v-else type="submit" src="/White/HT_ICONS_WHITE_RGB-66.png" alt=""
-						class=" bg-orangeBright rounded-md h-[43px] w-[63px] border-2 ">
-				</button>
-			</CustomInputContainer>
+<!--				<button class="  rounded-md">-->
+<!--					<div v-if="loading" class="loading loading-spinner"></div>-->
+<!--					&lt;!&ndash; <pi-send v-else /> &ndash;&gt;-->
+<!--					<img v-else type="submit" src="/White/HT_ICONS_WHITE_RGB-66.png" alt=""-->
+<!--						class=" bg-orangeBright rounded-md h-[43px] w-[63px] border-2 ">-->
+<!--				</button>-->
+<!--			</CustomInputContainer>-->
+
+      <InputGroupAddon>
+        <div v-if="loading" class="loading loading-spinner"></div>
+      <Button v-else icon="pi pi-send" severity="secondary" />
+      </InputGroupAddon>
+    </InputGroup>
 			<!-- <InputText placeholder="Type a message" class="w-full p-4 border-b border-gray-200" /> -->
 
-		</div>
+<!--		</div>-->
 		<!-- <button class="  rounded-md">
 			<div v-if="loading" class="loading loading-spinner"></div>
 			<img v-else type="submit" src="/White/HT_ICONS_WHITE_RGB-66.png" alt=""
