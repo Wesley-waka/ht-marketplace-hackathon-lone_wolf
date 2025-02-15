@@ -70,7 +70,7 @@ export const useAuth = () => {
     isAuthenticated: computed(() => authStore.isLoggedIn),
     loading: computed(() => authStore.loading),
     error: computed(() => authStore.error),
-
+    token: computed(() => authStore.token),
     // Methods
     login,
     signup,

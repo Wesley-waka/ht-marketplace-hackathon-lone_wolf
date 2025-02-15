@@ -1,28 +1,37 @@
 import { ref, onMounted } from 'vue'
-import { useFetch } from '#app'
-import { useToast } from 'vue-toastification'
 
 const loading = ref(false)
-const conversations = ref([])
-
-const toast = useToast()
+const conversations = ref([]);
+import {useConversationStore} from "~/stores/useConversationStore.js";
 
 const useGetConversations = async () => {
   loading.value = true
-  try {
-    // const { data, error } = await useCustomFetch('/users/')
-    // write api
-    const { data, error } = await useCustomFetch('/')
-    // api for getting matched users
-    if (error.value) {
-      throw new Error(error.value.message)
-    }
-    // conversations.value = data.value
-    return { data }
-  } catch (error) {
-    toast.error(error.message)
-  } finally {
-    loading.value = false
+  const { user, token } = useAuthStore()
+  const URLparams = new URLSearchParams({
+    id: user._id
+  })
+  const {setConversations} = useConversationStore()
+
+    await useCustomFetch(`/messages/matched?${URLparams}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }).then((response) => {
+      console.log(response,'hey')
+      setConversations(response)
+    }).catch(()=>{
+      console.log('failed')
+    }).finally(() => {
+      loading.value = false
+    })
+
+
+
+  return {
+    conversations,
+    loading
   }
 }
 

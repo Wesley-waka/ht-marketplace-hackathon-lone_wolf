@@ -7,13 +7,15 @@
       <div class="flex flex-row justify-between">
         <h4 class="text-3xl my-1">{{ product.tractorName }}</h4>
         <div v-if="allProducts">
-          <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-50.png" class="w-[40px] h-full cursor-pointer" alt=""
-            @click="addToFavorites">
+<!--          <img src="/public/Sunset Blaze/HT_ICONS_ORANGE-50.png" class="w-[40px] h-full cursor-pointer" alt=""-->
+<!--            @click="addToFavorites">-->
         </div>
         <div v-else class="flex flex-col space-y-2">
-          <button class="btn btn-primary outlined" @click="matchUser()">Connect with User</button>
-          <button class="btn btn-primary" @click="removeFromFavorites">Remove Favourite</button>
+<!--          <button class="btn btn-primary outlined" @click="matchUser()">Connect with User</button>-->
+<!--          <button class="btn btn-primary" @click="removeFromFavorites">Remove Favourite</button>-->
         </div>
+
+        <button class="btn btn-primary outlined" @click="matchUser()">Connect with User</button>
       </div>
       <div class="flex flex-row space-x-4 my-3">
         <div class="flex flex-row space-x-1 items-center">
@@ -71,9 +73,9 @@ const props = defineProps(["product", "allProducts"]);
 const logStore = useAuthStore()
 // const {user} = useAuthStore();
 console.log(logStore.user,'this is our user');
-const { addToFavourite, deleteFavourite } = useFavouriteAPI(logStore.user?._id);
+const { addToFavourite, deleteFavourite } = useFavouriteStore();
 
-console.log(JSON.parse(localStorage.getItem('user')),'this is our user');
+// console.log(JSON.parse(localStorage.getItem('user')),'this is our user');
 
 const addToFavorites = async () => {
   try {
@@ -104,16 +106,18 @@ const removeFromFavorites = async () => {
 };
 
 const matchUser = async () => {
-  try {
-    const res = await useCustomFetch(`/messages/match-user?id=${props.product.createdByUser}`, { method: 'GET' })
+  router.push('/messages')
 
-    if (res.status !== 200) {
-      throw new Error('Failed to match user')
-    }
-
-    router.navigate('/messages')
-  } catch (error) {
-    console.error('Error matching user:', error.message)
-  }
+  // try {
+  //   const res = await useCustomFetch(`/messages/match-user?id=${props.product.createdByUser}`, { method: 'GET' })
+  //
+  //   if (res.status !== 200) {
+  //     throw new Error('Failed to match user')
+  //   }
+  //
+  //   router.navigate('/messages')
+  // } catch (error) {
+  //   console.error('Error matching user:', error.message)
+  // }
 }
 </script>

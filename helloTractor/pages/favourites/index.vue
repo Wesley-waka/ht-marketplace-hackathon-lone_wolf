@@ -92,7 +92,7 @@ const clearFavorites = async () => {
   } catch (error) {
     console.error('Error removing from favorites:', error);
   }
-}; 
+};
 
 
 

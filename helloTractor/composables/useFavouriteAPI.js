@@ -1,11 +1,15 @@
-// import { useAuthStore } from '@/stores/authStore'
+// import { useAuthStore } from '@/stores/authStore';
 
 // import auth from "~/middleware/auth";
 
-export const useFavouriteAPI = (user_id) => {
-  console.log(user_id, 'user_id')
+export const useFavouriteAPI = (token) => {
+
+  const urlSearchParams = new URLSearchParams({
+    token: token
+  });
+
   const getFavourite = async () => {
-    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
+    return await useCustomFetch(`/auth/favoriteProducts?${urlSearchParams}`, {
       method: "GET",
     });
   };
@@ -14,9 +18,14 @@ export const useFavouriteAPI = (user_id) => {
     const data = {
       productID: productId,
     };
-    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
+
+    const urlSearchParams = new URLSearchParams({
+      token: token,
+    });
+
+    return await useCustomFetch(`/auth/users/favoriteProducts?${urlSearchParams}`, {
       method: "POST",
-      body: data,
+      body: JSON.stringify(data),
     });
   };
 
@@ -27,7 +36,11 @@ export const useFavouriteAPI = (user_id) => {
   };
 
   const clearFavourite = async () => {
-    return await useCustomFetch(`/auth/users/${user_id}/favoriteProducts`, {
+    const urlSearchParams = new URLSearchParams({
+      token: token,
+    });
+
+    return await useCustomFetch(`/auth/users/favoriteProducts/clear?${urlSearchParams}`, {
       method: "DELETE",
     });
   };

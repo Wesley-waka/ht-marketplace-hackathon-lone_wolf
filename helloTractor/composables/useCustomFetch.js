@@ -7,7 +7,7 @@ const bearerToken = ref(localStorage.getItem('bearerToken') || null)
 
 export function useCustomFetch(url, options = {}) {
   const config = useRuntimeConfig()
-  const mainUrl = config.public.apiURL // Assuming you've set this in nuxt.config.ts
+  const mainUrl = config.public.apiURL // Assuming you've set this in nuxt.config.js
 
   // Prepare headers
   const headers = new Headers({

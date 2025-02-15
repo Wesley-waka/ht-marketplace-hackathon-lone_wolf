@@ -2,13 +2,13 @@ import Conversation from "../models/Conversation.js";
 import Message from "../models/Message.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 import User from "../models/User.js";
-
+import mongoose from 'mongoose';
 
 export const sendMessage = async (req, res) => {
 	try {
 		const { message } = req.body;
-		const { id: receiverId } = req.params;
-		const senderId = req.user._id;
+		const { id: receiverId } = req.params; // this is the receiver of the message
+		const senderId = req.query.id; // this is the sender of the message
 
 		let conversation = await Conversation.findOne({
 			participants: { $all: [senderId, receiverId] },
@@ -30,16 +30,10 @@ export const sendMessage = async (req, res) => {
 			conversation.messages.push(newMessage._id);
 		}
 
-		// await conversation.save();
-		// await newMessage.save();
-
-		// this will run in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
 
-		// SOCKET IO FUNCTIONALITY WILL GO HERE
 		const receiverSocketId = getReceiverSocketId(receiverId);
 		if (receiverSocketId) {
-			// io.to(<socket_id>).emit() used to send events to specific client
 			io.to(receiverSocketId).emit("newMessage", newMessage);
 		}
 
@@ -50,49 +44,16 @@ export const sendMessage = async (req, res) => {
 	}
 };
 
-export const getMessages = async (req, res) => {
-	try {
-		const { id: userToChatId } = req.params;
-		const senderId = req.user._id;
-
-		const conversation = await Conversation.findOne({
-			participants: { $all: [senderId, userToChatId] },
-		}).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
-
-		if (!conversation) return res.status(200).json([]);
-
-		const messages = conversation.messages;
-
-		res.status(200).json(messages);
-	} catch (error) {
-		console.log("Error in getMessages controller: ", error.message);
-		res.status(500).json({ error: "Internal server error" });
-	}
-};
-
-// get all users
-// export const getUsersForSidebar = async (req, res) => {
-// 	try {
-// 		const loggedInUserId = req.user._id;
-
-// 		const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
-
-// 		res.status(200).json(filteredUsers);
-// 	} catch (error) {
-// 		console.error("Error in getUsersForSidebar: ", error.message);
-// 		res.status(500).json({ error: "Internal server error" });
-// 	}
-// };
 
 
-//get the loggged in userId then push it to the array of matchedUsers of the user that is being matched and also push the matched user to the array of matchedUsers of the logged in user
 export const getMatchedUser = async (req, res) => {
 	try {
 		const { id: matchedUserId } = req.params;
-		const loggedInUserId = req.user._id;
+		const loggedInUserId = req.query.id;
 
-		console.log("matchedUserId: ", matchedUserId);
-		console.log("loggedInUserId: ", loggedInUserId);
+		if (!mongoose.Types.ObjectId.isValid(matchedUserId) || !mongoose.Types.ObjectId.isValid(loggedInUserId)) {
+			return res.status(400).json({ error: "Invalid user ID" });
+		}
 
 		const matchedUser = await User.findById(matchedUserId);
 		const loggedInUser = await User.findById(loggedInUserId);
@@ -116,17 +77,47 @@ export const getMatchedUser = async (req, res) => {
 	}
 };
 
-
-//get all  users matched
 export const getUsersForSidebar = async (req, res) => {
 	try {
-		const loggedInUserId = req.user._id;
+		const loggedInUserId = req.query.id;
 
-		const filteredUsers = await User.find({ matchedUsers: { $ne: loggedInUserId } }).select("-password");
+
+
+
+		const receiverObjectId = new mongoose.Types.ObjectId(loggedInUserId);
+		const filteredUsers = await User.find({ matchedUsers: { $eq: loggedInUserId } }).select("-password");
 
 		res.status(200).json(filteredUsers);
 	} catch (error) {
 		console.error("Error in getUsersForSidebar: ", error.message);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+
+export const getMessages = async (req, res) => {
+	try {
+		const { id: userToChatId } = req.params;
+		const senderId = req.query.id;
+
+		if (!mongoose.Types.ObjectId.isValid(senderId) || !mongoose.Types.ObjectId.isValid(userToChatId)) {
+			return res.status(400).json({ error: "Invalid user ID" });
+		}
+
+		const senderObjectId = new mongoose.Types.ObjectId(senderId);
+		const receiverObjectId = new mongoose.Types.ObjectId(userToChatId);
+
+		const conversation = await Conversation.findOne({
+			participants: { $all: [senderObjectId, receiverObjectId] },
+		}).populate("messages");
+
+		if (!conversation) return res.status(200).json([]);
+
+		const messages = conversation.messages;
+
+		res.status(200).json(messages);
+	} catch (error) {
+		console.log("Error in getMessages controller: ", error.message);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };

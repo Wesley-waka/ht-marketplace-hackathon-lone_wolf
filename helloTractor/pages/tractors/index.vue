@@ -137,6 +137,7 @@
           </div>
 
 
+<!--          {{dataList}}-->
 
           <div class="">
 
@@ -172,7 +173,6 @@
 
             <div v-if="dataList.length" class=" mb-8 w-full flex flex-col space-y-2 h-[800px]  overflow-y-auto">
               <div v-for="tractor in dataList" class="flex-row space-y-4" :key="tractor._id">
-
                 <TractorCard :product="tractor" @selectProduct="selectedProduct = product" :all-products="true" />
               </div>
             </div>

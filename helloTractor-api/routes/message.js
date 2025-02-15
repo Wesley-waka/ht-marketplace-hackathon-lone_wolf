@@ -9,10 +9,10 @@ const attachUser = (req, res, next) => {
   next();
 };
 
+messageRouter.get("/matched", protectRoute, getUsersForSidebar);
 messageRouter.get("/:id", protectRoute, getMessages);
 messageRouter.post("/send/:id", protectRoute, sendMessage);
-messageRouter.get("/", protectRoute, getUsersForSidebar);
-messageRouter.get('/match-user/:id', protectRoute, getMatchedUser)
+messageRouter.get('/match/:id', protectRoute, getMatchedUser);
 
 
 // messageRouter.get("/:id", attachUser, getMessages);

@@ -12,6 +12,8 @@ export const useFavouriteStore = defineStore('useFavouriteStore', () => {
   /**
    * States
    */
+
+  const {token} = useAuthStore();
   const isFavouriteLoaded = ref(false)
   // const cart = ref({})
   const favouriteItems = ref([])
@@ -51,10 +53,10 @@ export const useFavouriteStore = defineStore('useFavouriteStore', () => {
       })
   }
 
-  const updateItem = async (productId, quantity) => {
-    await addToFavourite(productId, quantity)
-      .then((data) => {
-        fetchCart()
+  const updateItem = async (productId) => {
+    await addToFavourite(productId, token)
+      .then(async(data) => {
+        await fetchWishList(token);
       })
       .catch((error) => {
         console.error(error)
@@ -62,9 +64,9 @@ export const useFavouriteStore = defineStore('useFavouriteStore', () => {
   }
 
   const removeItem = async (productId) => {
-    await deleteFavourite(productId)
-      .then((data) => {
-        fetchCart()
+    await deleteFavourite(productId,token)
+      .then(async(data) => {
+        await fetchWishList(token);
       })
       .catch((error) => {
         console.error(error)
@@ -73,8 +75,8 @@ export const useFavouriteStore = defineStore('useFavouriteStore', () => {
 
   const clearAll = async () => {
     await clearFavourite()
-      .then((data) => {
-        fetchCart()
+      .then(async(data) => {
+        await fetchWishList(token);
       })
       .catch((error) => {
         console.error(error)

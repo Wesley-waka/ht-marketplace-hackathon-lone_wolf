@@ -57,7 +57,7 @@ app.use('/api/messages', messageRouter);
 app.use('/api/child-dealer', childDealerRouter);
 app.use('/api/dealer', DealerRouter);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hello Tractor API is running....');
 });
 
