@@ -1,14 +1,18 @@
 import Conversation from "../models/Conversation.js";
 import Message from "../models/Message.js";
-import { getReceiverSocketId, io } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../index.js";
 import User from "../models/User.js";
 import mongoose from 'mongoose';
 
 export const sendMessage = async (req, res) => {
 	try {
 		const { message } = req.body;
-		const { id: receiverId } = req.params; // this is the receiver of the message
-		const senderId = req.query.id; // this is the sender of the message
+		const { id: receiverId } = req.params;
+		const senderId = req.query.id;
+
+		if (!mongoose.Types.ObjectId.isValid(senderId) || !mongoose.Types.ObjectId.isValid(receiverId)) {
+			return res.status(400).json({ error: 'Invalid user ID' });
+		}
 
 		let conversation = await Conversation.findOne({
 			participants: { $all: [senderId, receiverId] },
@@ -34,13 +38,13 @@ export const sendMessage = async (req, res) => {
 
 		const receiverSocketId = getReceiverSocketId(receiverId);
 		if (receiverSocketId) {
-			io.to(receiverSocketId).emit("newMessage", newMessage);
+			io.to(receiverSocketId).emit('newMessage', newMessage);
 		}
 
 		res.status(201).json(newMessage);
 	} catch (error) {
-		console.log("Error in sendMessage controller: ", error.message);
-		res.status(500).json({ error: "Internal server error" });
+		console.log('Error in sendMessage controller: ', error.message);
+		res.status(500).json({ error: 'Internal server error' });
 	}
 };
 

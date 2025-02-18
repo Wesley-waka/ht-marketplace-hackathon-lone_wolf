@@ -1,38 +1,63 @@
-import { Server } from "socket.io";
-import http from "http";
-import express from "express";
-
-const app = express();
-
-const server = http.createServer(app);
-const io = new Server(server, {
-	cors: {
-		origin: '*',
-		methods: ["GET", "POST"],
-	},
-});
-
-export const getReceiverSocketId = (receiverId) => {
-	return userSocketMap[receiverId];
-};
-
-const userSocketMap = {}; // {userId: socketId}
-
-io.on("connection", (socket) => {
-	console.log("a user connected", socket.id);
-
-	const userId = socket.handshake.query.userId;
-	if (userId != "undefined") userSocketMap[userId] = socket.id;
-
-	// io.emit() is used to send events to all the connected clients
-	io.emit("getOnlineUsers", Object.keys(userSocketMap));
-
-	// socket.on() is used to listen to the events. can be used both on client and server side
-	socket.on("disconnect", () => {
-		console.log("user disconnected", socket.id);
-		delete userSocketMap[userId];
-		io.emit("getOnlineUsers", Object.keys(userSocketMap));
-	});
-});
-
-export { app, io, server };
+// import { Server } from 'socket.io';
+// import http from 'http';
+// import express from 'express';
+// import mongoose from 'mongoose'; // Import mongoose for validation
+//
+// const app = express();
+// const server = http.createServer(app);
+// const io = new Server(server, {
+// 	cors: {
+// 		origin: process.env.CLIENT_ORIGIN || '*', // Restrict to your client's origin
+// 		methods: ['GET', 'POST'],
+// 	},
+// });
+//
+// // Store online users
+// const onlineUsers = new Map();
+//
+// // Utility function to get receiver's socket ID
+// export const getReceiverSocketId = (receiverId) => {
+// 	return onlineUsers.get(receiverId);
+// };
+//
+// io.on('connection', (socket) => {
+// 	console.log('A user connected:', socket.id);
+//
+// 	// Handle user login
+// 	socket.on('login', (userId) => {
+// 		if (!mongoose.Types.ObjectId.isValid(userId)) {
+// 			console.error('Invalid userId:', userId);
+// 			return;
+// 		}
+// 		console.log(`User ${userId} is online`);
+// 		onlineUsers.set(userId, socket.id);
+// 		io.emit('getOnlineUsers', Array.from(onlineUsers.keys()));
+// 	});
+//
+// 	// Handle new messages
+// 	socket.on('newMessage', (message) => {
+// 		const { receiverId } = message;
+// 		if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+// 			console.error('Invalid receiverId:', receiverId);
+// 			return;
+// 		}
+// 		const receiverSocketId = getReceiverSocketId(receiverId);
+// 		if (receiverSocketId) {
+// 			io.to(receiverSocketId).emit('newMessage', message);
+// 		}
+// 	});
+//
+// 	// Handle user disconnect
+// 	socket.on('disconnect', () => {
+// 		console.log('A user disconnected:', socket.id);
+// 		for (const [userId, socketId] of onlineUsers.entries()) {
+// 			if (socketId === socket.id) {
+// 				onlineUsers.delete(userId);
+// 				break;
+// 			}
+// 		}
+// 		io.emit('getOnlineUsers', Array.from(onlineUsers.keys()));
+// 	});
+// });
+//
+// export { app, io, server };

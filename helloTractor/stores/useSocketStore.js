@@ -7,13 +7,13 @@ import { ref, onMounted, onUnmounted } from 'vue';
 export const useSocketStore = defineStore('useSocketStore', () => {
   const socket = ref(null);
   const onlineUsers = ref([]);
-  const { authUser } = useAuth();
+  const { user } = useAuthStore();
 
   onMounted(() => {
-    if (authUser.value) {
+    if (user) {
       socket.value = io('/messages', {
         query: {
-          userId: authUser.value._id,
+          userId: user._id,
         },
       });
 

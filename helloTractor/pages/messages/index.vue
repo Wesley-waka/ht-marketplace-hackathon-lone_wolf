@@ -59,83 +59,6 @@
 
 
 
-                <div>
-                    <div onclick="handleMessageDisplay(id)" class="flex items-center p-4 hover:bg-gray-50 transition-colors duration-200 rounded-lg cursor-pointer">
-                        <!-- Avatar section with improved styling -->
-                        <div class="relative">
-                            <img src="/public/Black/HT_ICONS_BLACK_RGB-36.png"
-                                class="w-12 h-12 rounded-full object-cover border-2 border-gray-100 shadow-sm"
-                                alt="User Avatar">
-                            <div
-                                class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white">
-                            </div>
-                        </div>
-
-                        <!-- User info section with better spacing and typography -->
-                        <div class="flex flex-col ml-4 flex-grow ">
-                            <div class="flex items-center justify-between ">
-                                <div>
-                                    <h2
-                                        class="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200">
-                                        JohnDeere6R
-                                    </h2>
-                                    <div class="flex items-center mt-0.5 space-x-10">
-                                        <span
-                                            class="px-2 py-0.5 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                                            Buyer
-                                        </span>
-                                        <span class="text-xs text-gray-500 ml-3">
-                                            2 weeks ago
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Message icon with hover effect -->
-                                <!-- <button class="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                                    <img src="/public/Black/HT_ICONS_BLACK_RGB-71.png"
-                                        class="w-6 h-6 opacity-75 hover:opacity-100 transition-opacity duration-200"
-                                        alt="Message Icon">
-                                </button> -->
-                            </div>
-                        </div>
-                    </div>
-
-                  <div class="flex items-center p-4 hover:bg-gray-50 transition-colors duration-200 rounded-lg">
-                    <!-- Avatar section with improved styling -->
-                    <div class="relative">
-                      <img src="/public/Black/HT_ICONS_BLACK_RGB-36.png"
-                           class="w-12 h-12 rounded-full object-cover border-2 border-gray-100 shadow-sm"
-                           alt="User Avatar">
-                      <div
-                          class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white">
-                      </div>
-                    </div>
-
-                    <!-- User info section with better spacing and typography -->
-                    <div class="flex flex-col ml-4 flex-grow">
-                      <div class="flex items-center justify-between">
-                        <div>
-                          <h2
-                              class="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200">
-                            JohnDeere6R
-                          </h2>
-                          <div class="flex items-center mt-0.5 space-x-10">
-                                        <span
-                                            class="px-2 py-0.5 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                                            Buyer
-                                        </span>
-                            <span class="text-xs text-gray-500 ml-3">
-                                            2 weeks ago
-                                        </span>
-                          </div>
-                        </div>
-
-
-                      </div>
-                    </div>
-                  </div>
-<!--                    <MessagesConversation />-->
-                </div>
             </div>
 
 
@@ -393,30 +316,51 @@
 
 
 <script setup>
-import {useConversationStore} from "~/stores/useConversationStore.js";
-import useGetConversations from "~/composables/useGetConversations.js";
-import useGetMessages from "~/composables/useGetMessages.js";
-import {onMounted, ref} from "vue";
-import {useCustomFetch} from "~/composables/useCustomFetch.js";
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+// import { useToast } from '~/composables/useToast'; // Assuming you have a useToast composable
+import { useAuthStore } from '~/stores/useAuthStore';
+import { useSocketStore } from '~/stores/useSocketStore';
+// import { useConversationStore } from '~/stores/useConversationStore';
+// import useGetConversations from '~/composables/useGetConversations';
+// import useGetMessages from '~/composables/useGetMessages';
+// import useListenMessages from '~/composables/useListenMessages';
+import { useCustomFetch } from '~/composables/useCustomFetch';
+import notificationSound from '/Sounds/notification.mp3';
+
 const conversations = ref([]);
 const loading = ref(false);
-// const {conversations, loading: conversationLoading} = useGetConversations();
-const { selectedConversation, setSelectedConversation } = useConversationStore();
-const toast = useToast();
 const messages = ref([]);
-const { user, token } = useAuthStore();
 const userSelected = ref({});
+const { user, token } = useAuthStore();
+const socketStore = useSocketStore();
+const toast = useToast();
+
+// Listen for new messages
+// useListenMessages();
+
+const handleNewMessage = (newMessage) => {
+  newMessage.shouldShake = true;
+  const sound = new Audio(notificationSound);
+  sound.play();
+  messages.value = [...messages.value, newMessage]; // Update messages ref
+};
+
+// Attach socket event listener
+if (socketStore.socket) {
+  socketStore.socket.on('newMessage', handleNewMessage);
+}
+
+// Cleanup socket event listener on unmount
+onUnmounted(() => {
+  if (socketStore.socket) {
+    socketStore.socket.off('newMessage', handleNewMessage);
+  }
+});
 
 
-onMounted(async()=>{
-  // chats
-  // console.log(chats,'hellll')
-  // const { messages} = useGetMessages('674689b7af09dbfdeeda51a3');
-  // console.log(messages,'this are our messages');
-  // useGetMessages('674689b7af09dbfdeeda51a3');
-  // getMessages('674689b7af09dbfdeeda51a3')
-})
 
+
+// Format time ago
 const formatTimeAgo = (dateString) => {
   const date = new Date(dateString);
   const now = new Date();
@@ -429,83 +373,83 @@ const formatTimeAgo = (dateString) => {
   if (diffInDays < 21) return '2 weeks ago';
   if (diffInDays < 28) return '3 weeks ago';
   return `${Math.floor(diffInDays / 30)} months ago`;
-}
+};
 
-
+// Fetch messages for a specific conversation
 const getMessages = async (id) => {
-
-  loading.value = true
+  loading.value = true;
 
   const URLparams = new URLSearchParams({
-    id: user._id
-  })
+    id: user._id,
+  });
 
   try {
-    const res = await useCustomFetch(`/messages/${id}?${URLparams}`,{
+    const res = await useCustomFetch(`/messages/${id}?${URLparams}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    const data = await res
-    console.log(data,'this is our data')
-    // if (data.error) throw new Error(data.error)
-    messages.value = data
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res;
+    messages.value = data;
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
+    toast.error('Failed to fetch messages'); // Notify user of error
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
+// Handle message display for a selected user
 const handleMessageDisplay = (userDisplay) => {
-  console.log(userDisplay,'we have the user')
-  const {_id} = userDisplay
-  // const {messages,loading: messageLoading} = useGetMessages(id);
-  // setSelectedConversation(id);
-  // useGetMessages(id);
+  const { _id } = userDisplay;
   getMessages(_id);
   userSelected.value = userDisplay;
-}
+};
 
-watch(()=> userSelected.value,(newId) => {
-  handleMessageDisplay(newId)
-})
+// Watch for changes in userSelected
+watch(userSelected, (newUser) => {
+  if (newUser) {
+    handleMessageDisplay(newUser);
+  }
+});
 
-
+// Fetch conversations
 const getConversations = async () => {
   loading.value = true;
 
-
   const URLparams = new URLSearchParams({
-    id: user._id
+    id: user._id,
   });
 
-  await useCustomFetch(`/messages/matched?${URLparams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  }).then((response) => {
+  try {
+    const response = await useCustomFetch(`/messages/matched?${URLparams}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
     conversations.value = response;
-
-  }).catch(() => {
-    console.log('failed');
-  }).finally(() => {
+  } catch (error) {
+    console.error('Failed to fetch conversations:', error);
+    toast.error('Failed to fetch conversations'); // Notify user of error
+  } finally {
     loading.value = false;
-  });
+  }
 };
 
+// Fetch conversations on mount
 onMounted(async () => {
   await getConversations();
+
+
+  socket.value = io(process.env.API_URL || 'http://localhost:3000')
+
+  socket.value.on('connect', () => {
+    console.log('Connected to Socket.IO server')
+    socket.value.emit('login', props.userId)
+  })
 });
-
-
-// console.log(chats,'hellll')
-
-
-
-
 </script>
