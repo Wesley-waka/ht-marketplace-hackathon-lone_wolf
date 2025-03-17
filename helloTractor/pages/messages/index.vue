@@ -326,6 +326,9 @@ import { useSocketStore } from '~/stores/useSocketStore';
 // import useListenMessages from '~/composables/useListenMessages';
 import { useCustomFetch } from '~/composables/useCustomFetch';
 import notificationSound from '/Sounds/notification.mp3';
+import io from 'socket.io-client';
+
+const socket = io(process.env.API_URL);
 
 const conversations = ref([]);
 const loading = ref(false);
@@ -346,14 +349,14 @@ const handleNewMessage = (newMessage) => {
 };
 
 // Attach socket event listener
-if (socketStore.socket) {
-  socketStore.socket.on('newMessage', handleNewMessage);
+if (socket) {
+  socket.on('newMessage', handleNewMessage);
 }
 
 // Cleanup socket event listener on unmount
 onUnmounted(() => {
-  if (socketStore.socket) {
-    socketStore.socket.off('newMessage', handleNewMessage);
+  if (socket) {
+    socket.off('newMessage', handleNewMessage);
   }
 });
 
@@ -443,13 +446,14 @@ const getConversations = async () => {
 // Fetch conversations on mount
 onMounted(async () => {
   await getConversations();
+  socket.connect('')
 
 
-  socket.value = io(process.env.API_URL || 'http://localhost:3000')
-
-  socket.value.on('connect', () => {
-    console.log('Connected to Socket.IO server')
-    socket.value.emit('login', props.userId)
-  })
+//   socket.value = io(process.env.API_URL || 'http://localhost:3000')
+//
+//   socket.value.on('connect', () => {
+//     console.log('Connected to Socket.IO server')
+//     socket.value.emit('login', props.userId)
+//   })
 });
 </script>

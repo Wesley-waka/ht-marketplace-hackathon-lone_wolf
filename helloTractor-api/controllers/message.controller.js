@@ -85,9 +85,6 @@ export const getUsersForSidebar = async (req, res) => {
 	try {
 		const loggedInUserId = req.query.id;
 
-
-
-
 		const receiverObjectId = new mongoose.Types.ObjectId(loggedInUserId);
 		const filteredUsers = await User.find({ matchedUsers: { $eq: loggedInUserId } }).select("-password");
 

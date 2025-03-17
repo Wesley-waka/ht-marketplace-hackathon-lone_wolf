@@ -134,71 +134,80 @@
             </div>
           </div>
 
+          <div class="grid grid-cols-2 gap-16 mt-6">
+            <!-- First column - General -->
             <div>
               <h2>General</h2>
+              <div class="flex flex-row align-middle items-center gap-2 mt-2">
                 <h2>Track Name</h2>
                 <p>JohnDeere6R</p>
-
-                <h2>Track Brand</h2>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Track Name</h2>
                 <p>JohnDeere6R</p>
-
-                <h2>Track Cost</h2>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Track Name</h2>
                 <p>JohnDeere6R</p>
-
-                <h2>Track HP</h2>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Track Name</h2>
                 <p>JohnDeere6R</p>
-
-                <h2>Track Engine/hr Used</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track VehicleID</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track Location</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track FuelType</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track Engine Conditions</h2>
-                <p>JohnDeere6R</p>
-
-
-                <h2>Track Consumption</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track Tyre Condition</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track type</h2>
-                <p>JohnDeere6R</p>
-
-                <h2>Track interioir Features</h2>
-                <p>john-deere</p>
-
-                <h2>Track Exterior Features</h2>
-                <p>john-deere</p>
-
-                <h2>Track price comparison</h2>
-                <p>90%</p>
-
-                <h2>Seller deatails</h2>
-
-                <h2>Seller Name</h2>
-                <p>Jason</p>
-
-                <h2>Total Reviews</h2>
-                <p>91</p>
-
-                <h2>Price ratio</h2>
-                <p>9%</p>
-
-                <button class="btn btn-secondary outlined">
-                    match
-                </button>
+              </div>
             </div>
 
+            <!-- Second column - Engine -->
+            <div>
+              <h2>Engine</h2>
+              <div class="flex flex-row align-middle items-center gap-2 mt-2">
+                <h2>Engine Capacity</h2>
+                <p>JohnDeere6R</p>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Engine Conditions</h2>
+                <p>JohnDeere6R</p>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Engine Consumption</h2>
+                <p>JohnDeere6R</p>
+              </div>
+            </div>
+
+
+
+<!--                <button class="btn btn-secondary outlined">-->
+<!--                    match-->
+<!--                </button>-->
+            </div>
+
+
+          <div class="mt-4">
+            <h2>Features</h2>
+            <h5>Exterior</h5>
+            <p>JohnDeere6R</p>
+            <p>JohnDeere6R</p>
+            <p>JohnDeere6R</p>
+
+
+            <h5 class="mt-2">Interior</h5>
+            <p>JohnDeere6R</p>
+            <p>JohnDeere6R</p>
+            <p>JohnDeere6R</p>
+
+            <h5 class="mt-2">Others</h5>
+            <p>JohnDeere6R</p>
+            <p>JohnDeere6R</p>
+
+
+          </div>
+
+          <div class="mt-4">
+            <h2>Comparison</h2>
+          </div>
+
         </div>
+
+
     </div>
 
     <!-- images -->

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    '@primevue/nuxt-module',
+    '@primevue/nuxt-module'
     // [
     //   "@pinia/nuxt",
     //   {
@@ -21,7 +21,6 @@ export default defineNuxtConfig({
       }
     ]
   ],
-
   vite: {
     server: {
       hmr: {

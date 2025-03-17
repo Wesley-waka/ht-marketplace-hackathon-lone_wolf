@@ -319,6 +319,8 @@ const router = useRouter();
 
 const loading = ref(false);
 
+const { $socket } = useNuxtApp()
+
 const sign_in = ref(true);
 const user_selector = ref(false);
 const sign_up = ref(false);
@@ -458,6 +460,7 @@ const handleSignInSubmit = async () => {
 onMounted(() => {
   // fetchLocation();
   // reverseGeocode(-1.266944, 36.811667);
+  $socket.connect('123456');
 });
 </script>
 
