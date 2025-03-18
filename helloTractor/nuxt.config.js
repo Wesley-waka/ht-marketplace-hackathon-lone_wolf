@@ -6,8 +6,12 @@ export default defineNuxtConfig({
     "nuxt-security",
     "@nuxtjs/tailwindcss",
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    '@primevue/nuxt-module'
+    // 'pinia-plugin-persistedstate/nuxt',
+    '@primevue/nuxt-module',
+    [
+      'nuxt-sass-resources-loader',
+      ['@/assets/scss/theme.scss'],
+    ]
     // [
     //   "@pinia/nuxt",
     //   {
@@ -15,10 +19,10 @@ export default defineNuxtConfig({
     //   }
     // ],
     [
-      "@pinia/nuxt",
-      {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
-      }
+    "@pinia/nuxt",
+    {
+      autoImports: ['defineStore', 'acceptHMRUpdate'],
+    }
     ]
   ],
   vite: {
@@ -35,6 +39,12 @@ export default defineNuxtConfig({
       }
     }
   },
+
+  // meta: {
+  //   style: [
+  //     '@/assets/scss/theme.scss',
+  //   ]
+  // },
 
 
   app: {
