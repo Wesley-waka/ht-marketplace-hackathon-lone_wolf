@@ -78,6 +78,7 @@
 
       </swiper>
 
+        <div class="flex flex-row">
 
         <div>
             <h2>
@@ -139,19 +140,19 @@
             <div>
               <h2>General</h2>
               <div class="flex flex-row align-middle items-center gap-2 mt-2">
-                <h2>Track Name</h2>
+                <h2>Vehicle ID</h2>
                 <p>JohnDeere6R</p>
               </div>
               <div class="flex flex-row align-middle items-center gap-2">
-                <h2>Track Name</h2>
+                <h2>Make</h2>
                 <p>JohnDeere6R</p>
               </div>
               <div class="flex flex-row align-middle items-center gap-2">
-                <h2>Track Name</h2>
+                <h2>Model</h2>
                 <p>JohnDeere6R</p>
               </div>
               <div class="flex flex-row align-middle items-center gap-2">
-                <h2>Track Name</h2>
+                <h2>Body Color</h2>
                 <p>JohnDeere6R</p>
               </div>
             </div>
@@ -164,11 +165,15 @@
                 <p>JohnDeere6R</p>
               </div>
               <div class="flex flex-row align-middle items-center gap-2">
-                <h2>Engine Conditions</h2>
+                <h2>Consumption(comb.)</h2>
                 <p>JohnDeere6R</p>
               </div>
               <div class="flex flex-row align-middle items-center gap-2">
-                <h2>Engine Consumption</h2>
+                <h2>CO2 emissions</h2>
+                <p>JohnDeere6R</p>
+              </div>
+              <div class="flex flex-row align-middle items-center gap-2">
+                <h2>Emission class</h2>
                 <p>JohnDeere6R</p>
               </div>
             </div>
@@ -202,11 +207,25 @@
           </div>
 
           <div class="mt-4">
-            <h2>Comparison</h2>
+            <h2>Overall Performace Comparison</h2>
+          </div>
+
+          <div class="flex flex-row items-center space-x-12">
+            <apexchart type="radialBar" height="350" :options="options" :series="series"></apexchart>
+            <apexchart type="radialBar" height="350" :options="options" :series="series"></apexchart>
+            <apexchart type="radialBar" height="350" :options="options" :series="series"></apexchart>
+            <apexchart type="radialBar" height="350" :options="options" :series="series"></apexchart>
+
+          </div>
+        </div>
+
+          <div>
+            <div class="h-[80px] w-[80px] bg-amber-100">
+              <p>Width</p>
+            </div>
           </div>
 
         </div>
-
 
     </div>
 
@@ -221,12 +240,29 @@
 <script setup >
 import {Swiper,SwiperSlide} from 'swiper/vue';
 import 'swiper/css'
+// import apexchart from 'apexcharts';
 const route = useRoute();
 const dataList = ref([]);
 const { $toast } = useNuxtApp();
 const { fetchCart, updateItem, removeItem } = useFavouriteStore();
 const cartStore = useFavouriteStore();
 const { addToCart } = useFavouriteAPI();
+import VueApexCharts from 'vue-apexcharts';
+
+const options = ref({
+  plotOptions: {
+    radialBar: {
+      hollow: {
+        size: '70%',
+      }
+    },
+  },
+  labels: ['Cricket']
+});
+
+const series = ref([
+  70
+]);
 
 const fetchTractorData = async () => {
   dataLoading.value = true;

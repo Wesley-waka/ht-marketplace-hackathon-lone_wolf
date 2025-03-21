@@ -2,13 +2,7 @@
   <div class="flex w-full h-screen"> <!-- Parent div with full width and height -->
     <!-- First child div (1/4 width) containing video -->
     <div class="w-3/5 h-full">
-      <video
-          class="w-full h-full object-cover"
-          autoplay
-          muted
-          loop
-          playsinline
-      >
+      <video class="w-full h-full object-cover" autoplay muted loop playsinline>
         <source src="/hero-vid.mp4" type="video/mp4">
       </video>
     </div>
@@ -19,121 +13,123 @@
         <!-- Your form content here -->
 
 
-          <!-- LOGIN FORM -->
-          <div v-if="sign_in" class="h-full overflow-auto flex flex-col">
-            <div class="flex items-center mx-auto px-3">
-              <img src="/logo.png" alt="logo" class="h-12 mb-4" />
+        <!-- LOGIN FORM -->
+        <div v-if="sign_in" class="h-full overflow-auto flex flex-col">
+          <div class="flex items-center mx-auto px-3">
+            <img src="/logo.png" alt="logo" class="h-12 mb-4" />
 
-              <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1">
+
+            </div>
+          </div>
+
+          <div class="my-auto flex flex-col space-y-2">
+
+            <form class="m-auto max-w-[400px] flex-grow space-y-3" @submit.prevent="handleSignInSubmit">
+              <div>
+                <h1 class="text-2xl font-semibold text-center">Login</h1>
+                <p class="text-center text-gray-500 mb-6">
+                  Login to your account to continue
+                </p>
+              </div>
+              <CustomInputContainer label="Email" required :error="v$.email.$error"
+                :errorMessage="v$.email.$errors[0]?.$message">
+                <InputGroup>
+                  <InputGroupAddon>
+                    <i class="fas fa-envelope"></i>
+                  </InputGroupAddon>
+                  <InputText v-model="formDataLogin.email" placeholder="Email Address" @blur="v$.email.$touch()"
+                    :invalid="v$.email.$error" />
+                </InputGroup>
+              </CustomInputContainer>
+              <CustomInputContainer label="Password" required:error="v$.password.$error"
+                :errorMessage="v$.password.$errors[0]?.$message">
+                <InputGroup>
+                  <InputGroupAddon>
+                    <i class="fas fa-lock"></i>
+                  </InputGroupAddon>
+                  <Password v-model="formDataLogin.password" toggleMask :feedback="false" placeholder="Password"
+                    @blur="v$.password.$touch()" :invalid="v$.password.$error" />
+                </InputGroup>
+              </CustomInputContainer>
+              <div class="flex justify-between flex-col space-y-2 items-center w-full">
+
+                <button class="w-full btn btn-primary" type="submit" :disabled="loading">
+                  <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
+                  Login
+                </button>
+
 
               </div>
-            </div>
+            </form>
 
-            <div class="my-auto flex flex-col space-y-2">
+            <Divider align="center" type="solid" class="mt-6">
+              <b>or</b>
+            </Divider>
 
-              <form class="m-auto max-w-[400px] flex-grow space-y-3" @submit.prevent="handleSignInSubmit">
-                <div>
-                  <h1 class="text-2xl font-semibold text-center">Login</h1>
-                  <p class="text-center text-gray-500 mb-6">
-                    Login to your account to continue
-                  </p>
-                </div>
-                <CustomInputContainer label="Email" required :error="v$.email.$error"
-                                      :errorMessage="v$.email.$errors[0]?.$message">
-                  <InputGroup>
-                    <InputGroupAddon>
-                      <i class="fas fa-envelope"></i>
-                    </InputGroupAddon>
-                    <InputText v-model="formDataLogin.email" placeholder="Email Address" @blur="v$.email.$touch()"
-                               :invalid="v$.email.$error" />
-                  </InputGroup>
-                </CustomInputContainer>
-                <CustomInputContainer label="Password" required:error="v$.password.$error"
-                                      :errorMessage="v$.password.$errors[0]?.$message">
-                  <InputGroup>
-                    <InputGroupAddon>
-                      <i class="fas fa-lock"></i>
-                    </InputGroupAddon>
-                    <Password v-model="formDataLogin.password" toggleMask :feedback="false" placeholder="Password"
-                              @blur="v$.password.$touch()" :invalid="v$.password.$error" />
-                  </InputGroup>
-                </CustomInputContainer>
-                <div class="flex justify-between flex-col space-y-2 items-center w-full">
-
-                  <button class="w-full btn btn-primary" type="submit" :disabled="loading">
-                    <i v-if="loading" class="animate-spin mr-2 pi pi-spinner"></i>
-                    Login
-                  </button>
-
-
-                </div>
-              </form>
-
-              <Divider align="center" type="solid" class="mt-6">
-                <b>or</b>
-              </Divider>
-
-              <div class="items-center">
-                <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto align-middle flex justify-around">
+            <div class="items-center">
+              <button
+                class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto align-middle flex justify-around">
                 <img src="/google.png " alt="google-sign-in" class="w-[30px] h-[30px]">
-                  Sign in with Google
-                </button>
-              <div class="text-center mt-4">Don't have an account? <a href="/sign-up" class="text-blue-700">Sign Up</a></div>
+                Sign in with Google
+              </button>
+              <div class="text-center mt-4">Don't have an account? <a href="/sign-up" class="text-blue-700">Sign Up</a>
+              </div>
 
+            </div>
+
+
+            <!--              <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto"-->
+            <!--                      @click="sign_in = false, user_selector = true" :disabled="loading">-->
+            <!--                Sign Up-->
+            <!--              </button>-->
+          </div>
+        </div>
+
+
+
+
+
+        <!-- USER TYPE SELECTOR -->
+        <div v-if="user_selector">
+          <div class="w-full mx-auto">
+            <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
+            <div class="flex flex-row justify-around my-12">
+              <div
+                :class="`w-[300px] ${userType === 'buyer' ? 'border-orangeBright border-2 shadow-2xl' : ''} h-[140px] py-2 px-4 bg-slate-100 rounded-lg`"
+                @click="setUserType('buyer')">
+                <div>
+                  <img src="/public/Black/Hello Tractor_RGB_BLACK_-User.png" class="w-[50px]" alt="">
+                </div>
+                <p class="font-manropeSemiBold">Buyer,Buy farm equipment <br>and other products</p>
+              </div>
+
+              <div
+                :class="`w-[300px] h-[140px] py-2 ${userType === 'seller' ? 'border-orangeBright border-2 shadow-2xl' : ''} px-4 bg-slate-100 rounded-lg`"
+                @click="setUserType('seller')">
+                <div>
+                  <img src="/public/Black/HT_ICONS_BLACK_RGB-02.png" class="w-[50px]" alt="">
+                </div>
+                <p class="font-manropeSemiBold">Seller, Sell used Tractors <br>and other products</p>
               </div>
 
 
-<!--              <button class="w-full btn btn-primary outlined max-w-[254px] items-center mx-auto"-->
-<!--                      @click="sign_in = false, user_selector = true" :disabled="loading">-->
-<!--                Sign Up-->
-<!--              </button>-->
+
+            </div>
+
+            <div class="flex flex-col items-center justify-center w-full">
+              <button class="btn btn-primary w-[300px]" @click="user_selector = false, sign_up = true">
+                {{ buyer ? 'Join as aBuyer' : 'Join as seller' }}
+              </button>
             </div>
           </div>
+        </div>
+        <!-- SIgn Up form -->
 
+        <div v-if="sign_up">
 
-
-
-
-          <!-- USER TYPE SELECTOR -->
-          <div v-if="user_selector">
-            <div class="w-full mx-auto">
-              <h1 class="text-2xl text-center">Join as a Buyer or Seller</h1>
-              <div class="flex flex-row justify-around my-12">
-                <div
-                    :class="`w-[300px] ${userType === 'buyer' ? 'border-orangeBright border-2 shadow-2xl' : ''} h-[140px] py-2 px-4 bg-slate-100 rounded-lg`"
-                    @click="setUserType('buyer')">
-                  <div>
-                    <img src="/public/Black/Hello Tractor_RGB_BLACK_-User.png" class="w-[50px]" alt="">
-                  </div>
-                  <p class="font-manropeSemiBold">Buyer,Buy farm equipment <br>and other products</p>
-                </div>
-
-                <div
-                    :class="`w-[300px] h-[140px] py-2 ${userType === 'seller' ? 'border-orangeBright border-2 shadow-2xl' : ''} px-4 bg-slate-100 rounded-lg`"
-                    @click="setUserType('seller')">
-                  <div>
-                    <img src="/public/Black/HT_ICONS_BLACK_RGB-02.png" class="w-[50px]" alt="">
-                  </div>
-                  <p class="font-manropeSemiBold">Seller, Sell used Tractors <br>and other products</p>
-                </div>
-
-
-
-              </div>
-
-              <div class="flex flex-col items-center justify-center w-full">
-                <button class="btn btn-primary w-[300px]" @click="user_selector = false, sign_up = true">
-                  {{ buyer ? 'Join as aBuyer' : 'Join as seller' }}
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- SIgn Up form -->
-
-          <div v-if="sign_up">
-
-            <UserSignUp />
-          </div>
+          <UserSignUp />
+        </div>
 
 
 
@@ -143,7 +139,7 @@
 
 
 
-          <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
+        <!-- <Stepper :value="currentStep" linear @update:value="currentStep = $event">
               <StepList>
                 <Step value="1" :class="{ 'p-complete': Number(currentStep) > 1 }">
                   Personal Details
@@ -289,20 +285,20 @@
                               <span>{{ product?.title }} ({{ product?.selectedQty }})</span>
                             </div>
                           </template>
-      </div>
-      </div>
+</div>
+</div>
 
-      <div class="mt-2 pt-2 flex items-center border-t">
-        <Checkbox v-model="terms" binary />
-        <span class="ml-2 text-sm">
-          I agree to the <NuxtLink to="#" class="text-blue-800 underline">terms and conditions</NuxtLink>
-        </span>
-      </div>
-      </div>
-      </div>
-      </StepPanel>
-      </StepPanels>
-      </Stepper> -->
+<div class="mt-2 pt-2 flex items-center border-t">
+  <Checkbox v-model="terms" binary />
+  <span class="ml-2 text-sm">
+    I agree to the <NuxtLink to="#" class="text-blue-800 underline">terms and conditions</NuxtLink>
+  </span>
+</div>
+</div>
+</div>
+</StepPanel>
+</StepPanels>
+</Stepper> -->
       </div>
     </div>
   </div>
@@ -310,8 +306,8 @@
 
 <script setup>
 // Component logic goes here
-import {computed, onMounted, ref} from "vue";
-import {email, helpers, required} from "@vuelidate/validators";
+import { computed, onMounted, ref } from "vue";
+import { email, helpers, required } from "@vuelidate/validators";
 const { login, signUp } = useAuth();
 import useVuelidate from "@vuelidate/core";
 const { $toast } = useNuxtApp();
@@ -460,7 +456,7 @@ const handleSignInSubmit = async () => {
 onMounted(() => {
   // fetchLocation();
   // reverseGeocode(-1.266944, 36.811667);
-  $socket.connect('123456');
+  // $socket.connect('123456');
 });
 </script>
 
